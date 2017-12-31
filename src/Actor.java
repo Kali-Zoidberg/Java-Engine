@@ -14,6 +14,8 @@ public class Actor {
 	
 	private int actor_width = 10;
 	private int actor_height = 10;
+	private int actor_avg_width = actor_width / 2;
+	private int actor_avg_height = actor_height / 2;
 	
 	
 	
@@ -36,6 +38,8 @@ public class Actor {
 	 */
 	
 	Actor(Transform transform) {
+		transform.setX(transform.getX() + actor_avg_width);
+		transform.setY(transform.getY() - actor_avg_height);
 		this.transform = transform;
 		actor_sprite = null;
 	}
@@ -51,11 +55,20 @@ public class Actor {
 	 */
 	
 	Actor(Transform transform, Sprite sprite, int width, int height) {
-		this.transform = transform;
+		
 		actor_sprite = sprite;
 		actor_width = width;
 		actor_height = height;
 		sprite_color = sprite.getColor();
+		
+		actor_avg_width = actor_width / 2;
+		actor_avg_height = actor_height / 2;
+		
+		
+		transform.setX(transform.getX() + actor_avg_width);
+		transform.setY(transform.getY() - actor_avg_height);
+		this.transform = transform;
+
 	}
 	
 	
@@ -70,10 +83,18 @@ public class Actor {
 	 */
 	
 	Actor(Transform transform, Color color, int width, int height) {
-		this.transform = transform;
+	
+		actor_sprite = null;
 		sprite_color = color;
 		actor_width = width;
 		actor_height = height;
+		actor_avg_width = actor_width / 2;
+		actor_avg_height = actor_height / 2;
+		
+		
+		transform.setX(transform.getX() - actor_avg_width);
+		transform.setY(transform.getY() - actor_avg_height);
+		this.transform = transform;
 	}
 	
 	
@@ -124,19 +145,24 @@ public class Actor {
 		actor_sprite = sprite;
 	}
 	
+	
+	/**
+	 * Renders the actor onto the Jframe.
+	 * @param enable Set to true if you want the actor to be visible and in the jframe/scene.
+	 */
 	public void setVisible(boolean enable) {
 		
-		int x_position = this.transform.getPosition_X();
-		int y_position = this.transform.getPosition_Y();
+		int x_position = (int) this.transform.getConvertX();
+		int y_position = (int) this.transform.getConvertY();
 		
 		if (enable) {
 			
-			actor_graphics = rend_obj.bi.createGraphics();
-			
+			actor_graphics = Render.bi.createGraphics();
 			
 			if (actor_sprite!=null) {
 				actor_graphics.drawImage(actor_sprite.getImage(), x_position, y_position, null);
 			} else {
+
 				actor_graphics.setColor(sprite_color);
 				actor_graphics.fillRect(x_position, y_position, actor_width, actor_height);
 			}

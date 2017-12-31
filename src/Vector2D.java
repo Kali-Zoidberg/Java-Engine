@@ -1,10 +1,10 @@
 
-public class Vector2D {
+public class Vector2D extends Cartesian2D{
 	private double x = 0.0; 
 	private double y = 0.0; 
 	private double magn = 0.0;
 	private float dir = 0.0f;
-	
+
 	
 	Vector2D() {
 		//doesnt do much lol
@@ -17,8 +17,7 @@ public class Vector2D {
 	 */
 	
 	Vector2D(double x, double y) {
-		this.x = x;
-		this.y = y;
+		super(x,y);
 		magn = Math.hypot(x, y);
 		dir = (float) Math.atan(magn);
 	}
@@ -30,16 +29,15 @@ public class Vector2D {
 	Vector2D(double magnitude, float direction) {
 		magn = magnitude;
 		dir = direction;
-	}
-	
-	
-	/**
-	 * Retrieves the x coordinate of the vector
-	 * @return Returns the x coordinate of the vector.
-	 */
-	
-	public double getX() {
-		return x;
+		
+		double dir_sin = Math.sin(dir);
+		double dir_cos = Math.cos(dir);
+		
+		y = magn * dir_sin;
+		super.setY(y);
+		
+		x = magn * dir_cos;
+		super.setX(x);
 	}
 	
 	
@@ -49,21 +47,10 @@ public class Vector2D {
 	 */
 	
 	public void setX(double x) {	
-		this.x = x;
+		super.setX(x);
 		magn = Math.hypot(x, y);
 		dir = (float) Math.atan(magn);	
 	}
-	
-	
-	/**
-	 * Retrieves the y coordinate of the vector
-	 * @return Returns the y coordinate of the vector.
-	 */
-	
-	public double getY() {
-		return y;
-	}
-	
 	
 	/**
 	 * Sets the y coordinate of the Vector.
@@ -71,7 +58,7 @@ public class Vector2D {
 	 */
 	
 	public void setY(double y) {
-		this.y = y;
+		super.setY(y);
 		magn = Math.hypot(x, y);
 		dir = (float) Math.atan(magn);
 	}
@@ -95,7 +82,11 @@ public class Vector2D {
 	public void setMagnitude(double magnitude) {
 		float ratio = (float) (magn/magnitude); //Calculate ratio then downcast.
 		x *= ratio; 
+		super.setX(x);
+		
 		y *= ratio;
+		super.setY(y);
+		
 		magn = magnitude;
 	}
 	
@@ -123,7 +114,10 @@ public class Vector2D {
 		double dir_cos = Math.cos(dir);
 		
 		y = magn * dir_sin;
+		super.setY(y);
+		
 		x = magn * dir_cos;
+		super.setX(x);
 	}
 	
 	

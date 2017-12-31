@@ -24,7 +24,7 @@ public  class SnakeObject {
 	private static Collisions collis = new Collisions();
 	private Render render_obj;
 	
-	public SnakeObject(int width, int height, int xpos, int ypos, Color col, int count, Render rend_obj) {
+	public SnakeObject(int width, int height, int xpos, int ypos, Color col, int count) {
 		h = height;
 		w = width;
 		x = xpos;
@@ -32,7 +32,6 @@ public  class SnakeObject {
 		ychange = y;
 		xchange = x;
 		color = col;
-		render_obj = rend_obj;
 		
 		if (count != -1) {
 			this.count = count;

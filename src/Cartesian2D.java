@@ -1,8 +1,8 @@
 
 public class Cartesian2D {
 
-	private int x_pos = 0;
-	private int y_pos = 0;
+	private double x_pos = 0;
+	private double y_pos = 0;
 	
 	/**
 	 * Default constructor. Sets x and y axis to 0,0 (debug area)
@@ -19,7 +19,7 @@ public class Cartesian2D {
 	 * @param y The y position in the Cartesian coordinate.
 	 */
 	
-	Cartesian2D(int x, int y) {
+	Cartesian2D(double x, double y) {
 		x_pos = x;
 		y_pos = y;
 	}
@@ -30,7 +30,7 @@ public class Cartesian2D {
 	 * @param x Defines the new x position
 	 */
 	
-	public void setPosition_X(int x) {
+	public void setX(double x) {
 		x_pos = x;
 	}
 	
@@ -40,7 +40,7 @@ public class Cartesian2D {
 	 * @param x Defines the new x position
 	 */
 	
-	public void setPosition_Y(int y) {
+	public void setY(double y) {
 		
 		y_pos = y;
 	}
@@ -51,7 +51,7 @@ public class Cartesian2D {
 	 * @return Returns the x Cartesian coordinate
 	 */
 	
-	public int getPosition_X() {
+	public double getX() {
 		return x_pos;
 	}
 	
@@ -61,7 +61,7 @@ public class Cartesian2D {
 	 * @return Returns the y Cartesian coordinate.
 	 */
 	
-	public int getPosition_Y() {
+	public double getY() {
 		return y_pos;
 	}
 }

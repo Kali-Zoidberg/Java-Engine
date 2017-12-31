@@ -18,9 +18,7 @@ public class Controls {
 	private int dir = 0;
 	private Render render_obj;
 
-	Controls(Render rend_obj) {
-		render_obj = rend_obj;
-	}
+
 	public boolean movingup = false;
 
 	public void initializeControls() {
@@ -31,7 +29,7 @@ public class Controls {
 			public void actionPerformed(ActionEvent e) {
 			if (dir != 0) {
 				dir = 1;
-				render_obj.setSpeed(yspeedup,1);
+				Render.setSpeed(yspeedup,1);
 			}
 			}
 		};
@@ -40,7 +38,7 @@ public class Controls {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(dir != 2) {
-					render_obj.setSpeed(xspeedright, 3);	
+					Render.setSpeed(xspeedright, 3);	
 					dir= 3;
 				}
 				}
@@ -49,7 +47,7 @@ public class Controls {
 		Action moveleft = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				if (dir !=3) {
-					render_obj.setSpeed(xspeedleft, 2);
+					Render.setSpeed(xspeedleft, 2);
 					dir = 2;
 				}
 			}
@@ -58,7 +56,7 @@ public class Controls {
 		Action moveup = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				if (dir != 1) {
-					render_obj.setSpeed(yspeeddown,0);
+					Render.setSpeed(yspeeddown,0);
 					dir = 0;
 				}
 			}

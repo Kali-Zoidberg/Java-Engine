@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public  class Snake extends SnakeObject{
 	
-	public Snake(int width, int height, int xpos, int ypos, Color col, Render rend) {
-		super(width, height, xpos, ypos, col,-1, rend);
+	public Snake(int width, int height, int xpos, int ypos, Color col) {
+		super(width, height, xpos, ypos, col,-1);
 		
 	}
 	
@@ -25,10 +25,9 @@ public  class Snake extends SnakeObject{
 	
 	private static Collisions collis = new Collisions();
 	public Graphics2D snak = null;
-	private Render render_obj = super.getRenderObj();
 	
 	public void createGraphics1() {
-		snak = render_obj.bi.createGraphics();
+		snak = Render.bi.createGraphics();
 		super.ychange = ystat + super.y;
 		super.xchange = xstat + super.x;
 		snak.setColor(Color.PINK);
@@ -152,10 +151,10 @@ public  class Snake extends SnakeObject{
 		}
 	}
 	public void addSnake(SnakeObject so) {
-		snakeobjects.add(new SnakeObject(so.getWidth(), so.getHeight(),so.getX() - 9000,so.getY() - 10, Color.WHITE, so.getCount() + 1, render_obj));
-		snakeobjects.add(new SnakeObject(so.getWidth(), so.getHeight(),so.getX() - 20000,so.getY() - 20, Color.WHITE, so.getCount() + 1, render_obj));
-		snakeobjects.add(new SnakeObject(so.getWidth(), so.getHeight(),so.getX() - 30000,so.getY() - 30, Color.WHITE, so.getCount() + 2, render_obj));
-		snakeobjects.add(new SnakeObject(so.getWidth(), so.getHeight(),so.getX() - 40000,so.getY()- 40, Color.WHITE, so.getCount() + 3, render_obj));
+		snakeobjects.add(new SnakeObject(so.getWidth(), so.getHeight(),so.getX() - 9000,so.getY() - 10, Color.WHITE, so.getCount() + 1));
+		snakeobjects.add(new SnakeObject(so.getWidth(), so.getHeight(),so.getX() - 20000,so.getY() - 20, Color.WHITE, so.getCount() + 1));
+		snakeobjects.add(new SnakeObject(so.getWidth(), so.getHeight(),so.getX() - 30000,so.getY() - 30, Color.WHITE, so.getCount() + 2));
+		snakeobjects.add(new SnakeObject(so.getWidth(), so.getHeight(),so.getX() - 40000,so.getY()- 40, Color.WHITE, so.getCount() + 3));
 
 	}
 	
@@ -241,10 +240,10 @@ public  class Snake extends SnakeObject{
 	 * this should be under the render class
 	 */
 	private void checkBounds(Snake snake, int height, int width) { 
-		if ((snake.getY() <= 0) || snake.getY() + height >= render_obj.bi.getHeight() - 1)
+		if ((snake.getY() <= 0) || snake.getY() + height >= Render.bi.getHeight() - 1)
 			 isAlive = false;
 
-		if ((super.getX() <= 0) || super.getX() +width >= render_obj.bi.getWidth() - 1)
+		if ((super.getX() <= 0) || super.getX() +width >= Render.bi.getWidth() - 1)
 			isAlive = false;
 		
 	}
