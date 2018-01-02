@@ -17,6 +17,7 @@ public class Actor {
 	private int actor_avg_width = actor_width / 2;
 	private int actor_avg_height = actor_height / 2;
 	
+	private boolean is_visible = false;
 	
 	
 	
@@ -152,11 +153,12 @@ public class Actor {
 	 */
 	public void setVisible(boolean enable) {
 		
-		int x_position = (int) this.transform.getConvertX();
-		int y_position = (int) this.transform.getConvertY();
+		int x_position = (int) (this.transform.getConvertX() + 0.5f);
+		int y_position = (int) (this.transform.getConvertY() + 0.5f);
 		
 		if (enable) {
 			
+			is_visible = true;
 			actor_graphics = Render.bi.createGraphics();
 			
 			if (actor_sprite!=null) {
@@ -175,5 +177,12 @@ public class Actor {
 			//unreder the actor.
 		}
 		
+	}
+	/**
+	 * If the actor has been set to visible, this function returns true.
+	 * @return Returns true is suppose to be rendered onto the scene.
+	 */
+	public boolean isVisible() {
+		return is_visible;
 	}
 }

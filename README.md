@@ -12,10 +12,17 @@ The focus of the multi-threading/parallel computing will be to handle the update
 Todo: On resize, recaculate averages and have any function that uses avergae window height call on the average function.
 		
 		Think about the static behavior of the screen_Width in the transform class.
-		Reprogram Render class.
-		
+		UIclass
+		Reprogram Render class. Render class should exist on it's own thread.
+		Render class should contain all actors. Ignore the moveto functions until we can get multi-threading/parallel working
+		Include an update function.
+		Rotate function in transform class
 Note: Coordinates in space are stored as doubles and then down casted/truncated to integers.
 
+Changelog:
+
+	Update 3:
+		- When the actor is rendered on the screen, it's position is now rounded to improve precision.
 Cartesian2D class: The Cartesian representation of space in the game.
 				Functions:
 				Cartesian2D() - Default constructor. Sets x and y axis to 0,0 (debug area)
@@ -41,6 +48,8 @@ Transform class: The Transformation of an Actor.
 				setVelocity_X(double velocity) - Sets the X velocity of the transformation.
 					Parameters: - The x position
 				getVelocity
+				MoveTo(Cartesian2D target, Vector2D velocity)
+				rotateTo(double dir)
 				
 Vector class: Represents a position in space as a Vector.
 Actor class: Base class for all entities like sprites, players, N.P.C.s, etc.
@@ -59,4 +68,18 @@ Sprite class: uses jawa.awt.*
 			  Contains images, width sizes etc for rendering.
 			  
 			  Functions:
+			  
+
+UI class: 
+	Extends Cartesian2D
+	
+	Functions:
+	Text
+	setText(string text) - Sets the text
+	setFont(Font font)
+	
+RigidBody class:
+	goals: Collision detection using classical mechanics
+			Velocity moves the object using transform.set
+			
 			 

@@ -21,14 +21,18 @@ public class Render {
 	private static int frames = 0;
 	public static ArrayList<SnakeObject> snakeobjects = new ArrayList<SnakeObject>();
 	private static ArrayList<SnakeObject> emptysnakeobjects = new ArrayList<SnakeObject>();
+	private static ArrayList<Actor> actor_list = new ArrayList<Actor>();
 	private static int direction = 0;
 	private static int velocity = -10;
 	private static int totalframes = 0;
 	private static int count =0;
 	private static boolean GameOver = false;
 	protected static int points = 0;
-	private static final int SCREEN_WIDTH = 800;
-	private static final int SCREEN_HEIGHT = 600;
+	private static final int SCREEN_WIDTH = 1500;
+	private static final int SCREEN_HEIGHT = 1000;
+	private static boolean test = true;
+	private static int current_frame_rate = 0;
+	
 	public static Snake sn;
 
 /*
@@ -41,7 +45,9 @@ public class Render {
 
 	
 	public static void Renderframes(int frameratecap) throws NullPointerException {
-		
+			
+			current_frame_rate = frameratecap;
+			
 			Controls controller = new Controls();
 			controller.initializeControls();
 			JFrame frame = new JFrame();
@@ -95,7 +101,8 @@ public class Render {
 					totalTime += curTime - lastTime;
 					totalTime2 += curTime - lastTime;
 					if (totalTime > 1000) {
-						
+						System.out.println("framerate: " + frames);
+
 						totalTime -= 1000;
 						fps = frames;
 		
@@ -113,7 +120,7 @@ public class Render {
 			
 				//MiscGameLogic();
 				Start();
-
+				renderActors();
 				frame.getContentPane().add(Main.focusWindow);		
 				fpscounter.setFont(new Font("Courier New", Font.PLAIN, 12));
 				fpscounter.setColor(Color.GREEN);
@@ -124,17 +131,19 @@ public class Render {
 
 				if (!buffer.contentsLost()) 
 					buffer.show();
-				
+
 				Thread.yield();
 					}
 				
 				} finally {
 					if (totalTime2 > (1000 / frameratecap)) {
+						
 						totalTime2 -= (1000/frameratecap);
 					if (graphics != null);					}
 				
 				if (fpscounter != null)
 					if (totalTime2 > (1000 / frameratecap)) {
+						
 						totalTime2 -= (1000/ frameratecap);
 					fpscounter.dispose(); // dispose of fps counter
 					}
@@ -143,9 +152,10 @@ public class Render {
 				lastTime = curTime;
 				curTime = System.currentTimeMillis();
 				totalTime += curTime - lastTime;
-
+				
 				if (totalTime > 1000) {
 					totalTime -= 1000;
+					current_frame_rate = frames;
 					fps = frames;
 					frames = 0;
 					
@@ -157,14 +167,36 @@ public class Render {
 		public static int getFrames() {
 			return frames;
 		}
-	
+		/**
+		 * Renders all the actors in the scene.
+		 */
+		private static void renderActors() {
+			for (Actor act: actor_list) {
+				if (act.isVisible()) {
+					act.setVisible(true);
+				}
+			}
+		}
+		
+		/**
+		 * Used for initializing Actor's at the start of the game.
+		 */
 		private static void Start() {
 			
-			Transform transform_test = new Transform(0,0,25,25);
+			Transform transform_test = new Transform(750,500,25,25);
 			Actor player = new Actor(transform_test,Color.GREEN,50,50);
-			player.transform.setX(0);
-			player.transform.setY(0);
+
+			while(test) {
+				
+			player.transform.setX(player.transform.getX());
+			player.transform.setY(player.transform.getY());
+			player.transform.moveTo(new Cartesian2D(504,309), 200, 0.2f);
 			player.setVisible(true);
+			actor_list.add(player);
+			test = false;
+			}
+
+			
 			//emptysnakeobjects.add(new SnakeObject(10,10,30,50, Color.WHITE, 0)); // add snake object on screen to 'eat'
 	
 		}
@@ -274,6 +306,13 @@ public class Render {
 		
 		public static int getScreenHeight() {
 			return SCREEN_HEIGHT;
+		}
+		/**
+		 * Retrieves the computer's current frame rate.
+		 * @return Returns the computer's current frame rate.
+		 */
+		public static int getFrameRate() {
+			return current_frame_rate;
 		}
 	}
 
