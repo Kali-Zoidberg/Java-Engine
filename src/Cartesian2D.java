@@ -3,13 +3,14 @@ public class Cartesian2D {
 
 	private double x_pos = 0;
 	private double y_pos = 0;
-	
+
 	/**
 	 * Default constructor. Sets x and y axis to 0,0 (debug area)
 	 */
 
 	Cartesian2D() {
-
+		x_pos = 0;
+		y_pos = 0;
 	}
 	
 	

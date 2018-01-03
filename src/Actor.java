@@ -153,8 +153,9 @@ public class Actor {
 	 */
 	public void setVisible(boolean enable) {
 		
-		int x_position = (int) (this.transform.getConvertX() + 0.5f);
-		int y_position = (int) (this.transform.getConvertY() + 0.5f);
+		int x_position = (int) (this.transform.getX() + 0.5f);
+		int y_position = (int) (this.transform.getY() + 0.5f);
+		double actor_dir = this.transform.getDirection();
 		
 		if (enable) {
 			
@@ -163,10 +164,12 @@ public class Actor {
 			
 			if (actor_sprite!=null) {
 				actor_graphics.drawImage(actor_sprite.getImage(), x_position, y_position, null);
+				actor_graphics.rotate(actor_dir);
 			} else {
 
 				actor_graphics.setColor(sprite_color);
 				actor_graphics.fillRect(x_position, y_position, actor_width, actor_height);
+				actor_graphics.rotate(actor_dir);
 			}
 		} else {
 			if (actor_sprite != null) {
@@ -174,10 +177,11 @@ public class Actor {
 			} else {
 				actor_graphics.clearRect(x_position, y_position, actor_width, actor_height);
 			}
-			//unreder the actor.
+			//unrender the actor.
 		}
 		
 	}
+	
 	/**
 	 * If the actor has been set to visible, this function returns true.
 	 * @return Returns true is suppose to be rendered onto the scene.

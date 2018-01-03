@@ -183,14 +183,16 @@ public class Render {
 		 */
 		private static void Start() {
 			
-			Transform transform_test = new Transform(750,500,25,25);
+			Transform transform_test = new Transform(750,500,0f);
 			Actor player = new Actor(transform_test,Color.GREEN,50,50);
 
 			while(test) {
 				
 			player.transform.setX(player.transform.getX());
 			player.transform.setY(player.transform.getY());
-			player.transform.moveTo(new Cartesian2D(504,309), 200, 0.2f);
+			player.transform.moveTo(new Cartesian2D(1000,0), 300, 10f);
+			player.transform.setDirection(0.5f);
+			//System.out.println("direction: " + player.transform.getDirection());
 			player.setVisible(true);
 			actor_list.add(player);
 			test = false;

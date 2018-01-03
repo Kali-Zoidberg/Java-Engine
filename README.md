@@ -1,28 +1,33 @@
 # OldSnakey
 This game was created in 2015. Over time I will optimize and improve the re-usability of this code as well as properly comment the source code.
 
-Notes: The more recent code 2017+ will contain some resemblance to c++ etiquette. For this, I apologize as I have been using it more than other languages.
-		This etiquette is most noticeable in the way that variables are declared and defined and in the constructors.
 
-Re-Write: Over the course of this program, I will rewrite the code with re-usability in mind. With re-usability in mind, I am hoping to achieve a
+Re-Write: Over the course of this program, I will rewrite the code with re-usability in mind. I am hoping to achieve a
 basic game engine in Java using JFrames. However, parallel computing using multi-threads may be implemented to improve the optimization.
 The focus of the multi-threading/parallel computing will be to handle the updated game states such as Vectors, Transforms and Game Logic.
 
 
-Todo: On resize, recaculate averages and have any function that uses avergae window height call on the average function.
-		
+To do: On resize, recalculate averages and have any function that uses average window height call on the average function.
+		Multi-threading.
 		Think about the static behavior of the screen_Width in the transform class.
 		UIclass
 		Reprogram Render class. Render class should exist on it's own thread.
-		Render class should contain all actors. Ignore the moveto functions until we can get multi-threading/parallel working
+		Render class should contain all actors. Ignore the move to functions until we can get multi-threading/parallel working
 		Include an update function.
-		Rotate function in transform class
+		Rotate function in transform class.
+		moveTo function needs a preventive condition for when the speed is too fast.
 Note: Coordinates in space are stored as doubles and then down casted/truncated to integers.
 
-Changelog:
+Change log:
 
 	Update 3:
 		- When the actor is rendered on the screen, it's position is now rounded to improve precision.
+		- The moveTo function for the transform update is now working correctly and includes a delta, speed and position.
+		- Actors are now stored in a ArrayList in the Rendered class. Accordingly so, on each frame update, the positions of the Actors are retrieved
+		and rendered to the screen.
+		- Transform center of mass removed. (Will be implemented with Rigid Body)
+		- Removed conversions for sprites being set in the middle of the window. Instead the coordinate system for transform is now 1:1 with the Jframe coordinate system.
+		
 Cartesian2D class: The Cartesian representation of space in the game.
 				Functions:
 				Cartesian2D() - Default constructor. Sets x and y axis to 0,0 (debug area)
@@ -81,5 +86,6 @@ UI class:
 RigidBody class:
 	goals: Collision detection using classical mechanics
 			Velocity moves the object using transform.set
+			members: center of mass, mass, size dimensions and collision bounds?
 			
 			 
