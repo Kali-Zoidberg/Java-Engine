@@ -52,22 +52,6 @@ public class Transform extends Cartesian2D {
 		direction = dir;
 	}
 	
-	/**
-	 * Constructs a transform object with specified Cartesian2D coordinate and center of mass.
-	 * @param coordinate The coordinate of the object.
-	 * @param x_center X center of mass as a double.
-	 * @param y_center Y center of mass as a double.
-	 * @param direction The direction of the object in radians.
-	 */
-	
-	Transform(Cartesian2D coordinate, double x_center, double y_center, double direction) {
-		super(coordinate.getX(), coordinate.getY());
-		
-		x_pos = coordinate.getX();
-		y_pos = coordinate.getY();
-		dir = direction;
-	}
-	
 	
 	/**
 	 * Moves the Transform to the specified position.

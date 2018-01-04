@@ -14,7 +14,7 @@ To do: On resize, recalculate averages and have any function that uses average w
 		Reprogram Render class. Render class should exist on it's own thread.
 		Render class should contain all actors. Ignore the move to functions until we can get multi-threading/parallel working
 		Include an update function.
-		Rotate function in transform class.
+		Actor setRect or renderRect?
 		moveTo function needs a preventive condition for when the speed is too fast.
 Note: Coordinates in space are stored as doubles and then down casted/truncated to integers.
 
@@ -28,6 +28,17 @@ Change log:
 		- Transform center of mass removed. (Will be implemented with Rigid Body)
 		- Removed conversions for sprites being set in the middle of the window. Instead the coordinate system for transform is now 1:1 with the Jframe coordinate system.
 		
+	Update 4:
+		-Included getDirection and setDirection functions in the transform class.
+		-Sprite's (excluding sprite's without images) can now be rotated.
+		-Included definition for default Cartesian2D constructor.
+		
+		
+		
+		
+		
+NOTE: *The following outlines are for my own outlining and not meant to be official documentation of the classes and functions provided in this engine and game.
+
 Cartesian2D class: The Cartesian representation of space in the game.
 				Functions:
 				Cartesian2D() - Default constructor. Sets x and y axis to 0,0 (debug area)
@@ -57,6 +68,7 @@ Transform class: The Transformation of an Actor.
 				rotateTo(double dir)
 				
 Vector class: Represents a position in space as a Vector.
+
 Actor class: Base class for all entities like sprites, players, N.P.C.s, etc.
 			 Can only exist in space and be moved back and forth.
 			 This class may only store the properties to be rendered.
@@ -76,13 +88,17 @@ Sprite class: uses jawa.awt.*
 			  
 
 UI class: 
-	Extends Cartesian2D
+	Extends Transform
 	
 	Functions:
 	Text
 	setText(string text) - Sets the text
 	setFont(Font font)
 	
+	Members:
+	text
+	font
+	color		
 RigidBody class:
 	goals: Collision detection using classical mechanics
 			Velocity moves the object using transform.set

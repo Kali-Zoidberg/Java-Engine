@@ -146,6 +146,28 @@ public class Actor {
 		actor_sprite = sprite;
 	}
 	
+	/**
+	 * Sets the actor to render a rectangle instead of a sprite.
+	 * @param width The width of the actor.
+	 * @param height The height of the actor.
+	 * @param color The color of the actor.
+	 */
+	
+	public void setRect(int width, int height, Color color) {
+		actor_sprite = null;
+		actor_width = width;
+		actor_height = height;
+		sprite_color = color;
+	}
+	
+	/**
+	 * Sets the actor to render a rectangle instead of a sprite.
+	 * @param color The color of the rectangle.
+	 */
+	public void setRect(Color color) {
+		actor_sprite = null;
+		sprite_color = color;
+	}
 	
 	/**
 	 * Renders the actor onto the Jframe.
