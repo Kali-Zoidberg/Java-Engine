@@ -100,11 +100,28 @@ public class Sprite {
 		}
 	}
 	
+	/**
+	 * Retrieves the width of the sprite.
+	 * @return Returns the sprite's height as an integer.
+	 */
+	
 	public int getWidth() {
 		return sprite_width;
 	}
 
+	/**
+	 * Retrieves the height of the sprite.
+	 * @return Returns the sprite's height as an integer.
+	 */
 	
+	public int getHeight() {
+		return sprite_height;
+	}
+	
+	/**
+	 * Determines if the sprite has an Image or not.
+	 * @return Returns true if the sprite has an image.
+	 */
 	public boolean hasImage() {
 		if (sprite_image != null)
 			return true;

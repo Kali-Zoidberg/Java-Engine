@@ -21,7 +21,8 @@ public class Render {
 	private static int frames = 0;
 	public static ArrayList<SnakeObject> snakeobjects = new ArrayList<SnakeObject>();
 	private static ArrayList<SnakeObject> emptysnakeobjects = new ArrayList<SnakeObject>();
-	private static ArrayList<Actor> actor_list = new ArrayList<Actor>();
+	public static ArrayList<Actor> actor_list = new ArrayList<Actor>();
+	private static ArrayList<UserInterface> ui_list = new ArrayList<UserInterface>();
 	private static int direction = 0;
 	private static int velocity = -10;
 	private static int totalframes = 0;
@@ -47,7 +48,7 @@ public class Render {
 	public static void Renderframes(int frameratecap) throws NullPointerException {
 			
 			current_frame_rate = frameratecap;
-			
+			frameratecap = 60;
 			Controls controller = new Controls();
 			controller.initializeControls();
 			JFrame frame = new JFrame();
@@ -76,12 +77,13 @@ public class Render {
 			//Random rand = new Random();
 			frame.setVisible(true);
 			int fps = 0;
-			long totalTime = 0;
-			long curTime = System.currentTimeMillis();
-			long lastTime = curTime;
+			double totalTime = 0;
+			double curTime = System.currentTimeMillis();
+			double lastTime = curTime;
 			frame.setFocusable(true);
-			long totalTime2 = 0;
-
+			double totalTime2 = 0;
+			fpscounter = bi.createGraphics();
+			Start();
 			while (!GameOver) { // increase difficulty loop
 				if (count >= 5) {
 					if (count >= 5 && count < 10)
@@ -113,20 +115,21 @@ public class Render {
 					frames++;
 					totalframes++;
 					
-				fpscounter = bi.createGraphics();
 			
 				fpscounter.setColor(background);
 				fpscounter.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 			
 				//MiscGameLogic();
-				Start();
+				//Start();
 				renderActors();
 				frame.getContentPane().add(Main.focusWindow);		
 				fpscounter.setFont(new Font("Courier New", Font.PLAIN, 12));
 				fpscounter.setColor(Color.GREEN);
 				fpscounter.drawString(String.format( "Points: %s", points), 20, 20);
-				
+
 				graphics = buffer.getDrawGraphics();
+				deRenderGameObjects();
+
 				graphics.drawImage(bi,0,0,null);
 
 				if (!buffer.contentsLost()) 
@@ -173,27 +176,38 @@ public class Render {
 		private static void renderActors() {
 			for (Actor act: actor_list) {
 				if (act.isVisible()) {
-					act.setVisible(true);
+					act.renderActor();
 				}
+				//	}
+			}
+			for (UserInterface ui: ui_list) {
+				ui.renderText();
 			}
 		}
 		
+		private static void deRenderGameObjects() {
+			for (Actor act: actor_list) {
+				//if (act.isVisible())
+					act.actor_graphics.dispose();
+			}
+		}
 		/**
 		 * Used for initializing Actor's at the start of the game.
 		 */
 		private static void Start() {
 			
 			Transform transform_test = new Transform(750,500,0f);
+			UserInterface ui_test = new UserInterface(60,60,0.0,"Hello world!",Color.WHITE,	new Font("Courier New", Font.PLAIN, 12));
 			Actor player = new Actor(transform_test,Color.GREEN,50,50);
-
+			System.out.println("start");
 			while(test) {
 				
 			player.transform.setX(player.transform.getX());
 			player.transform.setY(player.transform.getY());
-			player.transform.moveTo(new Cartesian2D(1000,0), 300, 10f);
-			player.transform.setDirection(0.5f);
-			//System.out.println("direction: " + player.transform.getDirection());
 			player.setVisible(true);
+			//player.transform.setDirection(0.86f);
+
+			ui_list.add(ui_test);
 			actor_list.add(player);
 			test = false;
 			}

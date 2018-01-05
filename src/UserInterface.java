@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics2D;
 
 
 public class UserInterface extends Transform{
@@ -8,6 +9,7 @@ public class UserInterface extends Transform{
 	private Color ui_color = Color.WHITE;
 	private Font ui_font = null;
 	private Sprite ui_sprite;
+	Graphics2D ui_graphics = Render.bi.createGraphics();
 	/*
 	 * Default constructor for UserInterface object. This object is positioned at (0.0,0.0) with a direction of 0.0 radians.
 	 */
@@ -205,6 +207,10 @@ public class UserInterface extends Transform{
 	 * Renders the text of the UserInterface object instead of the sprite.
 	 */
 	public void renderText() {
+
+		ui_graphics.setFont(ui_font);
+		ui_graphics.setColor(ui_color);
+		ui_graphics.drawString(ui_text, (int)(this.getX() + 0.5),(int) (this.getY() + 0.5));
 		
 	}
 	/**
@@ -212,7 +218,12 @@ public class UserInterface extends Transform{
 	 */
 	public void renderSprite() {
 		
+		if (ui_sprite != null) {
+			ui_graphics.drawImage(ui_sprite.getImage(), (int) (this.getX() + 0.5), (int) (this.getY() + 0.5), ui_sprite.getWidth(), ui_sprite.getHeight(),  null);
+		}
+		
 	}
+		
 	/**
 	 * Returns the font style as an integer. Plain: 0, Bold: 1, Italic: 2, Italic + Bold: 3.
 	 * @return Returns the font style as an integer. Plain: 0, Bold: 1, Italic: 2, Italic + Bold: 3.

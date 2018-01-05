@@ -58,11 +58,11 @@ public class Transform extends Cartesian2D {
 	 * NOTE: This currently uses a while loop and needs to be resourced off to a separate thread.
 	 * 		- The speed is currently inverted.
 	 * @param target The position in space to move the Transform to.
-	 * @param speed The speed at which to move the Transform. 
+	 * @param speed The updates per frame?
 	 * @param delta The allowed precision error between the actor's old position and new position.
 	 */
 	
-	public void moveTo(Cartesian2D target, double speed, float delta) {
+	public boolean moveTo(Cartesian2D target, double speed, float delta) {
 		
 		double x_cur_pos = this.getX();
 		double y_cur_pos = this.getY();
@@ -84,15 +84,15 @@ public class Transform extends Cartesian2D {
 			
 			do {
 					
-				if (pos_diff_x > delta) {	//If X has been reached, stop updating it.
+				//if (pos_diff_x > delta) {	//If X has been reached, stop updating it.
 					x_cur_pos = this.getX();
 					this.setX(x_cur_pos + x_speed);
-				}
+				//}
 				
-				if (pos_diff_y > delta) {		//if Y has been reached, stop updating it.
+				//if (pos_diff_y > delta) {		//if Y has been reached, stop updating it.
 					this.setY(y_cur_pos + y_speed);
 					y_cur_pos = this.getY();
-				}
+				//}
 				
 				current_pos = Math.hypot(this.getX(), this.getY());	
 	
@@ -104,8 +104,9 @@ public class Transform extends Cartesian2D {
 	
 				//Thread.yield();
 				} while (pos_diff > delta);
+			return true;
+
 		}
-	
 	
 	/**
 	 * Sets the direction of the transform.
@@ -163,8 +164,6 @@ public class Transform extends Cartesian2D {
 	public void setY(double y) {
 		y_pos = y;
 	}
-	
-	
 
 	/**
 	 * The non-converted X coordinate. Use for easier understanding of the coordinate system. 

@@ -17,8 +17,8 @@ public class Controls {
 	public int countt = 0;
 	private int dir = 0;
 	private Render render_obj;
-
-
+	private boolean isMoving = false;
+	private boolean hasMoved = true;
 	public boolean movingup = false;
 
 	public void initializeControls() {
@@ -29,7 +29,13 @@ public class Controls {
 			public void actionPerformed(ActionEvent e) {
 			if (dir != 0) {
 				dir = 1;
-				Render.setSpeed(yspeedup,1);
+				//Render.setSpeed(yspeedup,1);
+				Actor player = Render.actor_list.get(0);
+			
+				
+					//	hasMoved = player.transform.moveTo(new Cartesian2D(player.transform.getX(),player.transform.getY() + 100), 10000, 2f);
+						
+				//player.transform.setY((int)player.transform.getY() + 10);
 			}
 			}
 		};
@@ -38,7 +44,10 @@ public class Controls {
 			public void actionPerformed(ActionEvent e) {
 				
 				if(dir != 2) {
-					Render.setSpeed(xspeedright, 3);	
+				//	Render.setSpeed(xspeedright, 3);
+					Actor player = Render.actor_list.get(0);
+					player.transform.setY((int)player.transform.getY() - 10);
+
 					dir= 3;
 				}
 				}
@@ -47,7 +56,11 @@ public class Controls {
 		Action moveleft = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				if (dir !=3) {
-					Render.setSpeed(xspeedleft, 2);
+					Actor player = Render.actor_list.get(0);
+
+					player.transform.setX((int)player.transform.getX() + 10);
+
+				//	Render.setSpeed(xspeedleft, 2);
 					dir = 2;
 				}
 			}
@@ -56,7 +69,11 @@ public class Controls {
 		Action moveup = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				if (dir != 1) {
-					Render.setSpeed(yspeeddown,0);
+					Actor player = Render.actor_list.get(0);
+
+					player.transform.setX((int)player.transform.getX() - 10);
+
+				//	Render.setSpeed(yspeeddown,0);
 					dir = 0;
 				}
 			}

@@ -9,7 +9,7 @@ public class Actor {
 	public Sprite actor_sprite;
 	
 	private Color sprite_color = Color.PINK;
-	private Graphics2D actor_graphics;
+	public Graphics2D actor_graphics = Render.bi.createGraphics();
 	private Render rend_obj; //WILL BE REMOVED WHEN RENDER IS CHANGED BACK TO STATIC
 	
 	private int actor_width = 10;
@@ -17,7 +17,7 @@ public class Actor {
 	private int actor_avg_width = actor_width / 2;
 	private int actor_avg_height = actor_height / 2;
 	
-	private boolean is_visible = false;
+	public boolean is_visible = false;
 	
 	
 	
@@ -170,21 +170,16 @@ public class Actor {
 	}
 	
 	/**
-	 * Renders the actor onto the Jframe.
-	 * @param enable Set to true if you want the actor to be visible and in the jframe/scene.
+	 * Renders an actor on screen if set to visible.
 	 */
-	public void setVisible(boolean enable) {
-		
+	public void renderActor() {
 		int x_position = (int) (this.transform.getX() + 0.5f);
 		int y_position = (int) (this.transform.getY() + 0.5f);
 		double actor_dir = this.transform.getDirection();
 		
-		if (enable) {
-			
-			is_visible = true;
+		if (is_visible) {
 			actor_graphics = Render.bi.createGraphics();
-			
-			if (actor_sprite!=null) {
+			if (actor_sprite != null) {
 				actor_graphics.drawImage(actor_sprite.getImage(), x_position, y_position, null);
 				actor_graphics.rotate(actor_dir);
 			} else {
@@ -192,15 +187,26 @@ public class Actor {
 				actor_graphics.setColor(sprite_color);
 				actor_graphics.fillRect(x_position, y_position, actor_width, actor_height);
 				actor_graphics.rotate(actor_dir);
+				
 			}
 		} else {
-			if (actor_sprite != null) {
+			//if (actor_sprite != null) {
 				
-			} else {
-				actor_graphics.clearRect(x_position, y_position, actor_width, actor_height);
-			}
+			//} else {
+			//	actor_graphics.dispose();
+			//	actor_graphics.clearRect(x_position, y_position, actor_width, actor_height);
+		//	}
 			//unrender the actor.
 		}
+	}
+	
+	/**
+	 * Sets an actor visible on the scene.
+	 * @param enable Set to true if you want the actor to be visible and in the jframe/scene.
+	 */
+	public void setVisible(boolean enable) {
+		
+		is_visible = enable;
 		
 	}
 	
