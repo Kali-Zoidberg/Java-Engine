@@ -6,16 +6,28 @@ Re-Write: Over the course of this program, I will rewrite the code with re-usabi
 basic game engine in Java using JFrames. However, parallel computing using multi-threads may be implemented to improve the optimization.
 The focus of the multi-threading/parallel computing will be to handle the updated game states such as Vectors, Transforms and Game Logic.
 
-
 To do: On resize, recalculate averages and have any function that uses average window height call on the average function.
+		Make sprite easier to use for setImage. setImage should have a string then it declares a file name and makes a buffered image.
+		Resizeable functions.
+		Actor class: upon initilization, push the actor to the GameEngine list.
+		Actor arraylist needs a search function. So we need to have a map.
 		Multi-threading.
-		Think about the static behavior of the screen_Width in the transform class.
-		UIclass
-		Reprogram Render class. Render class should exist on it's own thread.
-		Render class should contain all actors. Ignore the move to functions until we can get multi-threading/parallel working
-		Include an update function.
-		Actor setRect or renderRect?
-		moveTo function needs a preventive condition for when the speed is too fast.
+		
+		Change renderActor's method parameters.
+		
+		Render class setBackground(Color color), setBackground(Image img).
+		
+		Physics Class
+		
+		Switch controls to keyListener instead of action map
+		
+		
+Bugs: Framerate cap doesn't cap it to the user's specifications. Not too much of a problem right now though.
+		moveTo function is just plain broken but we can probably remove it.
+
+Potential ideas:
+ Have an array of coordinates and make this the game world. When a object moves or is placed somewhere it makes the position in space occupied.
+ Issues: array Size and access time.
 Note: Coordinates in space are stored as doubles and then down casted/truncated to integers.
 
 Change log:
@@ -33,7 +45,14 @@ Change log:
 		-Sprite's (excluding sprite's without images) can now be rotated.
 		-Included definition for default Cartesian2D constructor.
 		
+	Update 5:
+		-Rewrite of reprogram class.
+		-Inclusion of GameWorld class which is static and contains all game objects.
+		- Inclusion of a GameWindow class that handles the rendering of all game objects.
+		-New method for rendering game objects onto the canvas: GameWindow is now repainted and handles all game object rendering.
+		- Included an Updaterunnable class that implements runnable and can be as a separate thread.
 		
+		Notes: The render method seems to be executed on the main thread and is leading to some problems. I will try my best to offset it to another thread.
 		
 		
 		
@@ -103,5 +122,12 @@ RigidBody class:
 	goals: Collision detection using classical mechanics
 			Velocity moves the object using transform.set
 			members: center of mass, mass, size dimensions and collision bounds?
+			
+
+GameWorld class:
+	Background setting.
+	Contains an array of all elements on scene.
+	
+
 			
 			 

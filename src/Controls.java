@@ -20,62 +20,67 @@ public class Controls {
 	private boolean isMoving = false;
 	private boolean hasMoved = true;
 	public boolean movingup = false;
-
+	
 	public void initializeControls() {
 	
-		InputMap im = Main.focusWindow.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
+		InputMap im = Render.game_window.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
 		
 		Action movedown = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-			if (dir != 0) {
-				dir = 1;
+			
+				System.out.println("Action movedown");
 				//Render.setSpeed(yspeedup,1);
-				Actor player = Render.actor_list.get(0);
+				Actor player = GameWorld.actor_list.get(0);
 			
 				
-					//	hasMoved = player.transform.moveTo(new Cartesian2D(player.transform.getX(),player.transform.getY() + 100), 10000, 2f);
+				//	try {
+						//hasMoved = player.transform.moveTo(new Cartesian2D(player.transform.getX() - 90,player.transform.getY() + 300), 100, 1.4f);
+					//} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+				//		e1.printStackTrace();
+				//	}
 						
-				//player.transform.setY((int)player.transform.getY() + 10);
-			}
+				player.transform.setY((int)player.transform.getY() + 10);
+			
 			}
 		};
 		
 		Action moveright = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				
-				if(dir != 2) {
+				
 				//	Render.setSpeed(xspeedright, 3);
-					Actor player = Render.actor_list.get(0);
-					player.transform.setY((int)player.transform.getY() - 10);
+					Actor player = GameWorld.actor_list.get(0);
+					player.transform.setY((int)player.transform.getX() + 10);
 
-					dir= 3;
-				}
+			
+				
 				}
 		};
 		
 		Action moveleft = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				if (dir !=3) {
-					Actor player = Render.actor_list.get(0);
+				
+					Actor player = GameWorld.actor_list.get(0);
 
-					player.transform.setX((int)player.transform.getX() + 10);
+					player.transform.setX((int)player.transform.getX() - 10);
 
 				//	Render.setSpeed(xspeedleft, 2);
-					dir = 2;
-				}
+				
+				
 			}
 				
 		};
 		Action moveup = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				if (dir != 1) {
-					Actor player = Render.actor_list.get(0);
+				System.out.println("MOVEUP");
+					Actor player = GameWorld.actor_list.get(0);
 
-					player.transform.setX((int)player.transform.getX() - 10);
+					player.transform.setX((int)player.transform.getY() - 10);
 
 				//	Render.setSpeed(yspeeddown,0);
 					dir = 0;
-				}
+				
 			}
 		};
 		
@@ -83,10 +88,10 @@ public class Controls {
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_S,0), "movedown");
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_A,0),"moveleft");
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_W,0),"moveup");
-		Main.focusWindow.getActionMap().put("moveright", moveright);
-		Main.focusWindow.getActionMap().put("moveleft",  moveleft);
-		Main.focusWindow.getActionMap().put("movedown", moveup);
-		Main.focusWindow.getActionMap().put("moveup", movedown);
+		Render.game_window.getActionMap().put("moveright", moveright);
+		Render.game_window.getActionMap().put("moveleft",  moveleft);
+		Render.game_window.getActionMap().put("movedown", movedown);
+		Render.game_window.getActionMap().put("moveup", moveup);
 	}
 	
 	public int movedown(int speed) {

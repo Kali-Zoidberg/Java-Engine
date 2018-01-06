@@ -9,7 +9,7 @@ public class UserInterface extends Transform{
 	private Color ui_color = Color.WHITE;
 	private Font ui_font = null;
 	private Sprite ui_sprite;
-	Graphics2D ui_graphics = Render.bi.createGraphics();
+	public Graphics2D ui_graphics = Render.bi.createGraphics();
 	/*
 	 * Default constructor for UserInterface object. This object is positioned at (0.0,0.0) with a direction of 0.0 radians.
 	 */

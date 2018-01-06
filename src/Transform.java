@@ -60,9 +60,10 @@ public class Transform extends Cartesian2D {
 	 * @param target The position in space to move the Transform to.
 	 * @param speed The updates per frame?
 	 * @param delta The allowed precision error between the actor's old position and new position.
+	 * @throws InterruptedException 
 	 */
 	
-	public boolean moveTo(Cartesian2D target, double speed, float delta) {
+	public boolean moveTo(Cartesian2D target, double speed, float delta) throws InterruptedException {
 		
 		double x_cur_pos = this.getX();
 		double y_cur_pos = this.getY();
@@ -103,7 +104,8 @@ public class Transform extends Cartesian2D {
 				System.out.println("x_pos " + this.getX() + " y_pos " + this.getY() + " last_pos: " + target_pos + "delta: " + delta + "pos_diff " + pos_diff);
 	
 				//Thread.yield();
-				} while (pos_diff > delta);
+				
+			} while (pos_diff > delta);
 			return true;
 
 		}
@@ -162,6 +164,7 @@ public class Transform extends Cartesian2D {
 	 */
 	
 	public void setY(double y) {
+		System.out.println("sety");
 		y_pos = y;
 	}
 

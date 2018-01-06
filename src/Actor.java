@@ -9,7 +9,7 @@ public class Actor {
 	public Sprite actor_sprite;
 	
 	private Color sprite_color = Color.PINK;
-	public Graphics2D actor_graphics = Render.bi.createGraphics();
+	public Graphics2D actor_graphics;
 	private Render rend_obj; //WILL BE REMOVED WHEN RENDER IS CHANGED BACK TO STATIC
 	
 	private int actor_width = 10;
@@ -178,9 +178,9 @@ public class Actor {
 		double actor_dir = this.transform.getDirection();
 		
 		if (is_visible) {
-			actor_graphics = Render.bi.createGraphics();
+			//actor_graphics = Render.bi.createGraphics();
 			if (actor_sprite != null) {
-				actor_graphics.drawImage(actor_sprite.getImage(), x_position, y_position, null);
+				actor_graphics.drawImage(actor_sprite.getImage(), x_position, y_position, actor_sprite.getWidth(), actor_sprite.getHeight(), null);
 				actor_graphics.rotate(actor_dir);
 			} else {
 
