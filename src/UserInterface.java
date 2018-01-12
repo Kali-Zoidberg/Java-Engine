@@ -6,25 +6,39 @@ import java.awt.Graphics2D;
 public class UserInterface extends Transform{
 
 	private String ui_text = "Default Text.";
+	private String ui_name;
+	private int ui_index = GameWorld.ui_list.size(); // Since ui_index is initialized before adding the object to the list, the object is correctly indexed.
 	private Color ui_color = Color.WHITE;
 	private Font ui_font = null;
 	private Sprite ui_sprite;
 	public Graphics2D ui_graphics = Render.bi.createGraphics();
-	/*
+	
+	/**
 	 * Default constructor for UserInterface object. This object is positioned at (0.0,0.0) with a direction of 0.0 radians.
+	 * @param name The name of the UserInterface object.
 	 */
-	UserInterface() {
+	UserInterface(String name) {
 		super(0.0,0.0,0.0);
+		ui_name = name;
+		GameWorld.ui_list.add(this);
+		
 	}
+	
+	
 	/**
 	 * Constructs a UserInterface object without a sprite or specified text.
 	 * @param x The x position on the screen to place the UserInterface object.
 	 * @param y The y position on the screen to place the UserInterface object.
 	 * @param direction The direction/rotation of the UserInterface object on the screen.
+	 * @param The name of the UserInterface object.
 	 */
-	UserInterface(double x, double y, double direction) {
+	
+	UserInterface(double x, double y, double direction, String name) {
 		super(x,y,direction);
+		ui_name = name;
+		GameWorld.ui_list.add(this);
 	}
+	
 	
 	/**
 	 * Constructs a UserInterface object with a specified position, text, color and font.
@@ -34,12 +48,17 @@ public class UserInterface extends Transform{
 	 * @param text The text of the UserInterface object.
 	 * @param color The color of the text.
 	 * @param font The font of the text.
+	 * @param name The name of the UserInterface object.
 	 */
-	UserInterface(double x, double y, double direction, String text, Color color, Font font) {
+	
+	UserInterface(double x, double y, double direction, String text, Color color, Font font, String name) {
 		super(x,y,direction);
 		ui_text = text;
 		ui_color = color;
 		ui_font = font;
+		ui_name = name;
+		
+		GameWorld.ui_list.add(this);
 	}
 	/**
 	 * Constructs a UserInterface object with a specified position and sprite/image.
@@ -47,11 +66,15 @@ public class UserInterface extends Transform{
 	 * @param y The y position on the screen to place the UserInterface object.
 	 * @param direction The direction/rotation of the UserInterface object.
 	 * @param ui_sprite The Sprite/image of the UserInterface object.
+	 * @param name The name of the UserInterface object.
 	 */
 	
-	UserInterface(double x, double y, double direction, Sprite ui_sprite) {
+	UserInterface(double x, double y, double direction, Sprite ui_sprite, String name) {
 		super(x,y,direction);
 		this.ui_sprite = ui_sprite;
+		ui_name = name;
+		GameWorld.ui_list.add(this);
+		
 	}
 	/**
 	 * Constructs a Text-Based user interface object.
@@ -60,12 +83,15 @@ public class UserInterface extends Transform{
 	 * @param text The text of the UserInterface object.
 	 * @param color The color of the text.
 	 * @param font The font of the text.
+	 * @param name The name of the UserInterface object.
 	 */
-	UserInterface(Cartesian2D coordinate, double direction, String text, Color color, Font font) {
+	UserInterface(Cartesian2D coordinate, double direction, String text, Color color, Font font, String name) {
 		super(coordinate, direction);
 		ui_text = text;
 		ui_color = color;
 		ui_font = font;
+		ui_name = name;
+		GameWorld.ui_list.add(this);
 	}
 	
 	
@@ -74,11 +100,14 @@ public class UserInterface extends Transform{
 	 * @param coordinate The coordinates on the screen to place the UserInterface object.
 	 * @param direction The direction/rotation of the UserInterface object.
 	 * @param ui_sprite The sprite/image of the UserInterface object.
+	 * @param name The name of the UserInterface object.
 	 */
 	
-	UserInterface(Cartesian2D coordinate, double direction, Sprite ui_sprite) {
+	UserInterface(Cartesian2D coordinate, double direction, Sprite ui_sprite, String name) {
 		super(coordinate, direction);
 		this.ui_sprite = ui_sprite;
+		ui_name = name;
+		GameWorld.ui_list.add(this);
 	}
 	
 	/**
@@ -87,7 +116,7 @@ public class UserInterface extends Transform{
 	 */
 	
 	public void setText(String text) {
-		ui_text = text;
+		GameWorld.ui_list.get(ui_index).ui_text = text;
 	}
 	
 	/**
@@ -96,7 +125,7 @@ public class UserInterface extends Transform{
 	 */
 	
 	public void setColor(Color color) {
-		ui_color = color;
+		GameWorld.ui_list.get(ui_index).ui_color = color;
 	}
 	
 	
@@ -106,7 +135,7 @@ public class UserInterface extends Transform{
 	 */
 	
 	public void setNewFont(Font font) {
-		ui_font = font;
+		GameWorld.ui_list.get(ui_index).ui_font = font;
 	}
 	
 	/**
@@ -114,7 +143,22 @@ public class UserInterface extends Transform{
 	 * @param sprite The sprite for the UserInterface object.
 	 */
 	public void setSprite(Sprite sprite) {
-		ui_sprite = sprite;
+		GameWorld.ui_list.get(ui_index).ui_sprite = sprite;
+	}
+	
+	/**
+	 * Sets the name of the UserInterface object.
+	 * @param name The name of the UserInterFace object.
+	 * @return Returns true if the name has not already been assigned to another UserInterface object in the GameWorld ui_list.
+	 */
+	
+	public boolean setName(String name) {
+		
+		if (GameWorld.getUIIndex(name) != -1) { //The name has not been taken yet.
+			GameWorld.ui_list.get(ui_index).ui_name = name;
+			return true;
+		} else
+			return false;
 	}
 	
 	/**
@@ -131,7 +175,7 @@ public class UserInterface extends Transform{
 		for (int i = 0; i < fonts_size; ++i) { // Checks array of Font names and compares to the desired fontType.
 			if (fontType.equals(fonts[i])) {
 				Font temp_font = new Font(fontType, ui_font.getStyle(), ui_font.getSize());
-				ui_font = temp_font;
+				GameWorld.ui_list.get(ui_index).ui_font = temp_font;
 				return true;
 			}
 		}
@@ -147,7 +191,7 @@ public class UserInterface extends Transform{
 	public boolean setFontSize(int font_size) {
 		if (font_size >= 0) {
 			Font temp_font = new Font(ui_font.getFontName(), ui_font.getStyle(), font_size);
-			ui_font = temp_font;
+			GameWorld.ui_list.get(ui_index).ui_font = temp_font;
 
 			return true;
 		} else
@@ -163,10 +207,27 @@ public class UserInterface extends Transform{
 	public boolean setFontStyle(int fontStyle) {
 		if (fontStyle >= 0 && fontStyle <=3) {
 			Font temp_font = new Font(ui_font.getFontName(), fontStyle, ui_font.getSize());
-			ui_font = temp_font;
+			GameWorld.ui_list.get(ui_index).ui_font = temp_font;
 			return true;
 		} else
 			return false;
+	}
+	
+	/**
+	 * Removes an UserInterface object from the GameWorld UserInterface list. Please use this other than the remove function from the array list.
+	 */
+	public void remove() {
+		int list_size = GameWorld.ui_list.size();
+		if (ui_index < list_size - 1) { //Ensures that the current object being removed is not at the end of the list.
+			
+			for (int i = this.ui_index + 1; i < list_size; ++i) 
+				GameWorld.ui_list.get(i).ui_index = i - 1;
+			
+			GameWorld.ui_list.remove(ui_index);
+			
+		} else {
+			GameWorld.ui_list.remove(ui_index); // If this is the last elements, then we can just remove if from the array list without having to re-index the others.
+		}
 	}
 	
 	/**
@@ -208,9 +269,9 @@ public class UserInterface extends Transform{
 	 */
 	public void renderText() {
 
-		ui_graphics.setFont(ui_font);
-		ui_graphics.setColor(ui_color);
-		ui_graphics.drawString(ui_text, (int)(this.getX() + 0.5),(int) (this.getY() + 0.5));
+		GameWorld.ui_list.get(ui_index).ui_graphics.setFont(ui_font);
+		GameWorld.ui_list.get(ui_index).ui_graphics.setColor(ui_color);
+		GameWorld.ui_list.get(ui_index).ui_graphics.drawString(ui_text, (int)(this.getX() + 0.5),(int) (this.getY() + 0.5));
 		
 	}
 	/**
@@ -249,4 +310,18 @@ public class UserInterface extends Transform{
 		return ui_font.getSize();
 	}
 	
+	/**
+	 * Retrieves the name of the UserInterface object.
+	 * @return Returns the name of the UserInterface object as a string.
+	 */
+	public String getUIName() {
+		return ui_name;
+	}
+	/**
+	 * Retrieves the current index of the user_interface object.
+	 * @return Returns the UserInterface object's index.
+	 */
+	public int getUIIndex() {
+		return ui_index;
+	}
 }

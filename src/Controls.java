@@ -34,7 +34,12 @@ public class Controls {
 			
 				
 				//	try {
-						//hasMoved = player.transform.moveTo(new Cartesian2D(player.transform.getX() - 90,player.transform.getY() + 300), 100, 1.4f);
+					 try {
+						player.transform.moveTo(new Cartesian2D(player.transform.getX() - 90,player.transform.getY() + 300), 100, 1.4f);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					//} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 				//		e1.printStackTrace();

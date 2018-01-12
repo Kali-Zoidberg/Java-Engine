@@ -18,7 +18,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class Render {
+public class Render implements Runnable{
 	private static Random random = new Random();
 	public static BufferedImage bi;
 	public static JLabel PaddlePlayer = new JLabel(""); 
@@ -35,11 +35,11 @@ public class Render {
 	protected static int points = 0;
 	private static final int SCREEN_WIDTH = 1500;
 	private static final int SCREEN_HEIGHT = 1000;
-	private static boolean test = true;
 	private static int current_frame_rate = 0;
+	
 	public static Controls controller = new Controls();
 
-	
+	private static Thread rend_thread;
 	private static JFrame game_frame = new JFrame("Game Window");
 	private Image bg_image = null;
 	private Color bg_color = Color.BLACK;
@@ -61,11 +61,9 @@ public class Render {
 	public static Snake sn;
 
 /*
- * TODO: Fix Framerate dependency. Optimize game.
+ * TODO: 
  * Comment function using javadocs.
  * 
- * Fix snake objects not being rendered. Then seperate the classes so snake becomes only player controller and snake object
- * is the tail
  */
 	/**
 	 * Constructs a render object with a frame title, frame width and height.
@@ -113,10 +111,10 @@ public class Render {
 		game_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		while(!is_game_over) {
-			controller.initializeControls();
 
 			if (changed_bg_colors) { // ensures that the background is not constantly updating.
 				game_window.setBackground(bg_color);
+				
 				changed_bg_colors = false;
 			}
 
@@ -155,7 +153,7 @@ public class Render {
 	/**
 	 * Calculates the current frame rate.
  	 * @param update_rate Update rate in milliseconds.
-	 * @throws InterruptedExceptio
+	 * @throws InterruptedException
 	 */
 	public static void calculateFrameRate(long update_rate) throws InterruptedException {
 		
@@ -166,7 +164,7 @@ public class Render {
 		System.out.println("init frame count: " + frames);
 		int cur_frame = 0;
 		int frame_diff = 0;
-		Thread.sleep(update_rate);
+		//Thread.sleep(update_rate);
 		System.out.println("final frame count: " + frames);
 		cur_frame = frames;
 		
@@ -335,11 +333,14 @@ public class Render {
 	public void setBackground(Color color) {
 		bg_color = color;
 		changed_bg_colors = true;
+		game_window.setBackground(bg_color);
+	//	game_window.
 	}
 	
 	public void setBackground(Image background_image) {
 		bg_image = background_image;
 		game_window.setBackground(bg_image);
+		changed_bg_colors = false;
 	}
 	
 	/**
@@ -406,16 +407,15 @@ public class Render {
 	/**
 		* Used for initializing Actor's at the start of the game.
 	 */
-	public static void Start() throws IOException{
+	public void test_start() throws IOException{
 			
 		Transform transform_test = new Transform(750,500,0f);
 		File sprite_img = new File("sprite_test.jpg");
 		BufferedImage car_bg = ImageIO.read(sprite_img);
 
 		//UserInterface ui_test = new UserInterface(60,60,0.0,"Hello world!",Color.WHITE,	new Font("Courier New", Font.PLAIN, 12));
-		Actor player = new Actor(transform_test,Color.GREEN,50,50);
-		System.out.println("start");
-		while(test) {
+		Actor player = new Actor(transform_test,Color.GREEN, "test actor",50,50);
+		
 				
 		player.transform.setX(player.transform.getX());
 		player.transform.setY(player.transform.getY());
@@ -425,9 +425,10 @@ public class Render {
 		//player.transform.setDirection(0.86f);
 
 		//	ui_list.add(ui_test);
-		GameWorld.actor_list.add(player);
-		test = false;
-		}
+		//GameWorld.actor_list.add(player);
+		System.out.println("Actor index: " + GameWorld.getActorIndex("test actor"));
+
+		
 
 			
 		//emptysnakeobjects.add(new SnakeObject(10,10,30,50, Color.WHITE, 0)); // add snake object on screen to 'eat'
@@ -553,6 +554,23 @@ public class Render {
 	public static int getFrameRate() {
 		return current_frame_rate;
 	}
+
+	/**
+	 * Implementation of Runnable's abstract method run.
+	 */
+	@Override
+	public void run() {
+		renderScene();
+		
+	}
+	/**
+	 * Starts the game's rendering on a separate thread. Use this method when initializing the rendering of the scene.
+	 */
+	public void start() {
+		rend_thread = new Thread(new Render(window_title,max_framerate,window_width, window_height));
+		rend_thread.start();
+	}
 	
 }
+
 

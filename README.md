@@ -9,18 +9,13 @@ The focus of the multi-threading/parallel computing will be to handle the update
 To do: On resize, recalculate averages and have any function that uses average window height call on the average function.
 		Make sprite easier to use for setImage. setImage should have a string then it declares a file name and makes a buffered image.
 		Resizeable functions.
-		Actor class: upon initilization, push the actor to the GameEngine list.
-		Actor arraylist needs a search function. So we need to have a map.
-		Multi-threading.
+						
+		Physics Class - Implement on a separate thread.
 		
-		Change renderActor's method parameters.
+		Switch controls to keyListener instead of action map.
 		
-		Render class setBackground(Color color), setBackground(Image img).
-		
-		Physics Class
-		
-		Switch controls to keyListener instead of action map
-		
+		Allow the setBackground methods to swap each other. So if we have an image first we should be able to then swap for a color.
+				
 		
 Bugs: Framerate cap doesn't cap it to the user's specifications. Not too much of a problem right now though.
 		moveTo function is just plain broken but we can probably remove it.
@@ -54,8 +49,13 @@ Change log:
 		
 		Notes: The render method seems to be executed on the main thread and is leading to some problems. I will try my best to offset it to another thread.
 		
+	Update 6:
+		-Actors and UserInterface objects are now automatically pushed to the GameWorld array lists and their respective element in the array list is modified accordingly.
+		-Included remove functions for Actor and UserInterface objects. This automatically adjusts the indexes of Actor and UserInterface objects in the GameWorld lists.
+		-Game now has a separate thread for rendering. 
 		
 		
+Needs testing: UI_list, remove functions for both UserInterface and Actor
 NOTE: *The following outlines are for my own outlining and not meant to be official documentation of the classes and functions provided in this engine and game.
 
 Cartesian2D class: The Cartesian representation of space in the game.

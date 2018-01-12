@@ -8,7 +8,7 @@ public class Transform extends Cartesian2D {
 	private double dir = 0;
 
 //	private static int screen_width = Render.getScreenWidth();
-	private static int screen_height = Render.getScreenHeight();
+//	private static int screen_height = Render.getScreenHeight();
 
 	
 	public Vector2D veloc;
@@ -33,8 +33,6 @@ public class Transform extends Cartesian2D {
 		dir = direction;
 	}
 	
-	
-
 	
 	/**
 	 * Constructs a transform object with specified x and y coordinates and a center of mass
@@ -102,7 +100,7 @@ public class Transform extends Cartesian2D {
 				pos_diff_y = Math.abs(y_targ_pos - y_cur_pos);
 				System.out.printf("x diff: %f. y diff: %f \n", pos_diff_x,pos_diff_y);
 				System.out.println("x_pos " + this.getX() + " y_pos " + this.getY() + " last_pos: " + target_pos + "delta: " + delta + "pos_diff " + pos_diff);
-	
+				Thread.sleep(30);
 				//Thread.yield();
 				
 			} while (pos_diff > delta);
@@ -164,7 +162,6 @@ public class Transform extends Cartesian2D {
 	 */
 	
 	public void setY(double y) {
-		System.out.println("sety");
 		y_pos = y;
 	}
 
