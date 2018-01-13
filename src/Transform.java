@@ -2,14 +2,7 @@
 public class Transform extends Cartesian2D {
 	private double x_pos = 0;
 	private double y_pos = 0;
-	
-
-	
 	private double dir = 0;
-
-//	private static int screen_width = Render.getScreenWidth();
-//	private static int screen_height = Render.getScreenHeight();
-
 	
 	public Vector2D veloc;
 	

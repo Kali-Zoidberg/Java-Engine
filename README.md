@@ -15,7 +15,8 @@ To do: On resize, recalculate averages and have any function that uses average w
 		Switch controls to keyListener instead of action map.
 		
 		Allow the setBackground methods to swap each other. So if we have an image first we should be able to then swap for a color.
-				
+		
+		Add a setPosition method for transform and override for rigidbody.
 		
 Bugs: Framerate cap doesn't cap it to the user's specifications. Not too much of a problem right now though.
 		moveTo function is just plain broken but we can probably remove it.
@@ -25,6 +26,7 @@ Potential ideas:
  Issues: array Size and access time.
 Note: Coordinates in space are stored as doubles and then down casted/truncated to integers.
 
+Thoughts: How to deal with rigidbodies and actors. How will Rigidbody interact with Actor? Will it simply be constructed with an actor object and then pass the actor's parameters to actor's transformations?
 Change log:
 
 	Update 3:
@@ -54,6 +56,9 @@ Change log:
 		-Included remove functions for Actor and UserInterface objects. This automatically adjusts the indexes of Actor and UserInterface objects in the GameWorld lists.
 		-Game now has a separate thread for rendering. 
 		
+	Update 6.A:
+	-Cleaned up Render class code.
+	-GameWorld.world_coorindates[][] now correctly represents the locations of all rigid bodies. This may be changed from boolean to another datatype such that.
 		
 Needs testing: UI_list, remove functions for both UserInterface and Actor
 NOTE: *The following outlines are for my own outlining and not meant to be official documentation of the classes and functions provided in this engine and game.
@@ -119,6 +124,9 @@ UI class:
 	font
 	color		
 RigidBody class:
+	Extends Actor
+	Has velocity and mass.
+	Should be used if you want a collidable object.
 	goals: Collision detection using classical mechanics
 			Velocity moves the object using transform.set
 			members: center of mass, mass, size dimensions and collision bounds?

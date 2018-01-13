@@ -11,7 +11,8 @@ public class UserInterface extends Transform{
 	private Color ui_color = Color.WHITE;
 	private Font ui_font = null;
 	private Sprite ui_sprite;
-	public Graphics2D ui_graphics = Render.bi.createGraphics();
+	private boolean is_text = false;
+	public Graphics2D ui_graphics;
 	
 	/**
 	 * Default constructor for UserInterface object. This object is positioned at (0.0,0.0) with a direction of 0.0 radians.
@@ -36,6 +37,7 @@ public class UserInterface extends Transform{
 	UserInterface(double x, double y, double direction, String name) {
 		super(x,y,direction);
 		ui_name = name;
+		is_text = true;
 		GameWorld.ui_list.add(this);
 	}
 	
@@ -58,6 +60,7 @@ public class UserInterface extends Transform{
 		ui_font = font;
 		ui_name = name;
 		
+		is_text = true;
 		GameWorld.ui_list.add(this);
 	}
 	/**
@@ -91,6 +94,8 @@ public class UserInterface extends Transform{
 		ui_color = color;
 		ui_font = font;
 		ui_name = name;
+		
+		is_text = true;
 		GameWorld.ui_list.add(this);
 	}
 	
@@ -110,6 +115,8 @@ public class UserInterface extends Transform{
 		GameWorld.ui_list.add(this);
 	}
 	
+	
+
 	/**
 	 * Set function for the UserInterface object's text.
 	 * @param text The new text for the UserInterface object.
@@ -117,6 +124,7 @@ public class UserInterface extends Transform{
 	
 	public void setText(String text) {
 		GameWorld.ui_list.get(ui_index).ui_text = text;
+		GameWorld.ui_list.get(ui_index).is_text = true;
 	}
 	
 	/**
@@ -144,6 +152,8 @@ public class UserInterface extends Transform{
 	 */
 	public void setSprite(Sprite sprite) {
 		GameWorld.ui_list.get(ui_index).ui_sprite = sprite;
+		GameWorld.ui_list.get(ui_index).is_text = false;
+
 	}
 	
 	/**
@@ -264,14 +274,20 @@ public class UserInterface extends Transform{
 		return ui_font;
 	}
 	
+	
+	/*public void render() {
+		if ()
+	}
+	*/
 	/**
 	 * Renders the text of the UserInterface object instead of the sprite.
 	 */
+	
 	public void renderText() {
 
-		GameWorld.ui_list.get(ui_index).ui_graphics.setFont(ui_font);
-		GameWorld.ui_list.get(ui_index).ui_graphics.setColor(ui_color);
-		GameWorld.ui_list.get(ui_index).ui_graphics.drawString(ui_text, (int)(this.getX() + 0.5),(int) (this.getY() + 0.5));
+		ui_graphics.setFont(ui_font);
+		ui_graphics.setColor(ui_color);
+		ui_graphics.drawString(ui_text, (int)(this.getX() + 0.5),(int) (this.getY() + 0.5));
 		
 	}
 	/**

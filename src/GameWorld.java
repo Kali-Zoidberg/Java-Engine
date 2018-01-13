@@ -2,11 +2,12 @@ import java.util.ArrayList;
 
 
 public class GameWorld {
+	
 	public static ArrayList<Actor> actor_list = new ArrayList<Actor>();
 	public static ArrayList<UserInterface> ui_list = new ArrayList<UserInterface>();
-	private static int world_width;
-	private static int world_height;
-	private static boolean[][] world_coordinate;
+	private static int world_width = 1920;
+	private static int world_height = 1080;
+	private static boolean[][] world_coordinate = new boolean [world_width][world_height];
 	
 	/**
 	 * Constructs a game world with a specified width and height.
@@ -15,11 +16,37 @@ public class GameWorld {
 	 */
 	
 	GameWorld(int world_width, int world_height) {
-		this.world_width = world_width + 1; //Add one just in case the position exists. Might be able to be removed.
-		this.world_height = world_height + 1;
+		GameWorld.world_width = world_width + 1; //Add one just in case the position exists. Might be able to be removed.
+		GameWorld.world_height = world_height + 1;
 		world_coordinate = new boolean[world_width][world_height];
 		
 	}
+	
+	public static void printWorldCoordinates() {
+		
+		for (int i = 0; i < world_width; ++i) {
+			for (int j = 0; j < world_height; ++j) {
+				if (world_coordinate[i][j] == true) {
+					System.out.print(world_coordinate[i][j] + " ");
+					if ((j % 10) == 0)
+						System.out.print("\n");
+				}
+			}
+		}
+		
+	}
+	
+	/**
+	 * Sets the specified world coordinate to true such that an object is represented.
+	 * @param x The x-coordinate.
+	 * @param y The y-coordinate.
+	 * @param occupied Set to true if you want the specified xy coordinate to be occupied.
+	 */
+	
+	public static void setWorldCoordinate(int x, int y, boolean occupied) {
+		world_coordinate[x][y] = occupied;
+	}
+	
 	
 	/**
 	 * Initializes the world coordinates all to false.
@@ -70,4 +97,25 @@ public class GameWorld {
 		
 		return -1;
 	}
+	
+	
+	/**
+	 * Returns the world width.
+	 * @return Returns world width.
+	 */
+	
+	public static int getWorldWidth() {
+		return world_width;
+	}
+	
+	
+	/**
+	 * Returns the world height.
+	 * @return Returns the world height.
+	 */
+	
+	public static int getWorldHeight() {
+		return world_height;
+	}
+	
 }

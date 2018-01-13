@@ -2,9 +2,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 
-public class Actor {
+public class Actor extends Transform{
 	
-	public Transform transform;
 	public Sprite actor_sprite;
 	
 	private Color sprite_color = Color.PINK;
@@ -16,10 +15,11 @@ public class Actor {
 	private int actor_height = 10;
 	private int actor_avg_width = actor_width / 2;
 	private int actor_avg_height = actor_height / 2;
+	private int converted_pos_x = 0;
+	private int converted_pos_y = 0;
 	
-	
+	private boolean has_collision = false;
 	public boolean is_visible = false;
-	
 	
 	
 	/**
@@ -31,11 +31,11 @@ public class Actor {
 	Actor(String name) {
 
 		actor_name = name;
-		transform = new Transform();
 		actor_sprite = null;
 		GameWorld.actor_list.add(this);
 	}
 	
+
 	
 	/**
 	 * Constructs an Actor object with a specified transform.
@@ -45,9 +45,10 @@ public class Actor {
 	 */
 	
 	Actor(Transform transform, String name){
-		transform.setX(transform.getX() + actor_avg_width);
-		transform.setY(transform.getY() - actor_avg_height);
-		this.transform = transform;
+		
+		this.setX(transform.getX() - actor_avg_width);
+		this.setY(transform.getY() - actor_avg_height);
+		
 		actor_name = name;
 		actor_sprite = null;
 		GameWorld.actor_list.add(this);
@@ -76,16 +77,15 @@ public class Actor {
 		actor_avg_height = actor_height / 2;
 		
 		
-		transform.setX(transform.getX() + actor_avg_width);
-		transform.setY(transform.getY() - actor_avg_height);
-		this.transform = transform;
+		this.setX(transform.getX() - actor_avg_width);
+		this.setY(transform.getY() - actor_avg_height);
 		GameWorld.actor_list.add(this);
 
 	}
 	
 	
 	/**
-	 * Constructs and Actor object with a transform, color, width, and height.
+	 * Constructs an Actor object with a transform, color, width, and height.
 	 * The actor will appear as a box on screen.
 	 * @param transform The Transform of the Actor. Through which the velocity and position are manipulated
 	 * and retrieved.
@@ -106,31 +106,12 @@ public class Actor {
 		actor_avg_height = actor_height / 2;
 		
 		
-		transform.setX(transform.getX() - actor_avg_width);
-		transform.setY(transform.getY() - actor_avg_height);
-		this.transform = transform;
+		this.setX(transform.getX() - actor_avg_width);
+		this.setY(transform.getY() - actor_avg_height);
 		GameWorld.actor_list.add(this);
 	}
 	
 	
-	/**
-	 * Retrieves the Actor's sprite's width
-	 * @return Returns the width of the Actor's sprite.
-	 */
-	
-	public int getSpriteSize_Width() {
-		return actor_width;
-	}
-	
-	
-	/**
-	 * Returns the Actor's sprite's height.
-	 * @return Returns the height of the Actor's sprite.
-	 */
-	
-	public int getSpriteSize_Height() {
-		return actor_height;
-	}
 	/**
 	 * Sets the bounds in the world coordinate array located in GameWorld.
 	 * May need to use calculus for this problem...
@@ -142,6 +123,7 @@ public class Actor {
 		
 		return true;
 	}
+	
 	
 	/**
 	 * Sets the Actor's size.
@@ -179,10 +161,12 @@ public class Actor {
 	 */
 	
 	public void setRect(int width, int height, Color color) {
+		
 		GameWorld.actor_list.get(actor_index).actor_sprite = null;
 		GameWorld.actor_list.get(actor_index).actor_width = width;
 		GameWorld.actor_list.get(actor_index).actor_height = height;
 		GameWorld.actor_list.get(actor_index).sprite_color = color;
+		
 	}
 	
 	
@@ -192,8 +176,10 @@ public class Actor {
 	 */
 	
 	public void setRect(Color color) {
+		
 		GameWorld.actor_list.get(actor_index).actor_sprite = null;
 		GameWorld.actor_list.get(actor_index).sprite_color = color;
+		
 	}
 	
 	
@@ -201,19 +187,21 @@ public class Actor {
 	 * Renders an actor on screen if set to visible.
 	 */
 	public void renderActor() {
-		int x_position = (int) (this.transform.getX() + 0.5f);
-		int y_position = (int) (this.transform.getY() + 0.5f);
-		double actor_dir = this.transform.getDirection();
+		
+		converted_pos_x = (int) (this.getX() + 0.5f);
+		converted_pos_y = (int) (this.getY() + 0.5f);
+		
+		double actor_dir = this.getDirection();
 		
 		if (is_visible) {
 			//actor_graphics = Render.bi.createGraphics();
 			if (actor_sprite != null) {
-				GameWorld.actor_list.get(actor_index).actor_graphics.drawImage(actor_sprite.getImage(), x_position, y_position, actor_sprite.getWidth(), actor_sprite.getHeight(), null);
+				GameWorld.actor_list.get(actor_index).actor_graphics.drawImage(actor_sprite.getImage(), converted_pos_x, converted_pos_y, actor_sprite.getWidth(), actor_sprite.getHeight(), null);
 				GameWorld.actor_list.get(actor_index).actor_graphics.rotate(actor_dir);
 			} else {
 
 				GameWorld.actor_list.get(actor_index).actor_graphics.setColor(sprite_color);
-				GameWorld.actor_list.get(actor_index).actor_graphics.fillRect(x_position, y_position, actor_width, actor_height);
+				GameWorld.actor_list.get(actor_index).actor_graphics.fillRect(converted_pos_x, converted_pos_y, actor_width, actor_height);
 				GameWorld.actor_list.get(actor_index).actor_graphics.rotate(actor_dir);
 				
 			}
@@ -299,4 +287,34 @@ public class Actor {
 	public int getActorIndex() {
 		return actor_index;
 	}
+	
+	/**
+	 * Retrieves the Actor's width
+	 * @return Returns the width of the Actor's sprite.
+	 */
+	
+	public int getActorWidth() {
+		return actor_width;
+	}
+	
+	
+	/**
+	 * Returns the Actor's height.
+	 * @return Returns the height of the Actor's sprite.
+	 */
+	
+	public int getActorHeight() {
+		return actor_height;
+	}
+	
+	
+	/**
+	 * Determines if an object is collidable.
+	 * @return Returns true if the object can be collided with.
+	 */
+	public boolean isCollidable() {
+		return has_collision;
+	}
+	
+	
 }

@@ -16,8 +16,8 @@ public  class SnakeObject {
 	public int ychange;
 	public int xchange;
 	private int count;
-	private ArrayList<PositionsArray> xpos = new ArrayList<PositionsArray>();
-	private ArrayList<PositionsArray> ypos = new ArrayList<PositionsArray>();
+	//private ArrayList<PositionsArray> xpos = new ArrayList<PositionsArray>();
+//	private ArrayList<PositionsArray> ypos = new ArrayList<PositionsArray>();
 
 	protected Color color;
 	protected  Graphics2D snakgraph2d;
@@ -35,8 +35,8 @@ public  class SnakeObject {
 		
 		if (count != -1) {
 			this.count = count;
-			this.xpos.add(new PositionsArray(xpos));
-			this.ypos.add(new PositionsArray(ypos));
+		//	this.xpos.add(new PositionsArray(xpos));
+		//	this.ypos.add(new PositionsArray(ypos));
 		}
 	}
 		

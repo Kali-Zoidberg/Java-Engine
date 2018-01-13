@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import java.awt.Image;
 
 public class GameWindow extends JPanel {
+
 	private Graphics window_graphics;
 
 	private Image background_image = null;

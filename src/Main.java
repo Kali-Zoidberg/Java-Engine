@@ -13,6 +13,7 @@ public class Main {
 	public static JLabel focusWindow = new JLabel(""); 
 	public static Render render_obj = new Render("Testing title",60,1000,1000);
 	public static Controls controller = new Controls();
+
 	public static void main (String[] args) throws InterruptedException, IOException {
 		File car_file = new File("car_background.jpg");
 		
@@ -23,15 +24,7 @@ public class Main {
 		render_obj.setBackground(car_bg);
 		render_obj.setBackground(Color.black);
 		controller.initializeControls();
-/*
-		Render.Start();
+
 		
-		render_obj.setBackground(Color.black);
-		
-		
-		render_obj.renderScene();
-		
-	
-		*/
 	}
 }

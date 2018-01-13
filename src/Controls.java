@@ -10,15 +10,8 @@ import javax.swing.KeyStroke;
 
 public class Controls {
 
-	private int yspeedup = -10;
-	private int yspeeddown = 10;
-	private int xspeedleft = -10;
-	private int xspeedright = 10;
 	public int countt = 0;
-	private int dir = 0;
-	private Render render_obj;
-	private boolean isMoving = false;
-	private boolean hasMoved = true;
+
 	public boolean movingup = false;
 	
 	public void initializeControls() {
@@ -35,7 +28,7 @@ public class Controls {
 				
 				//	try {
 					 try {
-						player.transform.moveTo(new Cartesian2D(player.transform.getX() - 90,player.transform.getY() + 300), 100, 1.4f);
+						player.moveTo(new Cartesian2D(player.getX() - 90,player.getY() + 300), 100, 1.4f);
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -45,7 +38,7 @@ public class Controls {
 				//		e1.printStackTrace();
 				//	}
 						
-				player.transform.setY((int)player.transform.getY() + 10);
+				player.setY((int)player.getY() + 10);
 			
 			}
 		};
@@ -56,7 +49,7 @@ public class Controls {
 				
 				//	Render.setSpeed(xspeedright, 3);
 					Actor player = GameWorld.actor_list.get(0);
-					player.transform.setY((int)player.transform.getX() + 10);
+					player.setY((int)player.getX() + 10);
 
 			
 				
@@ -68,7 +61,7 @@ public class Controls {
 				
 					Actor player = GameWorld.actor_list.get(0);
 
-					player.transform.setX((int)player.transform.getX() - 10);
+					player.setX((int)player.getX() - 10);
 
 				//	Render.setSpeed(xspeedleft, 2);
 				
@@ -81,10 +74,9 @@ public class Controls {
 				System.out.println("MOVEUP");
 					Actor player = GameWorld.actor_list.get(0);
 
-					player.transform.setX((int)player.transform.getY() - 10);
+					player.setX((int)player.getY() - 10);
 
 				//	Render.setSpeed(yspeeddown,0);
-					dir = 0;
 				
 			}
 		};

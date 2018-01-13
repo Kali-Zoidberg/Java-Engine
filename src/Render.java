@@ -1,40 +1,27 @@
-import java.awt.Canvas;
+
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Image;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class Render implements Runnable{
-	private static Random random = new Random();
 	public static BufferedImage bi;
 	public static JLabel PaddlePlayer = new JLabel(""); 
 	private static int frames = 0;
 	public static ArrayList<SnakeObject> snakeobjects = new ArrayList<SnakeObject>();
-	private static ArrayList<SnakeObject> emptysnakeobjects = new ArrayList<SnakeObject>();
+
 	public static ArrayList<Actor> actor_list = new ArrayList<Actor>();
 	public static ArrayList<UserInterface> ui_list = new ArrayList<UserInterface>();
-	private static int direction = 0;
-	private static int velocity = -10;
-	private static int totalframes = 0;
-	private static int count =0;
-	private static boolean GameOver = false;
-	protected static int points = 0;
-	private static final int SCREEN_WIDTH = 1500;
-	private static final int SCREEN_HEIGHT = 1000;
+
+
+
 	private static int current_frame_rate = 0;
 	
 	public static Controls controller = new Controls();
@@ -121,6 +108,9 @@ public class Render implements Runnable{
 			cur_time = System.currentTimeMillis();
 			diff_time = cur_time - init_time;
 			
+			/*
+			 * If (diff_time >= update_Rate) is used for determining the amount of repaints per second.
+			 */
 			if(diff_time >= update_rate) {
 				diff_frame = frames - init_frame;
 				frames = 0;
@@ -129,13 +119,13 @@ public class Render implements Runnable{
 				init_time = System.currentTimeMillis();
 			}
 			
-			if (!game_frame.isFocused())
+			if (!game_frame.isFocused()) // Pauses the game if the window goes out of ofcus.
 				game_window.pause(true);
 			else
 				game_window.pause(false);
 			
 			if (!game_window.isPaused()) {
-				game_window.Render(GameWorld.actor_list, GameWorld.ui_list);
+				game_window.Render(GameWorld.actor_list, GameWorld.ui_list); //renders the actors and ui objects.
 			}
 
 			try {
@@ -150,11 +140,14 @@ public class Render implements Runnable{
 		}
 		return true;
 	}
+	
+	
 	/**
 	 * Calculates the current frame rate.
  	 * @param update_rate Update rate in milliseconds.
 	 * @throws InterruptedException
 	 */
+	
 	public static void calculateFrameRate(long update_rate) throws InterruptedException {
 		
 		if (update_rate < 0)
@@ -172,9 +165,15 @@ public class Render implements Runnable{
 		System.out.println("Frame rate: " + frame_diff);
 	}
 	
+	/**
+	 * Retrieves the current
+	 * @return Returns the frame rate as double
+	 */
 	public static double getCurrentFrameRate() {
 		return current_framerate;
 	}
+	
+	
 	/**
 	 * Changes the title description of the game window.
 	 * @param window_title The title of the game window.
@@ -201,129 +200,6 @@ public class Render implements Runnable{
 	public boolean isGameOver() {
 		return is_game_over;
 	}
-	
-	public static void Renderframes(int frameratecap) throws InterruptedException {
-			
-			current_frame_rate = frameratecap;
-			
-			frameratecap = 37;
-			Controls controller = new Controls();
-			controller.initializeControls();
-			JFrame frame = new JFrame();
-			Canvas canvas = new Canvas();
-			canvas.setIgnoreRepaint(true);
-			canvas.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-			frame.add(canvas); //add canvas to jframe
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.pack(); // pack frame
-			
-			canvas.createBufferStrategy(2); // render canvas
-			BufferStrategy buffer = canvas.getBufferStrategy();
-			
-			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			GraphicsDevice gd = ge.getDefaultScreenDevice();
-			GraphicsConfiguration gc = gd.getDefaultConfiguration();
-			
-			bi = gc.createCompatibleImage(SCREEN_WIDTH, SCREEN_HEIGHT); // create background
-	
-			Graphics graphics = null;
-			Graphics2D fpscounter = null; // create fps counter
-		
-			Color background = Color.BLACK;
-			
-			
-			//Random rand = new Random();
-			frame.setVisible(true);
-			int fps = 0;
-			double totalTime = 0;
-			double curTime = System.currentTimeMillis();
-			double lastTime = curTime;
-			frame.setFocusable(true);
-			double totalTime2 = 0;
-			fpscounter = bi.createGraphics();
-			//Start();
-			while (!GameOver) { // increase difficulty loop
-				if (count >= 5) {
-					if (count >= 5 && count < 10)
-					frameratecap = 15;
-					if (count <15 && count >= 10) 
-						frameratecap = 20;
-					
-					if (count >= 15) 
-						frameratecap = 30;
-					
-				}
-				if (frame.isFocused()){ // if player lcikcs out, game pauses
-				try {
-				
-					lastTime = curTime;
-					curTime = System.currentTimeMillis(); 
-					totalTime += curTime - lastTime;
-					totalTime2 += curTime - lastTime;
-					if (totalTime > 1000) {
-						System.out.println("framerate: " + frames);
-
-						totalTime -= 1000;
-						fps = frames;
-		
-						frames = 0;
-					}
-					if (totalTime2 > (1000 / frameratecap)) { // do the frame rate
-						totalTime2 -= (1000/frameratecap);
-					frames++;
-					totalframes++;
-					
-			
-				fpscounter.setColor(background);
-				fpscounter.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-			
-				//MiscGameLogic();
-				//Start();
-				renderActors();
-				frame.getContentPane().add(Main.focusWindow);		
-				fpscounter.setFont(new Font("Courier New", Font.PLAIN, 12));
-				fpscounter.setColor(Color.GREEN);
-				fpscounter.drawString(String.format( "Points: %s", points), 20, 20);
-
-				graphics = buffer.getDrawGraphics();
-				deRenderGameObjects();
-
-				graphics.drawImage(bi,0,0,null);
-
-				if (!buffer.contentsLost()) 
-					buffer.show();
-
-				Thread.sleep(10);
-					}
-				
-				} finally {
-					if (totalTime2 > (1000 / frameratecap)) {
-						
-						totalTime2 -= (1000/frameratecap);
-					if (graphics != null);					}
-				
-				if (fpscounter != null)
-					if (totalTime2 > (1000 / frameratecap)) {
-						
-						totalTime2 -= (1000/ frameratecap);
-					fpscounter.dispose(); // dispose of fps counter
-					}
-				}
-			} else {
-				lastTime = curTime;
-				curTime = System.currentTimeMillis();
-				totalTime += curTime - lastTime;
-				
-				if (totalTime > 1000) {
-					totalTime -= 1000;
-					current_frame_rate = frames;
-					fps = frames;
-					frames = 0;
-					
-					}
-				}
-			}
-		}
 	
 	/**
 	 * Sets the background to a specified color.
@@ -384,26 +260,7 @@ public class Render implements Runnable{
 		return frames;
 	}
 		
-		/**
-		 * Renders all the actors in the scene.
-		 */
-	private static void renderActors() {
-		for (Actor act: actor_list) {
-			if (act.isVisible()) {
-				act.renderActor();
-			}
-		}
-		for (UserInterface ui: ui_list) {
-			ui.renderText();
-		}
-	}
-		
-	private static void deRenderGameObjects() {
-		for (Actor act: actor_list) {
-			//if (act.isVisible())
-				act.actor_graphics.dispose();
-		}
-	}
+	
 	/**
 		* Used for initializing Actor's at the start of the game.
 	 */
@@ -413,118 +270,26 @@ public class Render implements Runnable{
 		File sprite_img = new File("sprite_test.jpg");
 		BufferedImage car_bg = ImageIO.read(sprite_img);
 
-		//UserInterface ui_test = new UserInterface(60,60,0.0,"Hello world!",Color.WHITE,	new Font("Courier New", Font.PLAIN, 12));
-		Actor player = new Actor(transform_test,Color.GREEN, "test actor",50,50);
+		UserInterface ui_test = new UserInterface(60.0,60.0,0.0,"Hello world!",Color.WHITE,	new Font("Courier New", Font.PLAIN, 12), "ui_test");
+		
+		RigidBody player = new RigidBody(transform_test,Color.GREEN, "test actor",50,50);
 		
 				
-		player.transform.setX(player.transform.getX());
-		player.transform.setY(player.transform.getY());
+		player.setX(player.getX());
+		player.setY(player.getY());
 		player.setVisible(true);
 		Sprite sprite_test = new Sprite(car_bg,50,50);
 		player.setSprite(sprite_test);
+		player.setCollision(true);
 		//player.transform.setDirection(0.86f);
 
 		//	ui_list.add(ui_test);
 		//GameWorld.actor_list.add(player);
 		System.out.println("Actor index: " + GameWorld.getActorIndex("test actor"));
-
-		
-
-			
-		//emptysnakeobjects.add(new SnakeObject(10,10,30,50, Color.WHITE, 0)); // add snake object on screen to 'eat'
 	
 	}
-	/*	
-		private static void MiscGameLogic() {
-			
-			Graphics2D gameover = null;
 
-			sn = new Snake(10,10,screenwidth / 2 - 10,screenheight / 2 - 10, Color.WHITE); // center snake on screen
-			sn.velocityfunction(velocity, direction); // set snake in motion
 
-			if (sn.isAlive()) { // makesure snake is not dead
-
-				sn.createGraphics1(); // render snake
-				makeNewSnake(); // make empty snake object
-			
-				if (snakeobjects.size() < 1) {
-				snakeobjects.add(new SnakeObject(10,10,320,240,Color.WHITE,0)); 
-				} 
-				
-			} else {
-				endGame(gameover);
-			}
-
-		if (snakeobjects.size() > 0 ) {
-			System.out.println("this is being executed");
-			sn.renderSnakeObjects(snakeobjects);
-		}		
-		sn.collisionDetection(sn, snakeobjects); 
-			
-		}
-		
-
-		*/
-	/*
-	 * checks for collision for the snake and snake food.
-	 */
-	private static void makeNewSnake() {
-		emptysnakeobjects.get(0).createGraphics();
-		if (sn.hasCollided(sn, emptysnakeobjects)) { 
-			count++; // count how many have been added
-			points++; 
-			snakeobjects.add(new SnakeObject(10,10,30,40,Color.WHITE, count));
-			System.out.println("snakeobj size in the render: " +snakeobjects.size());
-			//sn.addSnake();
-			randomizeSnakeLocation();
-			
-		} 
-	
-	}
-	private static void randomizeSnakeLocation() { // randomizes the snake's locaiton
-		double tempx = random.nextInt(SCREEN_WIDTH) / 10; // divide screne length by 10, then downcast it
-		double tempy = random.nextInt(SCREEN_HEIGHT) / 10;
-		int xpos = (int)tempx * 10; // multiplied the now down casted length
-		int ypos = (int ) tempy * 10;
-			
-		while (xpos == sn.getX() && ypos == sn.getY() &&  (xpos !=SCREEN_WIDTH + 10 && xpos != SCREEN_WIDTH - 10) && (ypos != SCREEN_HEIGHT + 10 && ypos != SCREEN_HEIGHT - 10))  { // Keep on looping until we reach a new coordinate
-			tempx = random.nextInt(SCREEN_WIDTH) / 10;
-			tempy = random.nextInt(SCREEN_HEIGHT) / 10;
-			xpos = (int)tempx * 10;
-			ypos = (int ) tempy * 10;
-				
-		}
-			
- 		if (xpos != sn.getX() && ypos!= sn.getY()) {
-				
-			emptysnakeobjects.get(0).setX(xpos, 0);
-			emptysnakeobjects.get(0).setY(ypos, 0);
-		}
-	}
-		
-	public static void setSpeed(int yspeed, int dir) {
-		direction = dir;
-		velocity = yspeed;
-		
-		if (dir <=1){
-		sn.setSpeedY(yspeed);
-		}
-		
-		else
-			sn.setSpeedX(yspeed);
-		}
-	
-		public static int getFrame() {
-			return totalframes;
-		}
-		public static void endGame(Graphics2D gameover) {
-			
-			gameover = bi.createGraphics();
-			gameover.setFont(new Font("Courier New", Font.PLAIN, 48));
-			gameover.setColor(Color.WHITE);
-			gameover.drawString(String.format( "GAME OVER"), SCREEN_WIDTH/2 - 128, SCREEN_HEIGHT / 2);
-			GameOver = true;
-		}
 		
 	/**
 	* Get function for the JFrame width
