@@ -1,4 +1,3 @@
-import java.awt.Color;
 
 
 public class RigidBody extends Transform {
@@ -27,9 +26,9 @@ public class RigidBody extends Transform {
 	 * @param width The width of the RigidBody, and consequently, the sprite.
 	 * @param height The height of the RigidBody, and consequently, the sprite.
 	 */
-	RigidBody(String name, Transform transform, Sprite sprite, int width, int height) {
+	/*RigidBody(String name, Transform transform, Sprite sprite, int width, int height) {
 		super(name, transform, sprite, width, height);
-	}
+	}*/
 	
 	/**
 	 * Constructs a RigidBody object with a transform, color, width, and height.
@@ -41,9 +40,9 @@ public class RigidBody extends Transform {
 	 * @param width The width of the RigidBody and box.
 	 * @param height The height of the RigidBody and box.
 	 */
-	RigidBody(Transform transform, Color color, String name, int width, int height) {
+	/*RigidBody(Transform transform, Color color, String name, int width, int height) {
 		super(transform, color, name, width, height);
-	}
+	} */
 
 	public void setCollision(boolean enable) {
 		has_collision = enable;

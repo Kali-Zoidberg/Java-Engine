@@ -1,3 +1,5 @@
+import java.util.Hashtable;
+
 /**
  * All Actors and subsequent entities inherit from this class.
  * All GameObjects contain a name, a string representing the object type, a transform, and an instance ID (within the game world)
@@ -8,6 +10,7 @@
  * GameObject names CANNOT be changed during runtime. This prevents invalid hash assignments.
  * Currently ID is uninitialized as names are sufficient keys as of right now. We can, however implement ID's based on the order at
  * which objects are placed into the Hashtable.
+ * All GameObjects have a hashtable of components as well.
  * @author Nicholas Chow
  * 
  */
@@ -17,6 +20,7 @@ public class GameObject {
 	private String obj_type = "GameObject";
 	private int component_count = 1;
 	protected Transform transform = new Transform();
+	public Hashtable<String, Component> component_table = new Hashtable<String,Component>();
 	
 	/**
 	 * Constructs a GameObject with a givne name.
@@ -24,7 +28,8 @@ public class GameObject {
 	 */
 	
 	GameObject(String name) {
-		this.name = name;
+		this.name = generateNewName(name, GameWorld.game_obj_table);
+		GameWorld.game_obj_table.put(this.name, this);
 	}
 	/**
 	 * Constructs a GameObject with a name and transform.
@@ -33,10 +38,10 @@ public class GameObject {
 	 */
 	GameObject(String name, Transform transform) {
 		
-		this.name = generateNewName(name);
+		this.name = generateNewName(name, GameWorld.game_obj_table);
 		this.transform = transform;
 		
-		GameWorld.game_obj_table.put(name, this);
+		GameWorld.game_obj_table.put(this.name, this);
 	//	id = GameWorld.game_obj_table.hashCode();
 	}
 	
@@ -46,10 +51,10 @@ public class GameObject {
 	 * @return Returns the modified name for the GameObject
 	 */
 	
-	private String generateNewName(String name_str) {
+	public String generateNewName(String name_str, @SuppressWarnings("rawtypes") Hashtable table) {
 		int instance_count = 1;
 		
-		while (GameWorld.game_obj_table.containsKey(name_str)) {
+		while (table.containsKey(name_str)) {
 			name_str = name_str + " (" + instance_count + ")";
 		}
 		
@@ -83,7 +88,7 @@ public class GameObject {
 	 */
 	
 	public String setName(String name_str) {
-		name = generateNewName(name_str);
+		name = generateNewName(name_str, GameWorld.game_obj_table);
 		return name;
 	}
 	
