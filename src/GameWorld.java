@@ -1,10 +1,16 @@
 import java.util.ArrayList;
+import java.util.Hashtable;
 
+/**
+ * 
+ * Implement hash function for game_object list.
+ */
 
 public class GameWorld {
 	
 	public static ArrayList<Actor> actor_list = new ArrayList<Actor>();
 	public static ArrayList<UserInterface> ui_list = new ArrayList<UserInterface>();
+	public static Hashtable<String, GameObject> game_obj_table = new Hashtable<String, GameObject>();
 	private static int world_width = 1920;
 	private static int world_height = 1080;
 	private static boolean[][] world_coordinate = new boolean [world_width][world_height];
@@ -47,6 +53,16 @@ public class GameWorld {
 		world_coordinate[x][y] = occupied;
 	}
 	
+	/**
+	 * Determines if a specified position in the game world is occupied by another actor.
+	 * @param x The X-coordinate in the game world
+	 * @param y The Y-coordinate in the game world.
+	 * @return Returns the occupation status of the coordinate represented in the game world.
+	 */
+	
+	public static boolean GetWorldCoordinate(int x, int y) {
+		return world_coordinate[x][y];
+	}
 	
 	/**
 	 * Initializes the world coordinates all to false.

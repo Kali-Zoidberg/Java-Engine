@@ -64,6 +64,7 @@ public class GameWindow extends JPanel {
 		}
 		for (UserInterface ui: game_ui_objects) {
 			ui.ui_graphics = graphics_2d;
+			ui.renderText();
 		}
 		//window_frame.setTitle(window_title);
 		//window_frame.setSize(current_frame_width, current_frame_height);

@@ -1,8 +1,16 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+/**
+ * 
+ * Inheritance changes: Actor is a Game Objet
+ * 	- Actor has a Transform or RigiBody.
+ * 	- Actor cannot move
+ *  - Rigid bodies and transforms can move.
+ *  -Actor moves based on transform. When transform is called to move, the actor's locaiton is updated?
+ */
 
-public class Actor extends Transform{
+public class Actor extends GameObject{
 	
 	public Sprite actor_sprite;
 	
@@ -29,8 +37,7 @@ public class Actor extends Transform{
 	 */
 	
 	Actor(String name) {
-
-		actor_name = name;
+		super(name);
 		actor_sprite = null;
 		GameWorld.actor_list.add(this);
 	}
@@ -44,11 +51,11 @@ public class Actor extends Transform{
 	 * is manipulated and retrieved.
 	 */
 	
-	Actor(Transform transform, String name){
-		
-		this.setX(transform.getX() - actor_avg_width);
-		this.setY(transform.getY() - actor_avg_height);
-		
+	Actor(String name, Transform transform){
+		super(name, transform);
+		transform.setMentor(this);
+		transform.setX(transform.getX() - actor_avg_width);
+		transform.setY(transform.getY() - actor_avg_height);
 		actor_name = name;
 		actor_sprite = null;
 		GameWorld.actor_list.add(this);
@@ -65,10 +72,12 @@ public class Actor extends Transform{
 	 * @param height The height of the Actor, and consequently, the sprite.
 	 */
 	
-	Actor(Transform transform, Sprite sprite, String name, int width, int height) {
-
+	Actor(String name, Transform transform, Sprite sprite, int width, int height) {
+		
+		
+		super(name, transform);
 		actor_sprite = sprite;
-		actor_name = name;
+	
 		actor_width = width;
 		actor_height = height;
 		sprite_color = sprite.getColor();
@@ -77,8 +86,9 @@ public class Actor extends Transform{
 		actor_avg_height = actor_height / 2;
 		
 		
-		this.setX(transform.getX() - actor_avg_width);
-		this.setY(transform.getY() - actor_avg_height);
+		transform.setX(transform.getX() - actor_avg_width);
+		transform.setY(transform.getY() - actor_avg_height);
+		this.transform = transform;
 		GameWorld.actor_list.add(this);
 
 	}
@@ -95,19 +105,22 @@ public class Actor extends Transform{
 	 * @param height The height of the Actor and box.
 	 */
 	
-	Actor(Transform transform, Color color, String name, int width, int height) {
+	Actor(String name, Transform transform, Color color, int width, int height) {
 	
+		super(name, transform);
+		
 		actor_sprite = null;
 		sprite_color = color;
-		actor_name = name;
+		
 		actor_width = width;
 		actor_height = height;
 		actor_avg_width = actor_width / 2;
 		actor_avg_height = actor_height / 2;
 		
 		
-		this.setX(transform.getX() - actor_avg_width);
-		this.setY(transform.getY() - actor_avg_height);
+		transform.setX(transform.getX() - actor_avg_width);
+		transform.setY(transform.getY() - actor_avg_height);
+		this.transform = transform;
 		GameWorld.actor_list.add(this);
 	}
 	
@@ -188,10 +201,10 @@ public class Actor extends Transform{
 	 */
 	public void renderActor() {
 		
-		converted_pos_x = (int) (this.getX() + 0.5f);
-		converted_pos_y = (int) (this.getY() + 0.5f);
+		converted_pos_x = (int) (transform.getX() + 0.5f);
+		converted_pos_y = (int) (transform.getY() + 0.5f);
 		
-		double actor_dir = this.getDirection();
+		double actor_dir = transform.getDirection();
 		
 		if (is_visible) {
 			//actor_graphics = Render.bi.createGraphics();

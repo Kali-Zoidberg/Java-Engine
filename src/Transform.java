@@ -1,4 +1,8 @@
-
+/**
+ * Transformations are 2D representations of objects in the scene. They are the basis for the movement of all GameObjects.
+ * @author Nicholas Chow
+ *
+ */
 public class Transform extends Cartesian2D {
 	private double x_pos = 0;
 	private double y_pos = 0;

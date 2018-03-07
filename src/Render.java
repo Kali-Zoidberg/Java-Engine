@@ -273,11 +273,11 @@ public class Render implements Runnable{
 		UserInterface ui_test = new UserInterface(60.0,60.0,0.0,"Hello world!",Color.WHITE,	new Font("Courier New", Font.PLAIN, 12), "ui_test");
 		
 		RigidBody player = new RigidBody(transform_test,Color.GREEN, "test actor",50,50);
-		
 				
 		player.setX(player.getX());
 		player.setY(player.getY());
 		player.setVisible(true);
+		
 		Sprite sprite_test = new Sprite(car_bg,50,50);
 		player.setSprite(sprite_test);
 		player.setCollision(true);

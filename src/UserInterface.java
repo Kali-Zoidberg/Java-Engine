@@ -285,9 +285,9 @@ public class UserInterface extends Transform{
 	
 	public void renderText() {
 
-		ui_graphics.setFont(ui_font);
-		ui_graphics.setColor(ui_color);
-		ui_graphics.drawString(ui_text, (int)(this.getX() + 0.5),(int) (this.getY() + 0.5));
+		GameWorld.ui_list.get(ui_index).ui_graphics.drawString(ui_text, (int)(this.getX() + 0.5),(int) (this.getY() + 0.5));
+		GameWorld.ui_list.get(ui_index).ui_graphics.setFont(ui_font);
+		GameWorld.ui_list.get(ui_index).ui_graphics.setColor(ui_color);
 		
 	}
 	/**

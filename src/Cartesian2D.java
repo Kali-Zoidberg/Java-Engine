@@ -1,5 +1,5 @@
 
-public class Cartesian2D {
+public class Cartesian2D extends Component {
 
 	private double x_pos = 0;
 	private double y_pos = 0;
@@ -9,6 +9,7 @@ public class Cartesian2D {
 	 */
 
 	Cartesian2D() {
+		
 		x_pos = 0;
 		y_pos = 0;
 	}
@@ -24,7 +25,25 @@ public class Cartesian2D {
 		x_pos = x;
 		y_pos = y;
 	}
-	
+	/**
+	 * Constructs a Cartesian2D component with a mentor and x-y position.
+	 * @param x X position of the Cartesian 2D coordinate
+	 * @param y Y position of the Cartesian 2D coordinate
+	 * @param mentor The Cartesian2D's Mentor.
+	 */
+	Cartesian2D(GameObject mentor, double x, double y) {
+		super(mentor);
+		x_pos = x;
+		y_pos = y;
+		
+	}
+	/**
+	 * Constructs a  Cartesian2D with a mentor.
+	 * @param mentor The mentor for the Cartesian 2D
+	 */
+	Cartesian2D(GameObject mentor) {
+		super(mentor);
+	}
 	
 	/**
 	 * Alters the x position in the Cartesian coordinate specified by the parameter.

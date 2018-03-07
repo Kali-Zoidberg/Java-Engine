@@ -24,20 +24,7 @@ public class Controls {
 				System.out.println("Action movedown");
 				//Render.setSpeed(yspeedup,1);
 				Actor player = GameWorld.actor_list.get(0);
-			
-				
-				//	try {
-					 try {
-						player.moveTo(new Cartesian2D(player.getX() - 90,player.getY() + 300), 100, 1.4f);
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					//} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-				//		e1.printStackTrace();
-				//	}
-						
+								
 				player.setY((int)player.getY() + 10);
 			
 			}
@@ -49,7 +36,7 @@ public class Controls {
 				
 				//	Render.setSpeed(xspeedright, 3);
 					Actor player = GameWorld.actor_list.get(0);
-					player.setY((int)player.getX() + 10);
+					player.setX((int)player.getX() + 10);
 
 			
 				
@@ -74,7 +61,7 @@ public class Controls {
 				System.out.println("MOVEUP");
 					Actor player = GameWorld.actor_list.get(0);
 
-					player.setX((int)player.getY() - 10);
+					player.setY((int)player.getY() - 10);
 
 				//	Render.setSpeed(yspeeddown,0);
 				
