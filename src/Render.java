@@ -15,7 +15,6 @@ public class Render implements Runnable{
 	public static BufferedImage bi;
 	public static JLabel PaddlePlayer = new JLabel(""); 
 	private static int frames = 0;
-	public static ArrayList<SnakeObject> snakeobjects = new ArrayList<SnakeObject>();
 
 	public static ArrayList<Actor> actor_list = new ArrayList<Actor>();
 	public static ArrayList<UserInterface> ui_list = new ArrayList<UserInterface>();
@@ -45,7 +44,6 @@ public class Render implements Runnable{
 	private static int window_height = 0;
 	private static String window_title = "Game Window";
 	private static double current_framerate = 0;
-	public static Snake sn;
 
 /*
  * TODO: 
@@ -266,21 +264,21 @@ public class Render implements Runnable{
 	 */
 	public void test_start() throws IOException{
 			
-		Transform transform_test = new Transform(750,500,0f);
+	//	Transform transform_test = new Transform("Transform", 750,500,0f);
 		File sprite_img = new File("sprite_test.jpg");
 		BufferedImage car_bg = ImageIO.read(sprite_img);
 
 		UserInterface ui_test = new UserInterface(60.0,60.0,0.0,"Hello world!",Color.WHITE,	new Font("Courier New", Font.PLAIN, 12), "ui_test");
 		
-		RigidBody player = new RigidBody(transform_test,Color.GREEN, "test actor",50,50);
+		Actor player = new Actor(50.0,50.0, "Actor1");
 				
-		player.setX(player.getX());
-		player.setY(player.getY());
-		player.setVisible(true);
+		player.transform.setX(player.transform.getX());
+		player.transform.setY(player.transform.getY());
+		//player.setVisible(true);
 		
 		Sprite sprite_test = new Sprite(car_bg,50,50);
 		player.setSprite(sprite_test);
-		player.setCollision(true);
+		//player.setCollision(true);
 		//player.transform.setDirection(0.86f);
 
 		//	ui_list.add(ui_test);

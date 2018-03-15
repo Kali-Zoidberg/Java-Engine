@@ -11,9 +11,12 @@
  *
  */
 public class Component {
+	
 	protected GameObject Mentor;
 	private int instanceID;
-	protected String name = "Default";
+	private String default_name = "Default";
+	protected String name = default_name;
+	protected String component_type = "Component";
 	
 	/**
 	 * Default constructor for Components. No mentor is set to the object.
@@ -21,6 +24,14 @@ public class Component {
 	
 	Component() {
 		Mentor = null;
+		
+	}
+	/**
+	 * Constructs a component with a specified name and no Mentor
+	 * @param name The desired name of the component.
+	 */
+	Component(String name) {
+		this.name = name;
 	}
 	
 	/**
@@ -119,6 +130,24 @@ public class Component {
 	
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Sets the Component type to the desired type.
+	 * @param component_str The desired component type as a String.
+	 */
+	
+	public void setComponentType(String component_str) {
+		component_type = component_str;
+	}
+	
+	/**
+	 * Returns the type of component that the component is.
+	 * @return Returns the type of component.
+	 */
+
+	public String getComponentType() {
+		return component_type;
 	}
 	
 }

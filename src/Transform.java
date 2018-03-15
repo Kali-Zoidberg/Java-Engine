@@ -4,10 +4,9 @@
  *
  */
 public class Transform extends Cartesian2D {
-	private double x_pos = 0;
-	private double y_pos = 0;
-	private double dir = 0;
-	
+
+	protected double dir = 0;
+	private static String default_name = "Transform";
 	public Vector2D veloc;
 	
 	/**
@@ -15,7 +14,7 @@ public class Transform extends Cartesian2D {
 	 */
 	
 	Transform() {
-		super(0,0);
+		super(0,0, default_name);
 	}
 	
 	
@@ -25,22 +24,21 @@ public class Transform extends Cartesian2D {
 	 * @param direction The direction of the Actor.
 	 */
 	
-	Transform(Cartesian2D coordinate, double direction) {
-		super(coordinate.getX(),coordinate.getY());
+	Transform(Cartesian2D coordinate, double direction, GameObject Mentor) {
+		super(coordinate.getX(),coordinate.getY(), Mentor, default_name);
 		dir = direction;
 	}
 	
 	
 	/**
-	 * Constructs a transform object with specified x and y coordinates and a center of mass
+	 * Constructs a transform object with specified x, y coordinates and a direction.
 	 * @param x Coordinate X as as a double.
 	 * @param y Coordinate Y as a double.
-
-	 * @param direction The direction of the Actor.
+	 * @param direction The direction of the Transformation.
 	 */
 	
-	Transform(double x, double y, double direction) {
-		super(x,y);
+	Transform(double x, double y, double direction, GameObject Mentor) {
+		super(x,y, Mentor, default_name);
 
 		x_pos = x;
 		y_pos = y;
@@ -48,6 +46,17 @@ public class Transform extends Cartesian2D {
 	}
 	
 	
+	/**
+	 * Constructs a transform object with specified X,Y coordinates, a Mentor, and a name. 
+	 * @param x X coordinate for transform as a double.
+	 * @param y Y coordinate for the transform as a double.
+	 * @param Mentor The mentor of the transform.
+	 * @param name The name of the transform component.
+	 */
+	Transform(double x, double y, GameObject Mentor, String name) {
+		super(x, y, Mentor, name);
+		
+	}
 	/**
 	 * Moves the Transform to the specified position.
 	 * NOTE: This currently uses a while loop and needs to be resourced off to a separate thread.

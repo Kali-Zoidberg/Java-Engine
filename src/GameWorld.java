@@ -106,7 +106,7 @@ public class GameWorld {
 		int list_size = ui_list.size();
 		
 		for (int i = 0; i < list_size; ++i) {
-			if (name.equals(ui_list.get(i).getUIName())) {
+			if (name.equals(ui_list.get(i).getName())) {
 				return i;
 			}
 		}

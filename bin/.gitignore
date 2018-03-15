@@ -1,11 +1,13 @@
 /Actor.class
 /Cartesian2D.class
 /Collisions.class
+/Component.class
 /Controls$1.class
 /Controls$2.class
 /Controls$3.class
 /Controls$4.class
 /Controls.class
+/GameObject.class
 /GameWindow.class
 /GameWorld.class
 /Main.class
@@ -18,5 +20,3 @@
 /UpdateRunnable.class
 /UserInterface.class
 /Vector2D.class
-/Component.class
-/GameObject.class

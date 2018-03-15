@@ -19,11 +19,11 @@ public class GameObject {
 	protected String name;
 	private String obj_type = "GameObject";
 	private int component_count = 1;
-	protected Transform transform = new Transform();
+	public Transform transform = new Transform();
 	public Hashtable<String, Component> component_table = new Hashtable<String,Component>();
 	
 	/**
-	 * Constructs a GameObject with a givne name.
+	 * Constructs a GameObject with a given name.
 	 * @param name The name to give the string object.
 	 */
 	
@@ -43,6 +43,23 @@ public class GameObject {
 		
 		GameWorld.game_obj_table.put(this.name, this);
 	//	id = GameWorld.game_obj_table.hashCode();
+	}
+	
+	
+	/**
+	 * Constructs a game object with the given parameters.
+	 * @param x The x position of the game object.
+	 * @param y The y position of the game object.
+	 * @param name The name of the GameObject.
+	 */
+	GameObject(double x, double y, String name) {
+		
+		transform.setX(x);
+		transform.setY(y);
+		
+		this.name = name;
+		transform.Mentor = this;
+		
 	}
 	
 	/**

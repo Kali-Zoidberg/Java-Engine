@@ -13,7 +13,7 @@ public class Controls {
 	public int countt = 0;
 
 	public boolean movingup = false;
-	
+	private Actor player = (Actor) GameWorld.game_obj_table.get("Actor1");
 	public void initializeControls() {
 	
 		InputMap im = Render.game_window.getInputMap(JPanel.WHEN_IN_FOCUSED_WINDOW);
@@ -23,9 +23,8 @@ public class Controls {
 			
 				System.out.println("Action movedown");
 				//Render.setSpeed(yspeedup,1);
-				Actor player = GameWorld.actor_list.get(0);
-								
-				player.setY((int)player.getY() + 10);
+				player = (Actor) GameWorld.game_obj_table.get("Actor1");				
+				player.transform.setY((int)player.transform.getY() + 10);
 			
 			}
 		};
@@ -33,10 +32,9 @@ public class Controls {
 		Action moveright = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				
-				
+				player = (Actor) GameWorld.game_obj_table.get("Actor1");
 				//	Render.setSpeed(xspeedright, 3);
-					Actor player = GameWorld.actor_list.get(0);
-					player.setX((int)player.getX() + 10);
+					player.transform.setX((int)player.transform.getX() + 10);
 
 			
 				
@@ -45,10 +43,8 @@ public class Controls {
 		
 		Action moveleft = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				
-					Actor player = GameWorld.actor_list.get(0);
-
-					player.setX((int)player.getX() - 10);
+				player = (Actor) GameWorld.game_obj_table.get("Actor1");
+					player.transform.setX((int)player.transform.getX() - 10);
 
 				//	Render.setSpeed(xspeedleft, 2);
 				
@@ -59,9 +55,8 @@ public class Controls {
 		Action moveup = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("MOVEUP");
-					Actor player = GameWorld.actor_list.get(0);
-
-					player.setY((int)player.getY() - 10);
+				player = (Actor) GameWorld.game_obj_table.get("Actor1");
+					player.transform.setY((int)player.transform.getY() - 10);
 
 				//	Render.setSpeed(yspeeddown,0);
 				
