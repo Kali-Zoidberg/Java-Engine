@@ -16,8 +16,7 @@ public class Actor extends GameObject{
 	private Color sprite_color = Color.PINK;
 	public Graphics2D actor_graphics;
 	
-	private Actor instanceOfActorInTable;
-	private int actor_index = GameWorld.actor_list.size();
+	//private Actor instanceOfActorInTable;
 	private int actor_width = 10;
 	private int actor_height = 10;
 	private int actor_avg_width = actor_width / 2;
@@ -39,6 +38,7 @@ public class Actor extends GameObject{
 		super(name);
 		actor_sprite = null;
 		GameWorld.actor_list.add(this);
+		
 	}
 	
 	
@@ -162,8 +162,8 @@ public class Actor extends GameObject{
 		if (width < 0 && height < 0)
 			return false; //invalid size.
 		else {
-			GameWorld.actor_list.get(actor_index).actor_width = width;
-			GameWorld.actor_list.get(actor_index).actor_height = height;
+			actor_width = width;
+			actor_height = height;
 			return true;
 		}		
 	}
@@ -175,8 +175,7 @@ public class Actor extends GameObject{
 	 */
 	
 	public void setSprite(Sprite sprite) {
-		Actor temp = (Actor) GameWorld.game_obj_table.get(name);
-		temp.actor_sprite = sprite;
+		actor_sprite = sprite;
 	}
 	
 	
@@ -188,11 +187,10 @@ public class Actor extends GameObject{
 	 */
 	
 	public void setRect(int width, int height, Color color) {
-		Actor temp = (Actor) GameWorld.game_obj_table.get(name);
-		temp.actor_sprite = null;
-		temp.actor_width = width;
-		temp.actor_height = height;
-		temp.sprite_color = color;
+		actor_sprite = null;
+		actor_width = width;
+		actor_height = height;
+		sprite_color = color;
 		
 	}
 	
@@ -203,10 +201,9 @@ public class Actor extends GameObject{
 	 */
 	
 	public void setRect(Color color) {
-		Actor temp = (Actor) GameWorld.game_obj_table.get(name);
-
-		temp.actor_sprite = null;
-		temp.sprite_color = color;
+		
+		actor_sprite = null;
+		sprite_color = color;
 		
 	}
 	
@@ -215,7 +212,6 @@ public class Actor extends GameObject{
 	 * Renders an actor on screen if set to visible.
 	 */
 	public void renderActor() {
-		Actor temp = (Actor) GameWorld.game_obj_table.get(name);
 
 		converted_pos_x = (int) (transform.getX() + 0.5f);
 		converted_pos_y = (int) (transform.getY() + 0.5f);
@@ -225,13 +221,13 @@ public class Actor extends GameObject{
 		if (is_visible) {
 			//actor_graphics = Render.bi.createGraphics();
 			if (actor_sprite != null) {
-				temp.actor_graphics.drawImage(actor_sprite.getImage(), converted_pos_x, converted_pos_y, actor_sprite.getWidth(), actor_sprite.getHeight(), null);
-				temp.actor_graphics.rotate(actor_dir);
+				actor_graphics.drawImage(actor_sprite.getImage(), converted_pos_x, converted_pos_y, actor_sprite.getWidth(), actor_sprite.getHeight(), null);
+				actor_graphics.rotate(actor_dir);
 			} else {
 
-				temp.actor_graphics.setColor(sprite_color);
-				temp.actor_graphics.fillRect(converted_pos_x, converted_pos_y, actor_width, actor_height);
-				temp.actor_graphics.rotate(actor_dir);
+				actor_graphics.setColor(sprite_color);
+				actor_graphics.fillRect(converted_pos_x, converted_pos_y, actor_width, actor_height);
+				actor_graphics.rotate(actor_dir);
 				
 			}
 		} else {
@@ -252,9 +248,8 @@ public class Actor extends GameObject{
 	 */
 	
 	public void setVisible(boolean enable) {
-		Actor temp = (Actor) GameWorld.game_obj_table.get(name);
 
-		temp.is_visible = enable;
+		is_visible = enable;
 		
 	}
 	
@@ -265,9 +260,8 @@ public class Actor extends GameObject{
 	 */
 	
 	public boolean setActorName(String name) {
-		Actor temp = (Actor) GameWorld.game_obj_table.get(name);
 
-		temp.name = name;
+		name = name;
 		return true;
 	}
 	
@@ -277,18 +271,9 @@ public class Actor extends GameObject{
 	 */
 	
 	public void remove() {
-		
-		int list_size = GameWorld.actor_list.size();
-		if (actor_index < list_size - 1) { //Ensures that the current object being removed is not at the end of the list.
+					
+		GameWorld.game_obj_table.remove(name);
 			
-			for (int i = this.actor_index + 1; i < list_size; ++i) 
-				GameWorld.actor_list.get(i).actor_index = i - 1;
-			
-			GameWorld.actor_list.remove(actor_index);
-			
-		} else {
-			GameWorld.actor_list.remove(actor_index); // If this is the last elements, then we can just remove if from the array list without having to re-index the others.
-		}
 	}
 	
 	
@@ -311,15 +296,6 @@ public class Actor extends GameObject{
 		return name;
 	}
 	
-	
-	/**
-	 * Get function for the actor's index.
-	 * @return Returns the index of the actor.
-	 */
-	
-	public int getActorIndex() {
-		return actor_index;
-	}
 	
 	/**
 	 * Retrieves the Actor's width

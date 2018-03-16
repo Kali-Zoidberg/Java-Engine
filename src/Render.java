@@ -123,7 +123,7 @@ public class Render implements Runnable{
 				game_window.pause(false);
 			
 			if (!game_window.isPaused()) {
-				game_window.Render(GameWorld.actor_list, GameWorld.ui_list); //renders the actors and ui objects.
+				game_window.Render(); //renders the actors and ui objects.
 			}
 
 			try {
@@ -274,7 +274,7 @@ public class Render implements Runnable{
 				
 		player.transform.setX(player.transform.getX());
 		player.transform.setY(player.transform.getY());
-		//player.setVisible(true);
+		player.setVisible(true);
 		
 		Sprite sprite_test = new Sprite(car_bg,50,50);
 		player.setSprite(sprite_test);

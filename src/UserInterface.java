@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 public class UserInterface extends GameObject{
 
 	private String ui_text = "Default Text.";
-	private int ui_index = GameWorld.ui_list.size(); // Since ui_index is initialized before adding the object to the list, the object is correctly indexed.
 	private Color ui_color = Color.WHITE;
 	private Font ui_font = null;
 	private Sprite ui_sprite;
@@ -57,7 +56,7 @@ public class UserInterface extends GameObject{
 		ui_font = font;
 		
 		is_text = true;
-		GameWorld.ui_list.add(this);
+		GameWorld.game_obj_table.put(name, this);
 	}
 	/**
 	 * Constructs a UserInterface object with a specified position and sprite/image.
@@ -71,7 +70,7 @@ public class UserInterface extends GameObject{
 	UserInterface(double x, double y, double direction, Sprite ui_sprite, String name) {
 		super(x,y,name);
 		this.ui_sprite = ui_sprite;
-		GameWorld.ui_list.add(this);
+		GameWorld.game_obj_table.put(name, this);
 		
 	}
 	/**
@@ -90,7 +89,7 @@ public class UserInterface extends GameObject{
 		ui_font = font;
 		
 		is_text = true;
-		GameWorld.ui_list.add(this);
+		GameWorld.game_obj_table.put(name, this);
 	}
 	
 	
@@ -105,7 +104,7 @@ public class UserInterface extends GameObject{
 	UserInterface(Cartesian2D coordinate, double direction, Sprite ui_sprite, String name) {
 		super(coordinate.getX(), coordinate.getY(), name);
 		this.ui_sprite = ui_sprite;
-		GameWorld.ui_list.add(this);
+		GameWorld.game_obj_table.put(name, this);
 	}
 	
 	
@@ -116,8 +115,8 @@ public class UserInterface extends GameObject{
 	 */
 	
 	public void setText(String text) {
-		GameWorld.ui_list.get(ui_index).ui_text = text;
-		GameWorld.ui_list.get(ui_index).is_text = true;
+		ui_text = text;
+		is_text = true;
 	}
 	
 	/**
@@ -126,7 +125,7 @@ public class UserInterface extends GameObject{
 	 */
 	
 	public void setColor(Color color) {
-		GameWorld.ui_list.get(ui_index).ui_color = color;
+		ui_color = color;
 	}
 	
 	
@@ -136,7 +135,7 @@ public class UserInterface extends GameObject{
 	 */
 	
 	public void setNewFont(Font font) {
-		GameWorld.ui_list.get(ui_index).ui_font = font;
+		ui_font = font;
 	}
 	
 	/**
@@ -144,8 +143,8 @@ public class UserInterface extends GameObject{
 	 * @param sprite The sprite for the UserInterface object.
 	 */
 	public void setSprite(Sprite sprite) {
-		GameWorld.ui_list.get(ui_index).ui_sprite = sprite;
-		GameWorld.ui_list.get(ui_index).is_text = false;
+		ui_sprite = sprite;
+		is_text = false;
 
 	}
 	
@@ -165,7 +164,7 @@ public class UserInterface extends GameObject{
 		for (int i = 0; i < fonts_size; ++i) { // Checks array of Font names and compares to the desired fontType.
 			if (fontType.equals(fonts[i])) {
 				Font temp_font = new Font(fontType, ui_font.getStyle(), ui_font.getSize());
-				GameWorld.ui_list.get(ui_index).ui_font = temp_font;
+				ui_font = temp_font;
 				return true;
 			}
 		}
@@ -181,7 +180,7 @@ public class UserInterface extends GameObject{
 	public boolean setFontSize(int font_size) {
 		if (font_size >= 0) {
 			Font temp_font = new Font(ui_font.getFontName(), ui_font.getStyle(), font_size);
-			GameWorld.ui_list.get(ui_index).ui_font = temp_font;
+			ui_font = temp_font;
 
 			return true;
 		} else
@@ -197,7 +196,7 @@ public class UserInterface extends GameObject{
 	public boolean setFontStyle(int fontStyle) {
 		if (fontStyle >= 0 && fontStyle <=3) {
 			Font temp_font = new Font(ui_font.getFontName(), fontStyle, ui_font.getSize());
-			GameWorld.ui_list.get(ui_index).ui_font = temp_font;
+			ui_font = temp_font;
 			return true;
 		} else
 			return false;
@@ -206,18 +205,9 @@ public class UserInterface extends GameObject{
 	/**
 	 * Removes an UserInterface object from the GameWorld UserInterface list. Please use this other than the remove function from the array list.
 	 */
-	public void remove() {
-		int list_size = GameWorld.ui_list.size();
-		if (ui_index < list_size - 1) { //Ensures that the current object being removed is not at the end of the list.
+	public void remove() {			
+			GameWorld.game_obj_table.remove(name);
 			
-			for (int i = this.ui_index + 1; i < list_size; ++i) 
-				GameWorld.ui_list.get(i).ui_index = i - 1;
-			
-			GameWorld.ui_list.remove(ui_index);
-			
-		} else {
-			GameWorld.ui_list.remove(ui_index); // If this is the last elements, then we can just remove if from the array list without having to re-index the others.
-		}
 	}
 	
 	/**
@@ -265,9 +255,9 @@ public class UserInterface extends GameObject{
 	
 	public void renderText() {
 
-		GameWorld.ui_list.get(ui_index).ui_graphics.drawString(ui_text, (int)(this.transform.getX() + 0.5),(int) (this.transform.getY() + 0.5));
-		GameWorld.ui_list.get(ui_index).ui_graphics.setFont(ui_font);
-		GameWorld.ui_list.get(ui_index).ui_graphics.setColor(ui_color);
+		ui_graphics.drawString(ui_text, (int)(this.transform.getX() + 0.5),(int) (this.transform.getY() + 0.5));
+		ui_graphics.setFont(ui_font);
+		ui_graphics.setColor(ui_color);
 		
 	}
 	/**
@@ -307,11 +297,4 @@ public class UserInterface extends GameObject{
 	}
 	
 
-	/**
-	 * Retrieves the current index of the user_interface object.
-	 * @return Returns the UserInterface object's index.
-	 */
-	public int getUIIndex() {
-		return ui_index;
-	}
 }

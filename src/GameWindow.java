@@ -19,8 +19,7 @@ public class GameWindow extends JPanel {
 	private int current_frame_height = 0;
 	private boolean is_paused = false;
 	private String window_title = "Default_title";
-	private ArrayList<Actor> game_actors = Render.actor_list;
-	private ArrayList<UserInterface> game_ui_objects = Render.ui_list;
+
 	
 	/**
 	 * Constructs a GameWindow object. 
@@ -36,9 +35,8 @@ public class GameWindow extends JPanel {
 	
 	}
 	
-	public void Render(ArrayList<Actor> actors, ArrayList<UserInterface> ui_objs) {
-		game_actors = actors;
-		game_ui_objects = ui_objs;
+	public void Render() {
+		
 		//Change parameters once GameWorld class is made.
 		this.repaint();
 	}
@@ -50,25 +48,39 @@ public class GameWindow extends JPanel {
 	 */
 	@Override
 	public void paint(Graphics graphics) {
+		
 		super.paint(graphics);
+		
 		Graphics2D graphics_2d = (Graphics2D) graphics;
 		//graphics_2d.setBackground(Color.BLACK);
+		
 		if (background_image != null) { //Background image set, change the imge.
 			graphics_2d.drawImage(background_image, 0, 0, Render.getScreenWidth(), Render.getScreenHeight(), null);
 		}
 		
-		for (Actor act: game_actors) {
-			act.actor_graphics = graphics_2d;
-			act.renderActor();
+		/*
+		 * The for loop runs through each game object and calls the correct method of rendering depending on the type of GameObject.
+		 */
+		for (GameObject goj: GameWorld.game_obj_table.values()) {
+			Actor temp_actor;
+			UserInterface temp_ui;
 			
+			if (goj instanceof Actor) { //Renders all objects that are an actor or subclass of an actor.
+				
+				temp_actor = (Actor) goj;
+				temp_actor.actor_graphics = graphics_2d;
+				temp_actor.renderActor();
+			}
+			
+			if (goj instanceof UserInterface) { //Renders all objects that are a UserInterface or subclass of a UserInterface.
+				temp_ui = (UserInterface) goj;
+				
+				temp_ui.ui_graphics = graphics_2d;
+				temp_ui.renderText();
+			}
 		}
-		for (UserInterface ui: game_ui_objects) {
-			ui.ui_graphics = graphics_2d;
-			ui.renderText();
-		}
-		//window_frame.setTitle(window_title);
-		//window_frame.setSize(current_frame_width, current_frame_height);
 		
+			
 	}
 	
 	/**
