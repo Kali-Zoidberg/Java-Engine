@@ -21,11 +21,10 @@ public class Controls {
 		Action movedown = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 			
-				System.out.println("Action movedown");
 				//Render.setSpeed(yspeedup,1);
 				player = (Actor) GameWorld.game_obj_table.get("Actor1");				
-				player.transform.setY((int)player.transform.getY() + 10);
-			
+				//player.rigidbody.setY((int)player.rigidbody.getY() + 10);
+				player.rigidbody.moveY(10);
 			}
 		};
 		
@@ -34,7 +33,7 @@ public class Controls {
 				
 				player = (Actor) GameWorld.game_obj_table.get("Actor1");
 				//	Render.setSpeed(xspeedright, 3);
-					player.transform.setX((int)player.transform.getX() + 10);
+					player.rigidbody.setX((int)player.rigidbody.getX() + 10);
 
 			
 				
@@ -44,7 +43,7 @@ public class Controls {
 		Action moveleft = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				player = (Actor) GameWorld.game_obj_table.get("Actor1");
-					player.transform.setX((int)player.transform.getX() - 10);
+					player.rigidbody.setX((int)player.rigidbody.getX() - 10);
 
 				//	Render.setSpeed(xspeedleft, 2);
 				
@@ -54,10 +53,9 @@ public class Controls {
 		};
 		Action moveup = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("MOVEUP");
 				player = (Actor) GameWorld.game_obj_table.get("Actor1");
-					player.transform.setY((int)player.transform.getY() - 10);
-
+			//		player.rigidbody.setY((int)player.rigidbody.getY() - 10);
+					player.rigidbody.moveY(-10);
 				//	Render.setSpeed(yspeeddown,0);
 				
 			}

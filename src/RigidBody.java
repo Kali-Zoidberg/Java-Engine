@@ -1,5 +1,8 @@
 
-
+/**
+ * @author Chow
+ *
+ */
 public class RigidBody extends Transform {
 	
 	float rig_mass = 0;
@@ -13,22 +16,34 @@ public class RigidBody extends Transform {
 	 * @param The String name of the RigidBody. Used for searching through the Array list of actors.
 	 */
 	
-	RigidBody(Actor mentor) {
+	RigidBody(Actor mentor, String name) {
 		super.Mentor = mentor;
+		Mentor.transform = this;
 	}
-
 	/**
-	 * Constructs a RigidBody object with
-	 * @param transform The transform of the RigidBody. Through which the Actor's velocity and position 
-	 * is manipulated and retrieved.
-	 * @param sprite The Image of the sprite.
-	 * @param name The String name of the RigidBody. Used for searching through the Array list of actors.
-	 * @param width The width of the RigidBody, and consequently, the sprite.
-	 * @param height The height of the RigidBody, and consequently, the sprite.
+	 * Constructs a RigidBody with specified x and y positions.
+	 * @param x The X position of the rigid body
+	 * @param y The y position of the rigid body.
+	 * @param mentor The mentor of the RigidBody
+	 * @param name The name of the RigidBody.
 	 */
-	/*RigidBody(String name, Transform transform, Sprite sprite, int width, int height) {
-		super(name, transform, sprite, width, height);
-	}*/
+	RigidBody(double x, double y, Actor mentor, String name) {
+		super(x,y, mentor, name);
+		Mentor.transform = this;
+	}
+	/**
+	 * Constructs a RigidBody using a transform.
+	 * @param transform The transform to use in the RigidBody.
+	 * @param mentor The mentor of the RigidBody.
+	 * @param name The name of the RigidBody.
+	 */
+	RigidBody(Transform transform, Actor mentor, String name) {
+		super(transform.getX(), transform.getY(), mentor, name);
+		Mentor.transform = this;
+
+
+	}
+	
 	
 	/**
 	 * Constructs a RigidBody object with a transform, color, width, and height.
@@ -49,10 +64,18 @@ public class RigidBody extends Transform {
 		int actor_width = Mentor.getActorWidth();
 		int actor_height = Mentor.getActorHeight();
 		
+		int x_min = (int) (super.getX() + 0.5);
+		int x_max = (x_min + actor_width);
+		int y_min = (int) (super.getY() + 0.5);
+		int y_max = (y_min + actor_height);
+		
+		
 		if (enable) {
-			for (int i = 0; i <= actor_width; ++i) {
-				for (int j =0; j <= actor_height; ++j) {
-					GameWorld.setWorldCoordinate(i + (int)(super.getX() + 0.5), j + (int)(super.getY() + 0.5), true);
+			for (int i = x_min; i <= x_max; ++i) {
+				for (int j = y_min; j <= y_max; ++j) {
+					System.out.println("setting coords for actor: " + Mentor.getName() + "@x: " + i + " @y: " + j);
+					GameWorld.setWorldCoordinate(i, j, Mentor.getName());
+					System.out.println(GameWorld.GetWorldCoordinate(i, j));
 				}
 			}
 		}
@@ -63,23 +86,25 @@ public class RigidBody extends Transform {
 	 * @param x The x-coordinate to set the RigidBody to.
 	 */
 	public void setX(double x) {
-		
+		UserInterface test_ui = (UserInterface) GameWorld.game_obj_table.get("ui_test");
 		int y_pos = (int) (super.getY() + 0.5); //Calculated here to optimize stack calls.
 		int x_pos = (int) (x + 0.5);
-		GameWorld.ui_list.get(0).setText("x pos: " + x_pos + "y pos: " + y_pos);
+		test_ui.setText("x pos: " + x_pos + "y pos: " + y_pos);
 		
 		if(has_collision) {
 			int actor_width = Mentor.getActorWidth(); // Binding issue
 			int actor_height = Mentor.getActorHeight();
 			System.out.println(GameWorld.GetWorldCoordinate(x_pos, y_pos) + " \n");
 			//First check from (x,y)->(x,
-			if (x_pos <= GameWorld.getWorldWidth() && x_pos  >= 0 && !(GameWorld.GetWorldCoordinate(x_pos,y_pos))) {//Checks the bounds of the object. If the object exits the gameWorld, it no longer has collision. This is to prevent an out-of-bounds exception.
+			System.out.println("Attempted pos:  " + x_pos + "," + y_pos);
+			System.out.println("This is what is here: " + GameWorld.GetWorldCoordinate(x_pos,y_pos));
+			if (x_pos <= GameWorld.getWorldWidth() && x_pos  >= 0 && (GameWorld.GetWorldCoordinate(x_pos,y_pos).equals("-1"))) {//Checks the bounds of the object. If the object exits the gameWorld, it no longer has collision. This is to prevent an out-of-bounds exception.
 				super.setX(x_pos);
 				//super.setY(y_pos);
 				for (int i = 0; i <= actor_width; ++i) {
 					for (int j =0; j <= actor_height; ++j) {
-						GameWorld.setWorldCoordinate(i + (int)(super.getX() + 0.5), j + y_pos, false);
-						GameWorld.setWorldCoordinate(i + (x_pos), j + y_pos,true);
+						GameWorld.setWorldCoordinate(i + (int)(Mentor.transform.getX() + 0.5), j + y_pos, "-1");
+						GameWorld.setWorldCoordinate(i + (x_pos), j + y_pos, Mentor.getName());
 					}
 				}
 				
@@ -87,6 +112,7 @@ public class RigidBody extends Transform {
 		}
 		else { //Rigid body does not have collision enabled so it may move anywhere on the plane.
 			super.setX(x_pos);
+			System.out.println("NO collision");
 			//super.setY(y_pos);
 		}
 	}
@@ -94,31 +120,117 @@ public class RigidBody extends Transform {
 	 * Overrides the transform setY and if collision is enabled, the GameWorld coordinate spaces will react accordingly.
 	 * @param y The y coordinate to set the RigidBody to.
 	 */
-	public void setY(double y) {
+	
+	public void moveY(double y) {
 		
-		int y_pos = (int) (y + 0.5);
+		UserInterface ui_test = (UserInterface) GameWorld.game_obj_table.get("ui_test");
+		double round = (y <= 0) ? -0.5 : 0.5;
+		System.out.println(round);
+		int actor_width = Mentor.getActorWidth();
+		int actor_height = Mentor.getActorHeight();
+		
+		int y_pos_cur = (int) (super.getY() + 0.5);
+		int x_pos_cur = (int) (super.getX() + 0.5);
+		
+		int y_pos = y_pos_cur + (int)(y + round);
 		int x_pos = (int) (super.getX() + 0.5);
-		GameWorld.ui_list.get(0).setText("x pos: " + x_pos + "y pos: " + y_pos); //This is for debug
 
+		
+		int delta_y = (int) (y+ round);
+		
+		ui_test.setText("x pos: " + x_pos + "y pos: " + y_pos); //This is for debug
+
+		/**
+		 * If the newly desired position is less than the previous position, the object is moving negatively along the axis.
+		 * As such, we will need to subtract the Actor's height from its current position. Therefore we multiply by negative 1. 
+		 */
+		//if (y < 0)
+			//actor_height *= -1;
+		
+		
+		int y_pos_next = y_pos_cur + actor_height + delta_y;
+		
+		
 		if(has_collision) {
 
-			int actor_width = Mentor.getActorWidth();
-			int actor_height = Mentor.getActorHeight();
-			if (y_pos <= GameWorld.getWorldHeight() && y_pos >= 0 && !(GameWorld.GetWorldCoordinate(x_pos,y_pos))) { 
-				//Checks the bounds of the object. If the object exits the Game World, it no longer has collision. This is to prevent an out-of-bounds exception.
-				//Check edge of rectangle in direction of y. So 
-				super.setY(y_pos);
-				for (int i = 0; i <= actor_width; ++i) {
-					for (int j =0; j <= actor_height; ++j) {
-						GameWorld.setWorldCoordinate(i + x_pos, j + (int) (super.getY() + 0.5), false);
-						GameWorld.setWorldCoordinate(i + x_pos, j + y_pos,true);
+			if (y_pos > GameWorld.getWorldHeight() || y_pos < 0) {
+				System.out.println("Going off the grid!");
+				return;
+			} else {
+				//need to check for negative velocity and positive velocity. So two cases.
+				if (delta_y >= 0) {
+					if (this.checkPath(x_pos_cur, y_pos_cur + actor_height + 1, x_pos + actor_width, y_pos_next)) {
+	
+					setPath(x_pos_cur, y_pos_cur, x_pos_cur + actor_width, y_pos_cur + actor_height, "-1"); //Clear previous allocated space.
+					setPath(x_pos, y_pos, x_pos + actor_width, y_pos + delta_y, Mentor.getName());
+					super.setY(y_pos);
+					}
+				} else {
+ 
+					if (this.checkPath(x_pos_cur, y_pos_cur + delta_y - 1, x_pos + actor_width, y_pos_next - actor_height)) {
+						
+						setPath(x_pos_cur, y_pos_cur, x_pos_cur + actor_width, y_pos_cur + actor_height, "-1"); //Clear previous allocated space.
+						System.out.println("old y: " + (y_pos_cur - actor_height));
+						setPath(x_pos, y_pos, x_pos + actor_width, y_pos + delta_y, Mentor.getName());
+						super.setY(y_pos);
 					}
 				}
-				
+			} 
+		} 
+		else  //Rigid body does not have collision so it may be set to anywhere in the plane.
+			super.setY(y_pos);
+		
+	}
+	
+	
+	
+	/**
+	 * Sets the projected path for the actor with the specified maximums. So it checks from the
+	 * [x_min,y_min] to [x_max,y_max] (inclusive). Since it is inclusive, you may have to adjust your bounds
+	 * accordingly. (I.E. try adding 1 to your mins or maxs).
+	 * @param x_min The minimum x coordinate.
+	 * @param y_min The mminimum y coordinate.
+	 * @param y_max The maximum y coordinate
+	 * @param obj_name The name of the GameObject that will exist in this space. If clearing up existing space, set to "-1"
+	 * @return Returns true if the operation is successful
+	 */
+	public boolean setPath(int x_min, int y_min, int x_max, int y_max, String obj_name) {
+		
+		if (GameWorld.isInWorldCoordinateBounds(x_max, y_max) && GameWorld.isInWorldCoordinateBounds(x_min, y_min)) {
+			for (int i = x_min; i <= x_max; ++i) {
+				for (int j = y_min; j <= y_max; ++j) {
+					GameWorld.setWorldCoordinate(i, j, obj_name); //set previous spot to -1.
+				}
+			}
+		}
+		
+		return true;
+		
+	}
+	/**
+	 * Checks the GameWorld's world coordinates from a range of [x_min, y_min] to [x_max, y_max]. Use this when determining the future position of an object.
+	 * @param x_min The minimum Y point to check.
+	 * @param y_min The minimum Y point to check.
+	 * @param x_max the maximum X point to check.
+	 * @param y_max The maximum Y point to check.
+	 * @return Returns true if the future position of the object does not interfere with other objects.
+	 */
+	public boolean checkPath(int x_min, int y_min, int x_max, int y_max) {
+		System.out.printf(" Checking from [%d, %d] to [%d,%d]",x_min,y_min,x_max,y_max);
+		for (int i = x_min; i <= x_max; ++i) { 
+			for (int j = y_min; j <= y_max; ++j) {
+				if (!GameWorld.GetWorldCoordinate(i, j).equals("-1")) {
+					System.out.println("\n x:" + this.getX() + " y: " + this.getY());
+					System.out.println("i: " + i + " j: " + j + " " + GameWorld.GetWorldCoordinate(i, j));
+					return false;
+					
+				}
+
+
 			}
 			
-		} else { //Rigid body does not have collision so it may be set to anywhere in the plane.
-			super.setY(y_pos);
 		}
+		
+		return true;
 	}
 }

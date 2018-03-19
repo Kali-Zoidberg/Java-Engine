@@ -262,30 +262,6 @@ public class Render implements Runnable{
 	/**
 		* Used for initializing Actor's at the start of the game.
 	 */
-	public void test_start() throws IOException{
-			
-	//	Transform transform_test = new Transform("Transform", 750,500,0f);
-		File sprite_img = new File("sprite_test.jpg");
-		BufferedImage car_bg = ImageIO.read(sprite_img);
-
-		UserInterface ui_test = new UserInterface(60.0,60.0,0.0,"Hello world!",Color.WHITE,	new Font("Courier New", Font.PLAIN, 12), "ui_test");
-		
-		Actor player = new Actor(50.0,50.0, "Actor1");
-				
-		player.transform.setX(player.transform.getX());
-		player.transform.setY(player.transform.getY());
-		player.setVisible(true);
-		
-		Sprite sprite_test = new Sprite(car_bg,50,50);
-		player.setSprite(sprite_test);
-		//player.setCollision(true);
-		//player.transform.setDirection(0.86f);
-
-		//	ui_list.add(ui_test);
-		//GameWorld.actor_list.add(player);
-		System.out.println("Actor index: " + GameWorld.getActorIndex("test actor"));
-	
-	}
 
 
 		

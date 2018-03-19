@@ -19,14 +19,13 @@ public class Actor extends GameObject{
 	//private Actor instanceOfActorInTable;
 	private int actor_width = 10;
 	private int actor_height = 10;
-	private int actor_avg_width = actor_width / 2;
-	private int actor_avg_height = actor_height / 2;
+	
 	private int converted_pos_x = 0;
 	private int converted_pos_y = 0;
 	
 	private boolean has_collision = false;
 	public boolean is_visible = false;
-	
+	public RigidBody rigidbody;
 	
 	/**
 	 * Constructs a Actor object with 'debug' position and sprite.
@@ -51,6 +50,8 @@ public class Actor extends GameObject{
 	
 	Actor(double x, double y, String name) {
 		super(x,y,name);
+		rigidbody = new RigidBody(transform, this, "rigidbody");
+
 		GameWorld.game_obj_table.put(this.name, this);
 
 	}
@@ -66,10 +67,12 @@ public class Actor extends GameObject{
 	Actor(Transform transform, String name){
 		super(name, transform);
 		transform.setMentor(this);
-		transform.setX(transform.getX() - actor_avg_width);
-		transform.setY(transform.getY() - actor_avg_height);
+		transform.setX(transform.getX() - actor_width);
+		transform.setY(transform.getY() - actor_height);
 		
 		this.transform = transform;
+		rigidbody = new RigidBody(this.transform, this, "rigidbody");
+
 		actor_sprite = null;
 		GameWorld.actor_list.add(this);
 	}
@@ -95,13 +98,11 @@ public class Actor extends GameObject{
 		actor_height = height;
 		sprite_color = sprite.getColor();
 		
-		actor_avg_width = actor_width / 2;
-		actor_avg_height = actor_height / 2;
-		
-		
-		transform.setX(transform.getX() - actor_avg_width);
-		transform.setY(transform.getY() - actor_avg_height);
+		transform.setX(transform.getX() - actor_width);
+		transform.setY(transform.getY() - actor_height);
 		this.transform = transform;
+		rigidbody = new RigidBody(this.transform, this, "rigidbody");
+
 		GameWorld.game_obj_table.put(this.name, this);
 
 	}
@@ -127,17 +128,34 @@ public class Actor extends GameObject{
 		
 		actor_width = width;
 		actor_height = height;
-		actor_avg_width = actor_width / 2;
-		actor_avg_height = actor_height / 2;
 		
-		
-		transform.setX(transform.getX() - actor_avg_width);
-		transform.setY(transform.getY() - actor_avg_height);
+		transform.setX(transform.getX() - actor_width);
+		transform.setY(transform.getY() - actor_height);
 		this.transform = transform;
+		rigidbody = new RigidBody(this.transform, this, "rigidbody");
 		GameWorld.game_obj_table.put(this.name, this);
 	}
 	
 	
+	Actor (RigidBody rigidbody, Color color, int width, int height, String name) {
+		
+		super(name, rigidbody);
+		
+		actor_sprite = null;
+		sprite_color = color;
+	
+		actor_width = width;
+		actor_height = height;
+	
+		rigidbody.setX(rigidbody.getX() - actor_width);
+		rigidbody.setY(rigidbody.getY() - actor_height);
+		
+		this.rigidbody = rigidbody;
+		this.addComponent(this.rigidbody);
+		rigidbody = new RigidBody(this.transform, this, "rigidbody");
+
+		GameWorld.game_obj_table.put(this.name, this);
+	}
 	/**
 	 * Sets the bounds in the world coordinate array located in GameWorld.
 	 * May need to use calculus for this problem...
@@ -176,6 +194,8 @@ public class Actor extends GameObject{
 	
 	public void setSprite(Sprite sprite) {
 		actor_sprite = sprite;
+		actor_width = sprite.getWidth();
+		actor_height = sprite.getHeight();
 	}
 	
 	
@@ -253,17 +273,6 @@ public class Actor extends GameObject{
 		
 	}
 	
-	/**
-	 * Sets the Actor name.
-	 * @param name The new name of the actor.
-	 * @return Returns true all the time. In the future it will if and only if there does not exist an Actor with the same name.
-	 */
-	
-	public boolean setActorName(String name) {
-
-		name = name;
-		return true;
-	}
 	
 	
 	/**

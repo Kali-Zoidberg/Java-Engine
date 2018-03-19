@@ -52,8 +52,8 @@ public class Component {
 	 */
 	
 	Component(GameObject mentor, String name) {
-		this.name = Mentor.generateNewName(name, Mentor.component_table);
 		Mentor = mentor;
+		this.name = Mentor.generateNewName(name, Mentor.component_table);
 		Mentor.component_table.put(name, this);
 	}
 	

@@ -18,7 +18,6 @@ public class GameObject {
 	private int id;
 	protected String name;
 	private String obj_type = "GameObject";
-	private int component_count = 1;
 	public Transform transform = new Transform();
 	public Hashtable<String, Component> component_table = new Hashtable<String,Component>();
 	
@@ -114,19 +113,20 @@ public class GameObject {
 	 * @return Returns the number of components of the GameObject.
 	 */
 	public int getComponentCount() {
-		return component_count;
+		return component_table.size();
 	}
 	
 	/**
-	 * Using this method you may set a new count or simply increment the component count.
-	 * @param updated_count The new updated number of Components
-	 * @return Returns true if the updated count is greater than or equal to 0.
+	 * Adds a component to the game object.
+	 * @param component The component to add to the game object.
+	 * @return Returns true if the component is not null.
 	 */
-	public boolean setComponentCount(int updated_count) {
-		if (updated_count >= 0) {
-			component_count = updated_count;
+	public boolean addComponent(Component component) {
+		if (component != null) {
+			component_table.put(component.name, component);
 			return true;
-		} else
+		}
+		else
 			return false;
 	}
 	
