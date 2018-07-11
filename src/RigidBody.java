@@ -20,6 +20,7 @@ public class RigidBody extends Transform {
 		super.Mentor = mentor;
 		Mentor.transform = this;
 	}
+	
 	/**
 	 * Constructs a RigidBody with specified x and y positions.
 	 * @param x The X position of the rigid body

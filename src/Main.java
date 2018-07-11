@@ -68,6 +68,13 @@ public class Main {
 			//	ui_list.add(ui_test);
 			//GameWorld.actor_list.add(player);
 			System.out.println("Actor index: " + GameWorld.getActorIndex("test actor"));
+			AudioLine musicLine = new AudioLine("Music");
+
+			SoundEmittor sound_test = new SoundEmittor(0,0, "Toto-Africa", "Test_music.wav", "Music");
+			sound_test.play();
+			sound_test.sound.setVolLinear(0.6f);
+
+			
 	}
 	
 	public static void Update() {
