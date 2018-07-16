@@ -6,12 +6,12 @@ public class AudioLine {
 	
 	public Hashtable<Integer, Sound> soundTable = new Hashtable<Integer, Sound>();
 	
-	float fLineVolume = 1.0f;
-	float fLineGain = 1.0f;
-	Integer liID;
+	private float fLineVolume = 1.0f;
+	private float fLineVolDB = 1.0f;
+	private Integer liID;
 	
 	
-	String sLineName;
+	private String sLineName;
 	
 	AudioLine(String lineName)
 	{
@@ -58,6 +58,57 @@ public class AudioLine {
 		return true;
 		
 	}
+	
+	/**
+	 * Sets the volume for all sounds on the line to the specified decibel value.
+	 * @param volDB The decibel value to set the sounds to.
+	 * 
+	 * Todo: Make it so that it's relative. 
+	 */
+	public void setLineVolDB(float volDB)
+	{
+		fLineVolume = ChowFunctions.dbToLinearFrac(volDB);
+		fLineVolDB = volDB;
+		Iterable<Sound> sounds = soundTable.values();
+		for (Sound sound: sounds)
+		{
+			sound.setVolDB(volDB);
+		}
+	}
+	
+	/**
+	 * Sets the volume for all sounds on the line to the specified value.
+	 * @param volFrac The linear value from 0 to 1.0 that you wish to set the line volume to.
+	 * TODO: Make it relative.
+	 */
+	public void setLineVolLinear(float volFrac)
+	{
+		fLineVolume = volFrac;
+		fLineVolDB = ChowFunctions.LinearFracToDB(volFrac);
+		Iterable<Sound> sounds = soundTable.values();
+		for (Sound sound: sounds)
+		{
+			sound.setVolLinear(volFrac);
+		}
+	}
+	
+	public void scaleLineVol(float volFrac)
+	{
+		fLineVolume = volFrac;
+		fLineVolDB = ChowFunctions.LinearFracToDB(volFrac);
+		Iterable<Sound> sounds = soundTable.values();
+		for (Sound sound: sounds)
+		{
+			sound.scaleVolume(volFrac);
+		}
+	}
+	
+	/**
+	 * Returns the specified sound id from the table.
+	 * @param id The id of the sound you wish to obtain
+	 * @return Returns the sound object of the sound id.
+	 */
+	public Sound getSound(Integer id) {return soundTable.get(id); }
 	/**
 	 * Creates an integer object for the ID out of a primitive int.
 	 * @param id The int id.
@@ -72,7 +123,7 @@ public class AudioLine {
 	public int getID() { 
 		try 
 		{
-		return liID.intValue(); 
+			return liID; 
 		} catch (NullPointerException e)
 		{
 			return -1;
@@ -80,5 +131,16 @@ public class AudioLine {
 	}
 	
 	public String getName() { return sLineName;}
+	
+	/**
+	 * Getter for the linear representation of the volume.
+	 * @return Returns the linear volume representation
+	 */
+	public float getLineVolLinear() { return fLineVolume;}
+	/**
+	 * Getter for the decibel representation of the volume.
+	 * @return Returns the decibel representation of the volume.
+	 */
+	public float getLineVolDB() { return fLineVolDB; }
 	
 }

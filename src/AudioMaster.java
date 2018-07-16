@@ -4,6 +4,7 @@ import java.util.Random;
 /**
  * This class will control all game audio lines.
  * Here you can adjust the different lines.
+ * Maybe Audio should have one AudioMaster class?????
  * @author Nicholas 'Kali' Chow
  */
 public class AudioMaster {
@@ -32,6 +33,19 @@ public class AudioMaster {
 	}
 	
 	/**
+	 * Scales the master volume of the game.
+	 * @param volFrac The amount you wish to scale the game by.
+	 */
+	public static void scaleVolume(float volFrac)
+	{
+		Iterable<AudioLine> audioLines = lineTable.values();
+		for (AudioLine audioLine: audioLines)
+		{
+			audioLine.scaleLineVol(volFrac);
+		}
+	}
+	
+	/**
 	 * Puts a line onto the hash table.
 	 * @param line The Audio line to put onto the hash table
 	 * @return Returns false on failure, true on success.
@@ -43,7 +57,6 @@ public class AudioMaster {
 			return false;
 		
 		lineID = new Integer(genID());
-		System.out.println("Generating Audio Line ID... " + lineID);
 		line.setID(genID());
 		
 		lineTable.put(lineID, line);
@@ -52,7 +65,12 @@ public class AudioMaster {
 		
 	}
 	
-	public static int getLineID(String lineName) {
+	/**
+	 * Obtains the line id of a given line name.
+	 * @param lineName The name of the desired line
+	 * @return Returns an Integer wrapper object of the line's id.
+	 */
+	public static Integer getLineID(String lineName) {
 		try
 		{
 			return lineIDTable.get(lineName); 
@@ -62,7 +80,11 @@ public class AudioMaster {
 			return -1;
 		}
 	}
-	
+	/**
+	 * Retrieves the AudioLine object from the hasbtable.
+	 * @param lineID The Integer ID of the desired audio line.
+	 * @return Returns the AudioLine object of the desired line.
+	 */
 	public static AudioLine getLine(Integer lineID) { return lineTable.get(lineID); }
 	
 }

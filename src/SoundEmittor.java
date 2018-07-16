@@ -28,15 +28,18 @@ public class SoundEmittor extends GameObject {
 	public void play() {
 		//Plays the sound.
 		sound.play();
-
+		
 	}
 	
-	
+	/**
+	 * Sets the Sound emittors sound clip.
+	 * Wav files 8khz-48khz, 8bit and 16 bit is supported.
+	 * @param filename The file name of the sound clip to set.
+	 */
 	public void setSoundClip(String filename) 
 	{ 
 		sFileName = filename; 
 		sound.open();
-		//set sound thingy to file name?
 	}
 	
 	

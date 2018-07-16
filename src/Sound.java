@@ -7,7 +7,13 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-
+/**
+ * TODO: Multi-threading... maybe.
+ * - waittime for clip to play.
+ * -Clip duration
+ * @author Chow
+ *
+ */
 
 public class Sound {
 
@@ -51,16 +57,23 @@ public class Sound {
 		}	
 	}
 	
+	/**
+	 * Opens the specified audio file.
+	 */
 	public void open()
 	{
 		try 
 		{
+			if (soundClip != null && soundClip.isOpen()) //If open, then close it and reopen.
+				soundClip.close();
+			
 			fSoundFile = new File(sFileName);
-	        AudioInputStream audioIn = AudioSystem.getAudioInputStream(fSoundFile);              
-	        soundClip = AudioSystem.getClip();
-	        //Open the sound file before playing to ensure the sound plays as commanded.
-	        soundClip.open(audioIn);
-	      
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(fSoundFile);              
+		    soundClip = AudioSystem.getClip();
+
+		    //Open the sound file before playing to ensure the sound plays as commanded.
+		    soundClip.open(audioIn);
+			
 	        
 		} catch (UnsupportedAudioFileException e)
 		{
@@ -72,15 +85,23 @@ public class Sound {
 		}
 		catch (LineUnavailableException e) 
 		{
-			e.printStackTrace();
+			//Print stack trace so game doesn't crash on consumer.
+			System.out.println(e.getMessage());
 		}
+		
 	}
 
+	/**
+	 * Plays the sound clip and scales the volume based on the line's settings.
+	 */
 	public void play() {
 		//Plays the sound.
 		if (soundClip.isOpen())
+		{
+			if (audioLine != null && audioLine.getLineVolLinear() != 1.0f)
+				this.scaleVolume(audioLine.getLineVolLinear());
 			soundClip.start();
-
+		}
 	}
 	
 	/**
@@ -98,22 +119,23 @@ public class Sound {
 		
 	}
 	
+	/**
+	 * Sets the Sound emittors sound clip.
+	 * Wav files 8khz-48khz, 8bit and 16 bit is supported.
+	 * @param filename The file name of the sound clip to set.
+	 */
 	public void setSoundClip(String filename) 
 	{ 
 		sFileName = filename; 
 		this.open();
-		//set sound thingy to file name?
 	}
 	
 	/**
-	 * Sets the duration of the audioclip in milliseconds.
+	 * Sets the duration of the audio clip in milliseconds.
 	 * @param msStartTime The start time of the audio clip in milliseconds
 	 * @param msEndTime The end time of the audio clip in milliseconds
 	 */
-	public boolean setDuration(long msStartTime, long msEndTime) 
-	{
-		
-		
+	public boolean setDuration(long msStartTime, long msEndTime) {
 		if (!this.durationInBounds(msStartTime, msEndTime))
 			return false;
 		
@@ -128,12 +150,9 @@ public class Sound {
 	 */
 	public void setVolDB(float decibel)
 	{
-		
 		if (soundClip.isOpen())
 		{
-			
-			FloatControl volControl = (FloatControl) soundClip.getControl(
-					FloatControl.Type.MASTER_GAIN);			
+			FloatControl volControl = this.getVolControl();	
 			
 			if (decibel < volControl.getMaximum())
 			{
@@ -159,20 +178,43 @@ public class Sound {
 	public void setVolLinear(float volFrac)
 	{
 		
-		if (volFrac <= 0)
-			volFrac = 0.001f;
+		volFrac = volFracInBounds(volFrac);
+
 		dVolumeLinear = volFrac;
 		
-		float volDB = (float) (Math.log10(volFrac) * 20);
-		System.out.println("volDB " + volDB);
-			
+		float volDB = ChowFunctions.LinearFracToDB(volFrac);
+		System.out.printf("Sound: %s \n LinearVol: %f DB: %f\n", this.sSoundName, volFrac, volDB);
 		this.setVolDB(volDB);
 			
 	}
 	
+	/**
+	 * Scales the the volume of the sound based on the fraction.
+	 * @param volFrac The fractional amount you wish to scale the sound's volume by.
+	 */
+	public void scaleVolume(float volFrac)
+	{
+		volFrac = volFracInBounds(volFrac);
+		FloatControl volControl = this.getVolControl();
+		float baseVol = volControl.getValue();
+		float linearVol = ChowFunctions.dbToLinearFrac(baseVol);
+		float scaledVolLinear = linearVol * volFrac;
+		float scaledVolDB = ChowFunctions.LinearFracToDB(scaledVolLinear);
+		this.setVolDB(scaledVolDB);
+		System.out.println("\nSound: " + sSoundName);
+		System.out.printf("base vol: %f, linearVol: %f\n"
+				+ "scaledVolLinear:  %f scaledVolDB: %f\n",
+				baseVol, linearVol, scaledVolLinear, scaledVolDB);
+	}
 	
+	private float volFracInBounds(float volFrac)
+	{
+		return (volFrac <= 0 ? 0.0005f : volFrac);
+	}
+
+	private FloatControl getVolControl() { return ((FloatControl) soundClip.getControl(
+			FloatControl.Type.MASTER_GAIN)); }
 	public String getSoundClip() { return sFileName; }
-	
 	public float getVolumeLinear() { return dVolumeLinear; }
 	public float getVolumeDecibel() { return dVolumeDB; }
 	public double getRadius() { return dRadius; }
@@ -194,7 +236,7 @@ public class Sound {
 	public int getID() { 
 		try
 		{
-			return siID.intValue(); 
+			return siID; 
 		} catch (NullPointerException e) {
 			
 			return 0;

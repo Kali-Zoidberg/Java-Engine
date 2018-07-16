@@ -68,11 +68,19 @@ public class Main {
 			//	ui_list.add(ui_test);
 			//GameWorld.actor_list.add(player);
 			System.out.println("Actor index: " + GameWorld.getActorIndex("test actor"));
-			AudioLine musicLine = new AudioLine("Music");
+			AudioLine ambientAudioLine = new AudioLine("Ambience");
+			AudioLine backgroundLine = new AudioLine("Background");
+			SoundEmittor rain_emittor = new SoundEmittor(0,0, "Rain", "rain.wav", "Ambience");
+			backgroundLine.scaleLineVol(0.5f);
+			SoundEmittor coffee_shop = new SoundEmittor(0,0, "Coffee", "coffee_shop.wav", "Background");
 
-			SoundEmittor sound_test = new SoundEmittor(0,0, "Toto-Africa", "Test_music.wav", "Music");
-			sound_test.play();
-			sound_test.sound.setVolLinear(0.6f);
+			rain_emittor.play();
+			rain_emittor.sound.setVolLinear(0.5f);
+			coffee_shop.play();
+			AudioMaster.scaleVolume(0.5f);
+
+			ambientAudioLine.scaleLineVol(0.5f);
+			//ChowFunctions.test_functions();
 
 			
 	}
