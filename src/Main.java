@@ -70,15 +70,15 @@ public class Main {
 			System.out.println("Actor index: " + GameWorld.getActorIndex("test actor"));
 			AudioLine ambientAudioLine = new AudioLine("Ambience");
 			AudioLine backgroundLine = new AudioLine("Background");
-			SoundEmittor rain_emittor = new SoundEmittor(0,0, "Rain", "rain.wav", "Ambience");
+			SoundEmittor rain_emittor = new SoundEmittor(box, "Rain", "rain.wav", "Ambience");
 			backgroundLine.scaleLineVol(0.5f);
-			SoundEmittor coffee_shop = new SoundEmittor(0,0, "Coffee", "coffee_shop.wav", "Background");
+			SoundEmittor coffee_shop = new SoundEmittor(box2, "Coffee", "coffee_shop.wav", "Background");
 
 			rain_emittor.play();
 			rain_emittor.sound.setVolLinear(0.5f);
 			coffee_shop.play();
 			AudioMaster.scaleVolume(0.5f);
-
+			rain_emittor.sound.printClipInfo();
 			ambientAudioLine.scaleLineVol(0.5f);
 			//ChowFunctions.test_functions();
 

@@ -3,24 +3,19 @@
  * Maybe this should just inherit sound sample space instead??
  * 
  */
-public class SoundEmittor extends GameObject {
-	
+public class SoundEmittor extends Component {
+	private float fVolumeDropOff = 0.0f;
 	public String sFileName;
 	public Sound sound;
 	
-	SoundEmittor(double x, double y, String name) 
+	SoundEmittor(GameObject mentor, String name, String filename, String lineName) 
 	{
-		super(x, y, name);
-	}
-	
-	SoundEmittor(double x, double y, String name, String filename, String lineName) 
-	{
-		super(x, y, name);
-		
+		super(mentor, name);
 		sound = new Sound(name, filename, lineName);
 		sFileName = filename;
 		sound.open();
 	}
+	
 	
 	/**
 	 * Plays the sound emittor's sound file.
@@ -42,8 +37,10 @@ public class SoundEmittor extends GameObject {
 		sound.open();
 	}
 	
+
+	public void setVolumeDropOff(float decibelPerUnit){fVolumeDropOff = decibelPerUnit; }
 	
-	
+	public float getVolumeDropOff() {return fVolumeDropOff; }
 	
 		
 }

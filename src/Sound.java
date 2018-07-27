@@ -28,7 +28,6 @@ public class Sound {
 	private float dVolumeDB = 0;
 	private double dRadius = 0;
 	private double dFrequency = 0;
-	private long lDuration = 0;
 	private long lStartTime = 0;
 	private long lEndTime = 0;
 	private Clip soundClip;
@@ -91,6 +90,15 @@ public class Sound {
 		
 	}
 
+	public void printClipInfo()
+	{
+		if (soundClip.isOpen()) {
+			System.out.printf("Frame length: %d\n", soundClip.getFrameLength());
+			System.out.println("Frame Position: " + soundClip.getFramePosition());
+			System.out.println("Microsecond Length: " + soundClip.getMicrosecondLength());
+			System.out.println("Microsecond position: " + soundClip.getMicrosecondPosition());
+		}
+	}
 	/**
 	 * Plays the sound clip and scales the volume based on the line's settings.
 	 */
@@ -100,10 +108,13 @@ public class Sound {
 		{
 			if (audioLine != null && audioLine.getLineVolLinear() != 1.0f)
 				this.scaleVolume(audioLine.getLineVolLinear());
+			
 			soundClip.start();
+			
 		}
 	}
 	
+
 	/**
 	 *Checks the desired duration by checking the bounds of the sound clip.
 	 *@param startTime Start time of the desired duration.
@@ -118,6 +129,7 @@ public class Sound {
 				|| endTime < 0 || startTime > clipEndTime);
 		
 	}
+	
 	
 	/**
 	 * Sets the Sound emittors sound clip.
@@ -141,6 +153,10 @@ public class Sound {
 		
 		lStartTime = msStartTime;
 		lEndTime = msEndTime;
+		double frameTimeRatio = (double) soundClip.getFrameLength() / soundClip.getMicrosecondLength();
+		int frameStartTime = (int) (frameTimeRatio *  lStartTime);
+		int frameEndTime = (int) ( frameTimeRatio * lEndTime);
+		soundClip.setLoopPoints(frameStartTime, frameEndTime);
 		return true;
 	}
 	
@@ -156,15 +172,17 @@ public class Sound {
 			
 			if (decibel < volControl.getMaximum())
 			{
-				volControl.setValue(decibel);
 				dVolumeDB = decibel;
+				dVolumeLinear = ChowFunctions.dbToLinearFrac(decibel);
 			}
 			else 
 			{
-				volControl.setValue(volControl.getMaximum());
-				dVolumeLinear = 1;
+				dVolumeDB = volControl.getMaximum();
+				dVolumeLinear = 1f;
 			}
 			
+			volControl.setValue(dVolumeDB);
+
 		}
 	}
 	
@@ -177,13 +195,11 @@ public class Sound {
 	
 	public void setVolLinear(float volFrac)
 	{
-		
 		volFrac = volFracInBounds(volFrac);
-
 		dVolumeLinear = volFrac;
 		
 		float volDB = ChowFunctions.LinearFracToDB(volFrac);
-		System.out.printf("Sound: %s \n LinearVol: %f DB: %f\n", this.sSoundName, volFrac, volDB);
+		dVolumeDB = volDB;
 		this.setVolDB(volDB);
 			
 	}
@@ -201,6 +217,9 @@ public class Sound {
 		float scaledVolLinear = linearVol * volFrac;
 		float scaledVolDB = ChowFunctions.LinearFracToDB(scaledVolLinear);
 		this.setVolDB(scaledVolDB);
+		
+		dVolumeLinear = scaledVolLinear;
+		dVolumeDB = scaledVolDB;
 		System.out.println("\nSound: " + sSoundName);
 		System.out.printf("base vol: %f, linearVol: %f\n"
 				+ "scaledVolLinear:  %f scaledVolDB: %f\n",

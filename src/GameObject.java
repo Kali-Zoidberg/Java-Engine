@@ -19,6 +19,8 @@ public class GameObject {
 	protected String name;
 	private String obj_type = "GameObject";
 	public Transform transform = new Transform();
+	public SoundEmittor soundemittor;
+
 	public Hashtable<String, Component> component_table = new Hashtable<String,Component>();
 	
 	/**
@@ -58,7 +60,8 @@ public class GameObject {
 		
 		this.name = name;
 		transform.Mentor = this;
-		
+		GameWorld.game_obj_table.put(this.name, this);
+
 	}
 	
 	/**

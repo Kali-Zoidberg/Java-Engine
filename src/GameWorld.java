@@ -1,3 +1,5 @@
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -160,5 +162,51 @@ public class GameWorld {
 	public static int getWorldHeight() {
 		return world_height;
 	}
+	
+	
+	/**
+	 * Returns the current width of the GameWindow frame.
+	 * @return Returns the current width of the GameWindow frame.
+	 */
+	
+	public static int getCurrentWidth() {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	
+		return screenSize.width;
+	}
+	
+	
+	/**
+	 * Returns the current height of the GameWindow frame.
+	 * @return Returns the height width of the GameWindow frame.
+	 */
+	
+	public static int getCurrentHeight() {
+		int height = Render.getScreenHeight();
+		return height;
+	}
+	
+	/**
+	 * Returns a scaled double to convert coordinate positions to screen coordinates.
+	 * @return Returns a scaled double.
+	 */
+	
+	public static double getViewportScaleX()
+	{
+		double world_width = getWorldWidth();
+		return (Render.getScreenWidth() / world_width);
+	}
+	/**
+	 * Returns a scaled double to convert coordinate positions to screen coordinates.
+	 * @return Returns a scaled double.
+	 */
+	
+	public static double getViewPortScaleY()
+	{
+		double world_height = getWorldHeight();
+		return (Render.getScreenHeight()/ world_height);
+	}
+	
+	
 	
 }

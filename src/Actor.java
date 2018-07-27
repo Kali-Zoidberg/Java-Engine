@@ -3,7 +3,7 @@ import java.awt.Graphics2D;
 
 /**
  * 
- * Inheritance changes: Actor is a Game Objet
+ * Inheritance changes: Actor is a Game Object
  * 	- Actor has a Transform or RigiBody.
  * 	- Actor cannot move
  *  - Rigid bodies and transforms can move.
@@ -37,7 +37,7 @@ public class Actor extends GameObject{
 		super(name);
 		actor_sprite = null;
 		GameWorld.actor_list.add(this);
-		
+
 	}
 	
 	
@@ -51,8 +51,8 @@ public class Actor extends GameObject{
 	Actor(double x, double y, String name) {
 		super(x,y,name);
 		rigidbody = new RigidBody(transform, this, "rigidbody");
+		GameWorld.actor_list.add(this);
 
-		GameWorld.game_obj_table.put(this.name, this);
 
 	}
 	
@@ -103,7 +103,7 @@ public class Actor extends GameObject{
 		this.transform = transform;
 		rigidbody = new RigidBody(this.transform, this, "rigidbody");
 
-		GameWorld.game_obj_table.put(this.name, this);
+		GameWorld.actor_list.add(this);
 
 	}
 	
@@ -133,7 +133,7 @@ public class Actor extends GameObject{
 		transform.setY(transform.getY() - actor_height);
 		this.transform = transform;
 		rigidbody = new RigidBody(this.transform, this, "rigidbody");
-		GameWorld.game_obj_table.put(this.name, this);
+		GameWorld.actor_list.add(this);
 	}
 	
 	
@@ -154,7 +154,7 @@ public class Actor extends GameObject{
 		this.addComponent(this.rigidbody);
 		rigidbody = new RigidBody(this.transform, this, "rigidbody");
 
-		GameWorld.game_obj_table.put(this.name, this);
+		GameWorld.actor_list.add(this);
 	}
 	/**
 	 * Sets the bounds in the world coordinate array located in GameWorld.
@@ -233,20 +233,23 @@ public class Actor extends GameObject{
 	 */
 	public void renderActor() {
 
-		converted_pos_x = (int) (transform.getX() + 0.5f);
-		converted_pos_y = (int) (transform.getY() + 0.5f);
-		
+		this.converted_pos_x = (int) (transform.getX() * GameWorld.getViewportScaleX() + 0.5f);
+		this.converted_pos_y = (int) (transform.getY() * GameWorld.getViewPortScaleY() + 0.5f);
+		int conv_act_width = (int) (this.actor_width * GameWorld.getViewportScaleX());
+		int conv_act_height = (int) (this.actor_height * GameWorld.getViewPortScaleY());
 		double actor_dir = transform.getDirection();
 		
 		if (is_visible) {
 			//actor_graphics = Render.bi.createGraphics();
 			if (actor_sprite != null) {
-				actor_graphics.drawImage(actor_sprite.getImage(), converted_pos_x, converted_pos_y, actor_sprite.getWidth(), actor_sprite.getHeight(), null);
+				actor_graphics.drawImage(actor_sprite.getImage(), converted_pos_x, converted_pos_y, 
+						actor_sprite.getWidth(), actor_sprite.getHeight(), null);
 				actor_graphics.rotate(actor_dir);
 			} else {
 
 				actor_graphics.setColor(sprite_color);
-				actor_graphics.fillRect(converted_pos_x, converted_pos_y, actor_width, actor_height);
+				actor_graphics.fillRect(converted_pos_x, converted_pos_y, 
+						conv_act_width, conv_act_height);
 				actor_graphics.rotate(actor_dir);
 				
 			}
@@ -306,6 +309,7 @@ public class Actor extends GameObject{
 	}
 	
 	
+	
 	/**
 	 * Retrieves the Actor's width
 	 * @return Returns the width of the Actor's sprite.
@@ -326,13 +330,5 @@ public class Actor extends GameObject{
 	}
 	
 	
-	/**
-	 * Determines if an object is collidable.
-	 * @return Returns true if the object can be collided with.
-	 */
-	public boolean isCollidable() {
-		return has_collision;
-	}
-	
-	
+
 }

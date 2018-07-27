@@ -1,10 +1,15 @@
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 
 
+
+
 import javax.swing.JPanel;
+
 import java.awt.Image;
 
 public class GameWindow extends JPanel {
@@ -179,7 +184,9 @@ public class GameWindow extends JPanel {
 	 */
 	
 	public int getCurrentWidth() {
-		return current_frame_width;
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	
+		return screenSize.width;
 	}
 	
 	
@@ -189,7 +196,29 @@ public class GameWindow extends JPanel {
 	 */
 	
 	public int getCurrentHeight() {
-		return current_frame_height;
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		return screenSize.height;
+	}
+	
+	/**
+	 * Returns a scaled double to convert coordinate positions to screen coordinates.
+	 * @return Returns a scaled double.
+	 */
+	
+	public double getViewportScaleX()
+	{
+		double world_width = GameWorld.getWorldWidth();
+		return (world_width / this.getCurrentWidth());
+	}
+	/**
+	 * Returns a scaled double to convert coordinate positions to screen coordinates.
+	 * @return Returns a scaled double.
+	 */
+	
+	public double getViewPortScaleY()
+	{
+		double world_height =  GameWorld.getWorldHeight();
+		return (world_height / this.getCurrentHeight());
 	}
 	
 	

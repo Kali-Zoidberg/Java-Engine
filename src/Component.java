@@ -32,6 +32,7 @@ public class Component {
 	 */
 	Component(String name) {
 		this.name = name;
+	
 	}
 	
 	/**
@@ -42,7 +43,7 @@ public class Component {
 	Component(GameObject mentor) {
 		Mentor = mentor;
 		name = Mentor.generateNewName(name, Mentor.component_table);
-		Mentor.component_table.put(name, this);
+		Mentor.addComponent(this);
 	}
 	
 	/**
@@ -54,7 +55,7 @@ public class Component {
 	Component(GameObject mentor, String name) {
 		Mentor = mentor;
 		this.name = Mentor.generateNewName(name, Mentor.component_table);
-		Mentor.component_table.put(name, this);
+		Mentor.addComponent(this);
 	}
 	
 	
@@ -93,7 +94,7 @@ public class Component {
 	
 	public void setMentor(GameObject mentor) {
 		Mentor = mentor;
-		Mentor.component_table.put(name, this);
+		Mentor.addComponent(this);
 	}
 	
 	/**
