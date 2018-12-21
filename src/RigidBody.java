@@ -111,19 +111,13 @@ public class RigidBody extends Transform {
 		double bodyB_y = bodyB.getY();
 		double bodyB_h = bodyB.Mentor.getActorHeight();
 		double bodyB_w = bodyB.Mentor.getActorWidth();
-
-		if (this.isInRange(bodyA_h, bodyB_y, bodyB_h) 
-				&& (this.isInRange(bodyA_w, bodyB_x, bodyB_w) 
-						|| this.isInRange(bodyA_x, bodyB_x, bodyB_w)))
-		{
-			System.out.println("Top left collided.");
-		}
+		System.out.printf("width of bodyB: %f\n", bodyB_w);		
+		if (bodyA_x < bodyB_x + bodyB_w && bodyA_x + bodyA_w > bodyB_x &&
+			bodyA_y < bodyB_y + bodyB_h && bodyA_y + bodyA_h > bodyB_y)
+			return true;
+		else
+			return false;
 	
-	
-	
-		
-		
-		return false;
 		
 	}
 	
@@ -135,15 +129,16 @@ public class RigidBody extends Transform {
 			{
 				if(actor.rigidbody.hasCollision())
 				{
-					System.out.printf("Checking collision with actor: %\n", actor.getName());
+					System.out.printf("Checking collision with actor: %s\n", actor.getName());
 
 					//Check to make sure the current actor we are checking is not OUR actor.
 					//if(actor.getID() != this.Mentor.getID()) 
 					if(actor.getName() != this.Mentor.getName())
 					{
 						//CHECK MATH
-						this.checkCollision(this, actor.rigidbody);
-
+						if(this.checkCollision(this, actor.rigidbody))
+							System.out.printf("Collision occured between %s and %s \n", this.getName(), actor.getName());
+						
 						
 					}
 
@@ -159,20 +154,16 @@ public class RigidBody extends Transform {
 	public void setX(double x) {
 		UserInterface test_ui = (UserInterface) GameWorld.game_obj_table.get("ui_test");
 		int y_pos = (int) (super.getY() + 0.5); //Calculated here to optimize stack calls.
-		int x_pos = (int) (x + 0.5);
+		int x_pos = (int) (x);
 		test_ui.setText("x pos: " + x_pos + "y pos: " + y_pos);
 		
 		if(has_collision) {
 			this.setX2(x);
 			int actor_width = Mentor.getActorWidth(); // Binding issue
 			int actor_height = Mentor.getActorHeight();
-			//System.out.println(GameWorld.GetWorldCoordinate(x_pos, y_pos) + " \n");
-			//First check from (x,y)->(x,
-			//System.out.println("Attempted pos:  " + x_pos + "," + y_pos);
-			//System.out.println("This is what is here: " + GameWorld.GetWorldCoordinate(x_pos,y_pos));
-			if (x_pos <= GameWorld.getWorldWidth() && x_pos  >= 0 && 
-					(GameWorld.GetWorldCoordinate(x_pos,y_pos).equals("-1"))) {//Checks the bounds of the object. If the object exits the gameWorld, it no longer has collision. This is to prevent an out-of-bounds exception.
-				super.setX(x_pos);
+			
+			if (x_pos <= GameWorld.getWorldWidth() && x_pos  >= 0) {//Checks the bounds of the object. If the object exits the gameWorld, it no longer has collision. This is to prevent an out-of-bounds exception.
+				super.setX(x);
 				
 				//super.setY(y_pos);
 				for (int i = 0; i <= actor_width; ++i) {
@@ -184,9 +175,10 @@ public class RigidBody extends Transform {
 				}
 				
 			}
+			
 		}
 		else { //Rigid body does not have collision enabled so it may move anywhere on the plane.
-			super.setX(x_pos);
+			super.setX(x);
 			System.out.println("NO collision");
 			//super.setY(y_pos);
 		}
@@ -199,19 +191,20 @@ public class RigidBody extends Transform {
 	public void moveY(double y) {
 		
 		UserInterface ui_test = (UserInterface) GameWorld.game_obj_table.get("ui_test");
-		double round = (y <= 0) ? -0.5 : 0.5;
-		System.out.println(round);
 		int actor_width = Mentor.getActorWidth();
 		int actor_height = Mentor.getActorHeight();
 		
-		int y_pos_cur = (int) (super.getY() + 0.5);
-		int x_pos_cur = (int) (super.getX() + 0.5);
+		int y_pos_cur = (int) (super.getY());
+		double y_pos_cur_doub = super.getY();
+		int x_pos_cur = (int) (super.getX());
+		double x_pos_cur_doub = super.getX();
 		
-		int y_pos = y_pos_cur + (int)(y + round);
-		int x_pos = (int) (super.getX() + 0.5);
+		int y_pos = y_pos_cur + (int)(y);
+		int x_pos = (int) (super.getX());
 
+		double y_pos_doub = y_pos_cur_doub + y;
 		
-		int delta_y = (int) (y+ round);
+		int delta_y = (int) (y);
 		
 		ui_test.setText("x pos: " + x_pos + "y pos: " + y_pos); //This is for debug
 
@@ -242,7 +235,7 @@ public class RigidBody extends Transform {
 					setPath(x_pos, y_pos, x_pos + actor_width, 
 							y_pos + delta_y, Mentor.getName());
 					
-					super.setY(y_pos);
+					super.setY(y_pos_doub);
 
 					}
 				} else {
@@ -257,13 +250,13 @@ public class RigidBody extends Transform {
 						
 						setPath(x_pos, y_pos, x_pos + actor_width, 
 								y_pos + delta_y, Mentor.getName());
-						super.setY(y_pos);
+						super.setY(y_pos_doub);
 					}
 				}
 			} 
 		} 
 		else  //Rigid body does not have collision so it may be set to anywhere in the plane.
-			super.setY(y_pos);
+			super.setY(y_pos_doub);
 		
 	}
 	
@@ -274,7 +267,7 @@ public class RigidBody extends Transform {
 	 * [x_min,y_min] to [x_max,y_max] (inclusive). Since it is inclusive, you may have to adjust your bounds
 	 * accordingly. (I.E. try adding 1 to your mins or maxs).
 	 * @param x_min The minimum x coordinate.
-	 * @param y_min The mminimum y coordinate.
+	 * @param y_min The minimum y coordinate.
 	 * @param y_max The maximum y coordinate
 	 * @param obj_name The name of the GameObject that will exist in this space. If clearing up existing space, set to "-1"
 	 * @return Returns true if the operation is successful
@@ -314,15 +307,35 @@ public class RigidBody extends Transform {
 			//	}
 
 
-	//ssssssssssssssssssssssssssswwwwwwwwwwwwwwwwwwwww		}
+	//	}
 			
 //		}
 		
 		return true;
 	}
-	
+	public double calcProjection()
+	{
+		return 0.0;
+	}
+	public double calcGap(Actor actorA, Actor actorB)
+	{
+		return 0.0;
+	}
+	public boolean hasCollided()
+	{
+		
+		return false;
+	}
 	
 	public boolean hasCollision(){ return has_collision; }
 	
-	
+	/**
+	 * Calls necessary methods at synchronization tick time.
+	 */
+	public void update() 
+	{
+		super.update();
+		//call collision ethods
+		
+	}
 }

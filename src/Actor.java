@@ -246,7 +246,7 @@ public class Actor extends GameObject{
 						actor_sprite.getWidth(), actor_sprite.getHeight(), null);
 				actor_graphics.rotate(actor_dir);
 			} else {
-
+				
 				actor_graphics.setColor(sprite_color);
 				actor_graphics.fillRect(converted_pos_x, converted_pos_y, 
 						conv_act_width, conv_act_height);
@@ -299,16 +299,6 @@ public class Actor extends GameObject{
 	}
 	
 	
-	/**
-	 * Get function for the actor's name. Use this to search through the Array string of actors.
-	 * @return Returns the name of the actor.
-	 */
-	
-	public String getActorName() {
-		return name;
-	}
-	
-	
 	
 	/**
 	 * Retrieves the Actor's width
@@ -327,6 +317,12 @@ public class Actor extends GameObject{
 	
 	public int getActorHeight() {
 		return actor_height;
+	}
+
+
+	@Override
+	public void update() {
+		System.out.println("Updating actor method. Call rigidbody update.");
 	}
 	
 	

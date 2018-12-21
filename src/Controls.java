@@ -43,8 +43,8 @@ public class Controls {
 		Action moveleft = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				player = (Actor) GameWorld.game_obj_table.get("Actor1");
-					player.rigidbody.setX((int)player.rigidbody.getX() - 10);
-
+				player.rigidbody.setX((int)player.rigidbody.getX() - 10);
+				player.rigidbody.setVelocity(new Vector2D(0.3,0));	
 				//	Render.setSpeed(xspeedleft, 2);
 				
 				

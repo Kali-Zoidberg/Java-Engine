@@ -7,7 +7,7 @@ public class Transform extends Cartesian2D {
 
 	protected double dir = 0;
 	private static String default_name = "Transform";
-	public Vector2D veloc;
+	public Vector2D velocity;
 	
 	/**
 	 * Default constructor for transform. Creates a Cartesian coordinate with the parameters (0,0)
@@ -39,9 +39,6 @@ public class Transform extends Cartesian2D {
 	
 	Transform(double x, double y, double direction, GameObject Mentor) {
 		super(x,y, Mentor, default_name);
-
-		x_pos = x;
-		y_pos = y;
 		direction = dir;
 	}
 	
@@ -114,6 +111,8 @@ public class Transform extends Cartesian2D {
 
 		}
 	
+
+	
 	/**
 	 * Sets the direction of the transform.
 	 * @param direction The direction of the transform in radians.
@@ -137,8 +136,9 @@ public class Transform extends Cartesian2D {
 	 * @param velocity The velocity of the transform as a 2D vector.
 	 */
 	 
-	public void setVelocity(Vector2D velocity) {
-		veloc = velocity;
+	public void setVelocity(Vector2D veloc) {
+		
+		this.velocity = veloc;
 	}
 	
 	
@@ -148,7 +148,7 @@ public class Transform extends Cartesian2D {
 	 */
 	
 	public Vector2D getVelocity() {
-		return veloc;
+		return velocity;
 	}
 	
 	
@@ -158,7 +158,8 @@ public class Transform extends Cartesian2D {
 	 */
 	
 	public void setX(double x) {
-		x_pos = x;
+		this.x= x;
+		
 	}
 	
 	
@@ -168,7 +169,7 @@ public class Transform extends Cartesian2D {
 	 */
 	
 	public void setY(double y) {
-		y_pos = y;
+		this.y = y;
 	}
 
 	/**
@@ -176,13 +177,34 @@ public class Transform extends Cartesian2D {
 	 * @return Returns the non-converted X coordinate. Used for easier understanding of the coordinate system.
 	 */
 	public double getX() {
-		return x_pos;
+		return x;
 	}
 	/***
 	 * The non-converted Y coordinate. Use for easier understanding of the coordinate system. 
 	 * @return Returns the non-converted Y coordinate. Used for easier understanding of the coordinate system.
 	 */
 	public double getY() {
-		return y_pos;
+		return y;
+	}
+	
+	/**
+	 * Moves the transform each tick based on the current velocity of the transform object.
+	 */
+	public void move()
+	{
+		if(velocity != null)
+		{
+			this.setX(this.getX() + this.velocity.getX());
+			System.out.printf("alksdjflkasjdfkl %f\n", this.velocity.getX());
+			this.setY(this.getY() + this.velocity.getY());
+	
+		}
+	}
+	
+	/**
+	 * Calls necessary methods at synchronization tick time.
+	 */
+	public void update() {
+		this.move();
 	}
 }

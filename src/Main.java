@@ -16,10 +16,11 @@ public class Main {
 	public static Controls controller = new Controls();
 
 	public static void main (String[] args) throws InterruptedException, IOException {
+		ChowFunctions.testNormals();
 		File car_file = new File("car_background.jpg");
-		GameWorld.initializeWorldCoordinates();
-
+		//GameWorld.initializeWorldCoordinates();
 		
+		/*
 		Start(); //rename
 
 		render_obj.start();
@@ -28,7 +29,7 @@ public class Main {
 		render_obj.setBackground(car_bg);
 		render_obj.setBackground(Color.black);
 		controller.initializeControls();
-
+		*/
 		
 	}
 	
@@ -70,15 +71,15 @@ public class Main {
 			System.out.println("Actor index: " + GameWorld.getActorIndex("test actor"));
 			AudioLine ambientAudioLine = new AudioLine("Ambience");
 			AudioLine backgroundLine = new AudioLine("Background");
-			SoundEmittor rain_emittor = new SoundEmittor(box, "Rain", "rain.wav", "Ambience");
+			//SoundEmittor rain_emittor = new SoundEmittor(box, "Rain", "rain.wav", "Ambience");
 			backgroundLine.scaleLineVol(0.5f);
 			SoundEmittor coffee_shop = new SoundEmittor(box2, "Coffee", "coffee_shop.wav", "Background");
 
-			rain_emittor.play();
-			rain_emittor.sound.setVolLinear(0.5f);
+			//rain_emittor.play();
+			//rain_emittor.sound.setVolLinear(0.5f);
 			coffee_shop.play();
 			AudioMaster.scaleVolume(0.5f);
-			rain_emittor.sound.printClipInfo();
+			//rain_emittor.sound.printClipInfo();
 			ambientAudioLine.scaleLineVol(0.5f);
 			//ChowFunctions.test_functions();
 

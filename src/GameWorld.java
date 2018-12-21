@@ -116,7 +116,7 @@ public class GameWorld {
 		int list_size = actor_list.size();
 		
 		for (int i = 0; i < list_size; ++i) {
-			if (name.equals(actor_list.get(i).getActorName())) {
+			if (name.equals(actor_list.get(i).getName())) {
 				return i;
 			}
 		}

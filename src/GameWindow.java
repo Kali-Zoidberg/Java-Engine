@@ -73,8 +73,10 @@ public class GameWindow extends JPanel {
 			if (goj instanceof Actor) { //Renders all objects that are an actor or subclass of an actor.
 				
 				temp_actor = (Actor) goj;
+				temp_actor.rigidbody.update();
 				temp_actor.actor_graphics = graphics_2d;
 				temp_actor.renderActor();
+				temp_actor.update();
 			}
 			
 			if (goj instanceof UserInterface) { //Renders all objects that are a UserInterface or subclass of a UserInterface.
@@ -82,10 +84,22 @@ public class GameWindow extends JPanel {
 				
 				temp_ui.ui_graphics = graphics_2d;
 				temp_ui.renderText();
+				temp_ui.update();
 			}
 		}
 		
-			
+	}
+	
+	/**
+	 * Checks the bounds of a specified x,y position to see if it can be rendered on screen.
+	 * @param x The x coordinate
+	 * @param y The y coordinate
+	 * @return Returns true if the position is within bounds of the specified screen
+	 */
+	public boolean checkWindowBounds(int x, int y)
+	{
+		return (x >= 0 && y >= 0 && 
+				x <= this.getCurrentWidth() && y <= this.getCurrentHeight());
 	}
 	
 	/**

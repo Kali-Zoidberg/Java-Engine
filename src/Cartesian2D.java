@@ -1,8 +1,8 @@
 
 public class Cartesian2D extends Component {
 
-	protected double x_pos = 0;
-	protected double y_pos = 0;
+	protected double x = 0;
+	protected double y = 0;
 	private static final String default_name = "Cartesian2D";
 	
 	/**
@@ -11,8 +11,8 @@ public class Cartesian2D extends Component {
 
 	Cartesian2D() {
 		super(default_name);
-		x_pos = 0;
-		y_pos = 0;
+		x = 0;
+		y = 0;
 	}
 	
 	
@@ -24,8 +24,8 @@ public class Cartesian2D extends Component {
 	
 	Cartesian2D(double x, double y) {
 		super(default_name);
-		x_pos = x;
-		y_pos = y;
+		this.x = x;
+		this.y = y;
 	}
 	/**
 	 * Constructs a Cartesian 2D with specified coordinates and name.
@@ -35,8 +35,8 @@ public class Cartesian2D extends Component {
 	 */
 	Cartesian2D(double x, double y, String name) {
 		super(name);
-		x_pos = x;
-		y_pos = y;
+		this.x = x;
+		this.y = y;
 	}
 	
 	/**
@@ -48,8 +48,8 @@ public class Cartesian2D extends Component {
 	 */
 	Cartesian2D(double x, double y, GameObject Mentor, String name) {
 		super(Mentor, name);
-		x_pos = x;
-		y_pos = y;
+		this.x = x;
+		this.y = y;
 	}
 	
 	/**
@@ -61,8 +61,8 @@ public class Cartesian2D extends Component {
 	
 	Cartesian2D(double x, double y, GameObject mentor) {
 		super(mentor, default_name);
-		x_pos = x;
-		y_pos = y;
+		this.x = x;
+		this.y = y;
 		
 	}
 	
@@ -84,7 +84,7 @@ public class Cartesian2D extends Component {
 	 */
 	
 	public void setX(double x) {
-		x_pos = x;
+		this.x = x;
 	}
 	
 
@@ -95,7 +95,7 @@ public class Cartesian2D extends Component {
 	
 	public void setY(double y) {
 		
-		y_pos = y;
+		this.y = y;
 	}
 	
 	
@@ -105,7 +105,7 @@ public class Cartesian2D extends Component {
 	 */
 	
 	public double getX() {
-		return x_pos;
+		return x;
 	}
 	
 	
@@ -115,6 +115,6 @@ public class Cartesian2D extends Component {
 	 */
 	
 	public double getY() {
-		return y_pos;
+		return y;
 	}
 }

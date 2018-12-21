@@ -151,4 +151,11 @@ public class Component {
 		return component_type;
 	}
 	
+	/**
+	 * Calls necessary methods for a component during synchronization ticks.
+	 */
+	public void update() {
+	//	System.out.printf("Component: %s's update method has been called", this.getName());
+	}
+	
 }

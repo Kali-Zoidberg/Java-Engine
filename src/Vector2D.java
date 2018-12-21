@@ -1,7 +1,6 @@
 
 public class Vector2D extends Cartesian2D{
-	private double x = 0.0; 
-	private double y = 0.0; 
+
 	private double magn = 0.0;
 	private float dir = 0.0f;
 
@@ -19,7 +18,8 @@ public class Vector2D extends Cartesian2D{
 	Vector2D(double x, double y) {
 		super(x,y);
 		magn = Math.hypot(x, y);
-		dir = (float) Math.atan(magn);
+		dir = (float) Math.atan2(y,x);
+		//dir = (float) Math.atan(magn);
 	}
 	/**
 	 * Constructs a vector object with a magnitude and direction (in radians).
@@ -63,6 +63,16 @@ public class Vector2D extends Cartesian2D{
 		dir = (float) Math.atan(magn);
 	}
 	
+	
+	/**
+	 * Returns the horizontal (x) component of the vector.
+	 */
+	public double getX(){ return x; }
+	
+	/**
+	 * Returns the vertical (y) component of the vector.
+	 */
+	public double getY(){ return y; }
 	
 	/**
 	 * Retrieves the magnitude of the vector.
@@ -141,6 +151,18 @@ public class Vector2D extends Cartesian2D{
 	public float getDirection_Degree() {
 		float temp_dir = (float) (dir * (180/Math.PI));
 		return temp_dir;
+	}
+	
+	public String toString()
+	{
+		String buf = String.format("X: %f Y: %f: Theta: %f", this.getX(),this.getY(), this.getDirection_Degree());
+		return buf;
+	}
+	
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

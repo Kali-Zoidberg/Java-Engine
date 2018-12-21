@@ -295,6 +295,12 @@ public class UserInterface extends GameObject{
 	public int getFontSize() {
 		return ui_font.getSize();
 	}
+
+
+	@Override
+	public void update() {
+		System.out.println("UI update method");
+	}
 	
 
 }

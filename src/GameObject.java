@@ -14,7 +14,7 @@ import java.util.Hashtable;
  * @author Nicholas Chow
  * 
  */
-public class GameObject {
+public abstract class GameObject {
 	private int id;
 	protected String name;
 	private String obj_type = "GameObject";
@@ -132,5 +132,5 @@ public class GameObject {
 		else
 			return false;
 	}
-	
+	public abstract void update();
 }
