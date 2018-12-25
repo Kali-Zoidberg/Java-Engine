@@ -179,26 +179,73 @@ public class Actor extends GameObject{
 	 * @return Returns true as long as width and height are >= 0. Otherwise, it returns false.
 	 */
 	
-	public boolean setActorSize(int width, int height) {
+	public boolean setSize(int width, int height) {
 		if (width < 0 && height < 0)
 			return false; //invalid size.
 		else {
 			actor_width = width;
 			actor_height = height;
-			return true;
+			if(this.rigidbody.collisionShape != null)
+			{
+				this.rigidbody.collisionShape.setHeight(actor_height);
+				this.rigidbody.collisionShape.setWidth(actor_width);
+			}
+				return true;
 		}		
 	}
 	
+	/**
+	 * Sets the actor width
+	 * @param width The amount of pixels to set the actor's width to.
+	 * @return Returns false if width <0 else true.
+	 */
+	public boolean setWidth(int width)
+	{
+		if(width < 0)
+			return false;
+		else
+		{
+			actor_width = width;
+			if(this.rigidbody.collisionShape != null)
+				this.rigidbody.collisionShape.setWidth(width);
+			return true;
+		}
+	}
 	
+	/**
+	 * Sets the actor height
+	 * @param height The amount of pixels to set the actor's height to.
+	 * @return Returns false if height < 0 else true.
+	 */
+	
+	public boolean setHeight(int height)
+	{
+		if(height < 0)
+			return false;
+		else
+		{
+			actor_height = height;
+			if(this.rigidbody.collisionShape != null)
+				this.rigidbody.collisionShape.setHeight(height);
+			return true;
+		}
+	}
 	/**
 	 * Loads a new sprite onto the actor.
 	 * @param sprite The new sprite to load in the actor.
 	 */
 	
-	public void setSprite(Sprite sprite) {
+	public void setSprite(Sprite sprite, String name) {
 		actor_sprite = sprite;
-		actor_width = sprite.getWidth();
-		actor_height = sprite.getHeight();
+		actor_sprite.setMentor(this);
+		actor_sprite.setName(name);
+		this.setHeight(sprite.getHeight());
+		this.setWidth(sprite.getWidth());
+		if(this.rigidbody.collisionShape != null)
+		{
+			this.rigidbody.collisionShape.setHeight(sprite.getHeight());
+			this.rigidbody.collisionShape.setWidth(sprite.getWidth());
+		}
 	}
 	
 	
@@ -211,11 +258,9 @@ public class Actor extends GameObject{
 	
 	public void setRect(int width, int height, Color color) {
 		actor_sprite = null;
-
-		actor_width = width;
-		actor_height = height;
+		this.setSize(width, height);
 		sprite_color = color;
-		if(this.rigidbody != null)
+		if(this.rigidbody.collisionShape != null)
 		{
 			this.rigidbody.collisionShape.setWidth(actor_width);
 			this.rigidbody.collisionShape.setHeight(actor_height);
@@ -241,24 +286,30 @@ public class Actor extends GameObject{
 	 */
 	public void renderActor() {
 
-		this.converted_pos_x = (int) (transform.getX() * GameWorld.getViewportScaleX() + 0.5f);
-		this.converted_pos_y = (int) (transform.getY() * GameWorld.getViewPortScaleY() + 0.5f);
+		this.converted_pos_x = (int) (rigidbody.getX() * GameWorld.getViewportScaleX() + 0.5f);
+		this.converted_pos_y = (int) (rigidbody.getY() * GameWorld.getViewPortScaleY() + 0.5f);
 		int conv_act_width = (int) (this.actor_width * GameWorld.getViewportScaleX());
 		int conv_act_height = (int) (this.actor_height * GameWorld.getViewPortScaleY());
-		double actor_dir = transform.getDirection();
+		double actor_dir = rigidbody.getDirection();
 		
 		if (is_visible) {
+			Cartesian2D center = new Cartesian2D(converted_pos_x + this.actor_width/2,
+					converted_pos_y + this.actor_height/2);
 			//actor_graphics = Render.bi.createGraphics();
 			if (actor_sprite != null) {
+			
+				actor_graphics.rotate(this.rigidbody.getDirection(), center.getX(), center.getY() );
+				
 				actor_graphics.drawImage(actor_sprite.getImage(), converted_pos_x, converted_pos_y, 
 						actor_sprite.getWidth(), actor_sprite.getHeight(), null);
-				actor_graphics.rotate(actor_dir);
+
 			} else {
-				
+				actor_graphics.rotate(this.rigidbody.getDirection(),center.getX(), center.getY());
+
 				actor_graphics.setColor(sprite_color);
+				
 				actor_graphics.fillRect(converted_pos_x, converted_pos_y, 
 						conv_act_width, conv_act_height);
-				actor_graphics.rotate(actor_dir);
 				
 			}
 		} else {
@@ -313,7 +364,7 @@ public class Actor extends GameObject{
 	 * @return Returns the width of the Actor's sprite.
 	 */
 	
-	public int getActorWidth() {
+	public int getWidth() {
 		return actor_width;
 	}
 	
@@ -323,7 +374,7 @@ public class Actor extends GameObject{
 	 * @return Returns the height of the Actor's sprite.
 	 */
 	
-	public int getActorHeight() {
+	public int getHeight() {
 		return actor_height;
 	}
 

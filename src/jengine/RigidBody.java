@@ -1,4 +1,7 @@
 package jengine;
+
+import java.awt.Color;
+
 /**
  * @author Chow
  *
@@ -39,7 +42,7 @@ public class RigidBody extends Transform {
 	RigidBody(double x, double y, Actor mentor, String name) {
 		super(x,y, mentor, name);
 		Mentor.transform = this;
-		collisionShape = new Rectangle(x,y, mentor.getActorWidth(), mentor.getActorHeight());
+		collisionShape = new Rectangle(x,y, mentor.getWidth(), mentor.getHeight());
 	}
 	/**
 	 * Constructs a RigidBody using a transform.
@@ -50,7 +53,7 @@ public class RigidBody extends Transform {
 	RigidBody(Transform transform, Actor mentor, String name) {
 		super(transform.getX(), transform.getY(), mentor, name);
 		Mentor.transform = this;
-		collisionShape = new Rectangle(transform.getX(),transform.getY(), mentor.getActorWidth(), mentor.getActorHeight());
+		collisionShape = new Rectangle(transform.getX(),transform.getY(), mentor.getWidth(), mentor.getHeight());
 		System.out.printf("CollisionShape width: %f collisionshape height: %f\n", ((Rectangle) collisionShape).getWidth(), ((Rectangle) collisionShape).getHeight());
 
 	}
@@ -85,8 +88,8 @@ public class RigidBody extends Transform {
 
 	public void setCollision(boolean enable) {
 		has_collision = enable;
-		int actor_width = Mentor.getActorWidth();
-		int actor_height = Mentor.getActorHeight();
+		int actor_width = Mentor.getWidth();
+		int actor_height = Mentor.getHeight();
 		
 		int x_min = (int) (super.getX() + 0.5);
 		int x_max = (x_min + actor_width);
@@ -125,12 +128,12 @@ public class RigidBody extends Transform {
 		//Initialize all x,y, width and height parameters for both objects
 		double bodyA_x = bodyA.getX();
 		double bodyA_y = bodyA.getY();
-		double bodyA_h = bodyA.Mentor.getActorHeight();
-		double bodyA_w = bodyA.Mentor.getActorWidth();
+		double bodyA_h = bodyA.Mentor.getHeight();
+		double bodyA_w = bodyA.Mentor.getWidth();
 		double bodyB_x = bodyB.getX();
 		double bodyB_y = bodyB.getY();
-		double bodyB_h = bodyB.Mentor.getActorHeight();
-		double bodyB_w = bodyB.Mentor.getActorWidth();
+		double bodyB_h = bodyB.Mentor.getHeight();
+		double bodyB_w = bodyB.Mentor.getWidth();
 		if (bodyA_x < bodyB_x + bodyB_w && bodyA_x + bodyA_w > bodyB_x &&
 			bodyA_y < bodyB_y + bodyB_h && bodyA_y + bodyA_h > bodyB_y)
 			return true;
@@ -176,8 +179,8 @@ public class RigidBody extends Transform {
 		
 		if(has_collision) {
 		//	this.setX2(x);
-			int actor_width = Mentor.getActorWidth(); // Binding issue
-			int actor_height = Mentor.getActorHeight();
+			int actor_width = Mentor.getWidth(); // Binding issue
+			int actor_height = Mentor.getHeight();
 			
 			if (x_pos <= GameWorld.getWorldWidth() && x_pos  >= 0) {//Checks the bounds of the object. If the object exits the gameWorld, it no longer has collision. This is to prevent an out-of-bounds exception.
 				super.setX(x);
@@ -206,9 +209,9 @@ public class RigidBody extends Transform {
 	
 	public void moveY(double y) {
 		
-		UserInterface ui_test = (UserInterface) GameWorld.game_obj_table.get("ui_test");
-		int actor_width = Mentor.getActorWidth();
-		int actor_height = Mentor.getActorHeight();
+		//UserInterface ui_test = (UserInterface) GameWorld.game_obj_table.get("ui_test");
+		int actor_width = Mentor.getWidth();
+		int actor_height = Mentor.getHeight();
 		
 		int y_pos_cur = (int) (super.getY());
 		double y_pos_cur_doub = super.getY();
@@ -222,7 +225,7 @@ public class RigidBody extends Transform {
 		
 		int delta_y = (int) (y);
 		
-		ui_test.setText("x pos: " + x_pos + "y pos: " + y_pos); //This is for debug
+		//ui_test.setText("x pos: " + x_pos + "y pos: " + y_pos); //This is for debug
 
 		/**
 		 * If the newly desired position is less than the previous position, the object is moving negatively along the axis.
@@ -343,8 +346,8 @@ public class RigidBody extends Transform {
 	{
 
 				boolean isSeparated = false;
-				Vector2D[] normActorA = Physics.getNormals(actorA.rigidbody.collisionShape);
-				Vector2D[] normActorB = Physics.getNormals(actorA.rigidbody.collisionShape);
+				Vector2D[] normActorA = actorA.rigidbody.collisionShape.getNormals();
+				Vector2D[] normActorB = actorA.rigidbody.collisionShape.getNormals();
 				
 				Vector2D[] actorAShapeVects = actorA.rigidbody.collisionShape.getVectors();
 				Vector2D[] actorBShapeVects = actorB.rigidbody.collisionShape.getVectors();
@@ -353,8 +356,9 @@ public class RigidBody extends Transform {
 				{
 					double[] minMaxShapeA = Physics.minMaxProj(actorAShapeVects, normActorA[i]);
 					double[] minMaxShapeB = Physics.minMaxProj(actorBShapeVects, normActorA[i]);
-					isSeparated = (minMaxShapeA[1] < minMaxShapeB[0] || minMaxShapeB[1] < minMaxShapeA[0]);
-					if (isSeparated) break;
+					isSeparated = (minMaxShapeA[0] > minMaxShapeB[1] || minMaxShapeB[0] > minMaxShapeA[1]);
+					if (isSeparated)
+						return true;
 				}
 				
 				if (!isSeparated)
@@ -364,14 +368,14 @@ public class RigidBody extends Transform {
 					{
 					double[] minMaxShapeA = Physics.minMaxProj(actorAShapeVects, normActorB[i]);
 					double[] minMaxShapeB = Physics.minMaxProj(actorBShapeVects, normActorB[i]);
-					isSeparated = (minMaxShapeA[1] < minMaxShapeB[0] || minMaxShapeB[1] < minMaxShapeA[0]);
-					if(isSeparated) break;
+					isSeparated = Physics.projOverLap(minMaxShapeA, minMaxShapeB);
+					if(isSeparated)
+						return true;
 					}
 					
 				}
-				if(!isSeparated)
-					System.out.println("Not Separated boxes");
-				return isSeparated;		
+				return false;
+				
 			
 	}
 	
@@ -397,11 +401,15 @@ public class RigidBody extends Transform {
 		{
 			Actor curActor = GameWorld.actor_list.get(i);
 			if (curActor != this.Mentor && curActor.rigidbody != null && this.Mentor.rigidbody != null && 
-					curActor.rigidbody.hasCollision() )
+					curActor.rigidbody.hasCollision() && !this.Mentor.getName().equals("box1") && !this.Mentor.getName().contentEquals("box2"))
 			{
-				CollisionEnum collisionStatus = this.hasCollided(curActor);
-				if(collisionStatus == CollisionEnum.TOUCHED)
-					System.out.println("Actors touched");
+				System.out.printf("Checking : %s and %s \n", this.Mentor.getName(), curActor.getName());
+				if(calcGap(this.Mentor, curActor))
+					curActor.setRect(Color.BLUE);
+				else
+					curActor.setRect(Color.RED);
+				
+				
 				//else if (collisionStatus == CollisionEnum.PENETRATED)
 				//	System.out.printf("Actors penetrated: %s, %s \n", this.Mentor.getName(), curActor.getName());
 			}
@@ -412,7 +420,8 @@ public class RigidBody extends Transform {
 		
 		this.collisionShape.setX(this.getX());
 		this.collisionShape.setY(this.getY());
-		
+		this.collisionShape.setHeight(this.Mentor.getHeight());
+		this.collisionShape.setWidth(this.Mentor.getWidth());
 		
 	}
 	/**

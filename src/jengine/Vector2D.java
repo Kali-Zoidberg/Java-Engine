@@ -153,10 +153,21 @@ public class Vector2D extends Cartesian2D{
 		return temp_dir;
 	}
 	
+	/**
+	 * Finds the dot product of the current vector with VectorB
+	 * @param vectorB The Vector to perform the dot operation with
+	 * @return Returns a double representing the scalar result of the dot product
+	 */
 	public double dot(Vector2D vectorB)
 	{
 		return (this.getX() * vectorB.getX()) + (this.getY() * vectorB.getY());
 	}
+	
+	public double dot2(Vector2D vectorB)
+	{
+		return (this.getMagnitude() * vectorB.getMagnitude() * Math.cos(-1 * this.getDirection() + vectorB.getDirection()));
+	}
+	
 	/**
 	 * copies the vector and returns a left normal
 	 * @return Return a left normal such that V(x,y) = U(-y,x)
@@ -187,6 +198,32 @@ public class Vector2D extends Cartesian2D{
 		return retVector;
 	}
 	/**
+	 * Adds a vector by another vector
+	 * @param vectorR The vector on the righthand side to add
+	 * @return Returns a copy of the newly formed vector
+	 */
+	public Vector2D add(Vector2D vectorR)
+	{
+		Vector2D retVector = new Vector2D(this);
+		retVector.x = retVector.getX() + vectorR.getX();
+		retVector.y = retVector.getY() + vectorR.getY();
+		retVector.magn = Math.hypot(retVector.getX(),retVector.getY());
+		retVector.dir = Math.atan2(retVector.getY(), retVector.getX());
+		return retVector;
+	}
+	/**
+	 * Subtracts this vector by the vector on the RHS
+	 * @param vectorR The vector on the RHS
+	 * @return Returns a copy of the newly formed vecto.r
+	 */
+	public Vector2D sub(Vector2D vectorR)
+	{
+		Vector2D retVector = this.add(vectorR.mult(-1));
+		return retVector;
+		
+	}
+	
+	/**
 	 * Multiplies a vector by a scalar
 	 * @param scalar The value to multi[ply the vector by
 	 * @return Returns a copy of the vector
@@ -199,6 +236,11 @@ public class Vector2D extends Cartesian2D{
 		retVector.magn = Math.hypot(retVector.x, retVector.y);
 		return retVector;
 	}
+	/**
+	 * Returns a vector2d divided by a scalar
+	 * @param scalar The value to divde a vector by
+	 * @return Returns a copy of the divided vector
+	 */
 	public Vector2D div(double scalar)
 	{
 		Vector2D retVector = new Vector2D(this);
@@ -208,6 +250,10 @@ public class Vector2D extends Cartesian2D{
 		return retVector;
 	}
 	
+	/**
+	 * Normalizes the vector into a unit vector and returns a copy of it
+	 * @return A normalized/unit vector
+	 */
 	public Vector2D unitVector()
 	{
 		Vector2D retVector = new Vector2D(this);

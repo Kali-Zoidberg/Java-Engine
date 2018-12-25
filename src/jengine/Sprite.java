@@ -2,7 +2,7 @@ package jengine;
 import java.awt.Color;
 import java.awt.Image;
 
-public class Sprite {
+public class Sprite extends Component{
 	
 	private Image sprite_image;
 	private int sprite_width = 10;
@@ -14,7 +14,8 @@ public class Sprite {
 	 * Defaults to 10x10 pixels in size with the color pink.
 	 */
 
-	Sprite() {
+	Sprite(GameObject Mentor, String name) {
+		super(Mentor, name);
 		sprite_image = null;
 		
 	}
@@ -27,6 +28,7 @@ public class Sprite {
 	 */
 	
 	Sprite(Image img, int width, int height) {
+
 		sprite_width = width;
 		sprite_height = height;
 		sprite_image = img;
@@ -41,7 +43,7 @@ public class Sprite {
 	 */
 	
 	Sprite(Color color, int width, int height) {
-		
+
 		sprite_image = null;
 		sprite_color = color;
 	}

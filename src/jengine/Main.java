@@ -40,15 +40,16 @@ public class Main {
 		ChowFunctions.testNormals();
 		TestVectors.testNormalize();
 		TestVectors.testUnitVector();
+		TestVectors.testAddSubVector();
 	}
 	public static void Start() throws IOException {
 //		Transform transform_test = new Transform("Transform", 750,500,0f);
 			File sprite_img = new File("sprite_test.jpg");
 			BufferedImage car_bg = ImageIO.read(sprite_img);
 
-			UserInterface ui_test = new UserInterface(60.0,60.0,0.0,"Hello world!",Color.WHITE,	new Font("Courier New", Font.PLAIN, 12), "ui_test");
+			//UserInterface ui_test = new UserInterface(60.0,60.0,0.0,"Hello world!",Color.WHITE,	new Font("Courier New", Font.PLAIN, 12), "ui_test");
 			
-			Actor player = new Actor(50, 300, 50,50, "Actor1");
+			Actor player = new Actor(50, 300, 5,5, "Actor1");
 			Actor box = new Actor(300, 300,50,50, "box1");
 			Actor box2 = new Actor(50, 50,50,50, "box2");
 			
@@ -66,8 +67,8 @@ public class Main {
 		//	player.rigidbody.setY(player.rigidbody.getY());
 			player.setVisible(true);
 			
-			Sprite sprite_test = new Sprite(car_bg,50,50);
-			player.setSprite(sprite_test);
+			Sprite sprite_test = new Sprite(car_bg,20,20);
+			player.setSprite(sprite_test, "sprite_test");
 			player.rigidbody.setCollision(true);
 			
 			System.out.println("box1: " + box.rigidbody.getX() + " y:" + box.rigidbody.getY());
@@ -76,7 +77,6 @@ public class Main {
 
 			//	ui_list.add(ui_test);
 			//GameWorld.actor_list.add(player);
-			System.out.println("Actor index: " + GameWorld.getActorIndex("test actor"));
 			AudioLine ambientAudioLine = new AudioLine("Ambience");
 			AudioLine backgroundLine = new AudioLine("Background");
 			//SoundEmittor rain_emittor = new SoundEmittor(box, "Rain", "rain.wav", "Ambience");

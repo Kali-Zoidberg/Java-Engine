@@ -22,6 +22,18 @@ public class TestVectors {
 	
 		}
 	}
+	
+	public static void testAddSubVector()
+	{
+		Vector2D[] tests = {new Vector2D(0,0), new Vector2D(1,1), new Vector2D(3,4), new Vector2D(5,-1)};
+		for (int i = 0; i < tests.length - 1; ++i)
+		{
+			double deltaAddSelf = tests[i].add(tests[i]).getMagnitude() - tests[i].getMagnitude() * 2;
+			if (deltaAddSelf < -0.05 || deltaAddSelf > 0.05)
+				System.out.println("add by self failed: " + tests[i].toString());
+			
+		}
+	}
 		
 }
 

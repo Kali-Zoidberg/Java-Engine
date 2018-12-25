@@ -122,7 +122,24 @@ public class Transform extends Cartesian2D {
 	public void setDirection(double direction) {
 		
 		this.dir = direction;
-		
+		//Update x and y coordinates based on direction!!!!
+		/*if (this.Mentor instanceof Actor)
+		{
+		Actor ourActor = (Actor) this.Mentor;
+		Cartesian2D center = new Cartesian2D(this.getX() + ourActor.getWidth()/2,
+				this.getY() + ourActor.getHeight()/2);		
+		double tempX = this.getX() - center.getX();
+		double tempY = this.getY() - center.getY();
+		double cos = Math.cos(direction);
+		double sin = Math.sin(direction);
+		double rotatedX = tempX * cos - tempY * sin;
+		double rotatedY = tempX * sin + tempY * cos;
+		this.setX(rotatedX + 50);
+		this.setY(rotatedY + 50);
+		//this pivots it. Looks like I need pen and paper
+		//but not where I want.
+		}*/
+		//If it does not ahve width and hieght, then the x,y points stay the same. as it will pivote about itself
 	}
 	
 	/**

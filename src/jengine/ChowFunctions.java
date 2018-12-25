@@ -64,7 +64,7 @@ public class ChowFunctions {
 	public static void testNormals()
 	{
 		Rectangle test_shape = new Rectangle(0,0,5,6);
-		Vector2D test_normals[] = Physics.getNormals(test_shape);
+		Vector2D test_normals[] = test_shape.getNormals();
 		for (Vector2D normal: test_normals)
 		{
 			System.out.println(normal.toString());
@@ -89,83 +89,3 @@ public class ChowFunctions {
 	}
 }
 
-class Rectangle extends Shape {
-	
-	private Cartesian2D points[] = new Cartesian2D[5];
-	
-	Rectangle(double x, double y, double width, double height)
-	{
-		super(x,y,width,height);
-		genPoints();
-		printPoints();
-	}
-	/**
-	 * 4------1
-	 * |      |
-	 * |   0  |
-	 * |	  |
-	 * 3------2
-	 */
-	private void genPoints()
-	{
-		points[0] = getCenter();
-		points[1] = new Cartesian2D(x + width, y);
-		points[2] = new Cartesian2D(x + width, y + height);
-		points[3] = new Cartesian2D(x,y+height);
-		points[4] = new Cartesian2D(x,y);
-
-	//	printPoints();
-		
-	}
-	public void setX(double x)
-	{
-		super.setX(x);
-		genPoints();
-	}
-	public void setY(double y)
-	{
-		super.setY(y);
-		genPoints();
-	}
-	public double getWidth() {
-		return width;
-	}
-	public void setWidth(double width) {
-		this.width = width;
-		genPoints();
-	}
-	public double getHeight() {
-		return height;
-		
-	}
-	public void setHeight(double height) {
-		this.height = height;
-		genPoints();
-	}
-	public Cartesian2D getCenter()
-	{
-		return new Cartesian2D( (this.getX() + this.getWidth())/2, (this.getY() + this.getHeight()) / 2);
-	}
-	@Override
-	public Cartesian2D[] getPoints() {
-		return points;
-	}
-	public Vector2D[] getVectors()
-	{
-		//create an array of size points -1 because initioal point is center
-		Vector2D[] retVectors = new Vector2D[points.length - 1];
-		for (int i = 1; i < points.length; ++i)
-		{
-			//start at index one because the first point is the center and we do not want its vector
-			retVectors[i - 1] = new Vector2D(points[i].getX(), points[i].getY());
-		}
-		return retVectors;
-	}
-	
-	public void printPoints()
-	{
-		System.out.println("\n*****\n");
-		for (int i = 0; i< points.length; ++i)
-			System.out.printf("Point[%d]. X: %f Y: %f \n", i, points[i].getX(), points[i].getY());
-	}
-}
