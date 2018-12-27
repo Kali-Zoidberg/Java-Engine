@@ -9,7 +9,7 @@ import java.awt.Color;
 
 public class RigidBody extends Transform {
 	
-	float rig_mass = 0;
+	protected double mass = 1;
 	Vector2D rig_veloc = new Vector2D(0,0);
 	Actor Mentor = (Actor) super.Mentor;
 	Shape collisionShape = null;
@@ -342,7 +342,7 @@ public class RigidBody extends Transform {
 	 * @param actorB The second actor
 	 * @return Returns the gap between the two actors.
 	 */
-	public boolean calcGap(Actor actorA, Actor actorB)
+	public boolean hasCollided(Actor actorA, Actor actorB)
 	{
 
 				boolean isSeparated = false;
@@ -379,20 +379,13 @@ public class RigidBody extends Transform {
 			
 	}
 	
-	/**
-	 * Returns collision state of this rigidbody and another actor
-	 * @param actorB The other actor to test the collision wiht
-	 * @return Return an enum Collision state. ISOLATED - has not touched Touched - the two actors are touching PENETRATED - The two actors are penetrating each other.
-	 */
-	public CollisionEnum hasCollided(Actor actorB)
+	public void calcCollision(Actor actorA, Actor actorB)
 	{
-		if(calcGap(this.Mentor, actorB))
-		{
-			return CollisionEnum.PENETRATED;
-		} else
-			return CollisionEnum.ISOLATED;
+		RigidBody rigidA = actorA.rigidbody;
+		RigidBody rigidB = actorB.rigidbody;
+		double actorAVeloc  = Physics.elasticCollisionV1(rigidA.getMass(), rigidA.getVelocity().getX(), rigidB.getMass(), rigidB.getVelocity().getX());
+		
 	}
-	
 	public boolean hasCollision(){ return has_collision; }
 	public void checkAllCollisions()
 	{
@@ -404,10 +397,13 @@ public class RigidBody extends Transform {
 					curActor.rigidbody.hasCollision() && !this.Mentor.getName().equals("box1") && !this.Mentor.getName().contentEquals("box2"))
 			{
 				System.out.printf("Checking : %s and %s \n", this.Mentor.getName(), curActor.getName());
-				if(calcGap(this.Mentor, curActor))
-					curActor.setRect(Color.BLUE);
+				if(hasCollided(this.Mentor, curActor))
+				{
+					calcCollision(this.Mentor, curActor);
+				}
 				else
-					curActor.setRect(Color.RED);
+				{
+				}
 				
 				
 				//else if (collisionStatus == CollisionEnum.PENETRATED)
@@ -424,6 +420,7 @@ public class RigidBody extends Transform {
 		this.collisionShape.setWidth(this.Mentor.getWidth());
 		
 	}
+	
 	/**
 	 * Calls necessary methods at synchronization tick time.
 	 */
@@ -435,4 +432,23 @@ public class RigidBody extends Transform {
 		//call collision ethods
 		
 	}
+	
+	/**
+	 * Sets the mass of the rigid body.
+	 * @param mass The new mass of the rigid body. If the value is <= to 0, the mass is set to 1.
+	 */
+	public void setMass(double mass)
+	{
+		this.mass = mass <= 0 ? 1 : mass;
+	}
+	
+	/**
+	 * Getter function for the mass of the rigid body
+	 * @return Returns the mass of the rigid body.
+	 */
+	public double getMass()
+	{
+		return this.mass;
+	}
+	
 }

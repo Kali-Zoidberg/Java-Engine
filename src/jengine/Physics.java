@@ -53,7 +53,20 @@ public class Physics {
 	{
 		return (minMaxA[0] > minMaxB[1] || minMaxB[0] > minMaxA[1]);
 	}
-	
+	/**
+	 * Calculates the final velocity, of the first object, in an elastic collision
+	 * @param mass1 The mass of the first object
+	 * @param velocity1 The velocity of the first object
+	 * @param mass2 The mass of the second object
+	 * @param velocity2 The velocity of the second object
+	 * @return Returns the final velocity of the first object.
+	 */
+	public static double elasticCollisionV1(double mass1, double velocity1, double mass2, double velocity2)
+	{
+		//v1f = {[(m1 - m2)/(m1+m2)]*v1i} + [(2*m2]/(m1+m2)]*v2i
+		double v1f = (((mass1 - mass2) / (mass1 + mass2)) * velocity1) + ((2 * mass2) / (mass1 + mass2)) * velocity2;
+		return v1f;
+	}
 	public void findGaps()
 	{
 		
