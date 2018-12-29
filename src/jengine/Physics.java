@@ -61,11 +61,80 @@ public class Physics {
 	 * @param velocity2 The velocity of the second object
 	 * @return Returns the final velocity of the first object.
 	 */
-	public static double elasticCollisionV1(double mass1, double velocity1, double mass2, double velocity2)
+	public static double[] elasticCollision1D(double mass1, double velocity1, double mass2, double velocity2)
 	{
-		//v1f = {[(m1 - m2)/(m1+m2)]*v1i} + [(2*m2]/(m1+m2)]*v2i
-		double v1f = (((mass1 - mass2) / (mass1 + mass2)) * velocity1) + ((2 * mass2) / (mass1 + mass2)) * velocity2;
-		return v1f;
+		//vf1 = [(m1 - m2)·vi1 + 2 m2·vi2]/(m1 + m2)
+		//vf2 = [2 m1·vi1 - (m1 - m2)·vi2]/(m1 + m2)
+		double v1s = ((mass1 - mass2)*velocity1 + (2*mass2*velocity2)) / (mass1+mass2);
+		double v2s = (velocity2 * (mass2 - mass1) + (2 * mass1 * velocity1))/(mass1+mass2);
+		double retVeloc[] = {v1s, v2s};
+		//add initial vector with second vector to get final
+		return retVeloc;
+	}
+	/*
+	public static Vector2D[] elasticCollision(double mass1, Vector2D velocity1, double mass2, Vector2D velocity2)
+	{
+		//vf1 = [(m1 - m2)·vi1 + 2 m2·vi2]/(m1 + m2)
+		//vf2 = [2 m1·vi1 - (m1 - m2)·vi2]/(m1 + m2)
+		double v1p = velocity1.getMagnitude() * Math.cos(velocity1.getDirection());
+		double v2p = velocity2.getMagnitude() * Math.cos(velocity2.getDirection());
+		double v1s = ((mass1 - mass2)* v1p)+ (2*mass2*v2p) / (mass1+mass2);
+		double v2s = ((2 * mass1 * v1p) - (mass1 - mass2) * v2p)/(mass1+mass2);
+		double retVeloc[] = {v1s, v2s};
+		//add initial vector with second vector to get final
+		return retVeloc;
+	}
+	*/
+	public static Vector2D[] elasticCollision2D(double m1, RigidBody rigidA, double m2, RigidBody rigidB)
+	{
+		//find a normal vector. find the centers between the coordinates and create a vector
+		Cartesian2D rigidACent = rigidA.collisionShape.getCenter();
+		Cartesian2D rigidBCent = rigidB.collisionShape.getCenter();
+		
+		//Find the mutual normal vector by getting the vector between the centers of the shapes.
+		Vector2D mutualNormVect = new Vector2D(rigidBCent.getX() - rigidACent.getX(), rigidBCent.getY() - rigidACent.getY());
+		//normalize the vector
+		Vector2D mutualNormUnitVect = mutualNormVect.unitVector();
+		//find the tangent vector by finding the left normal
+		Vector2D mutualTanVect = mutualNormUnitVect.normL();
+		Vector2D v1 = rigidA.getVelocity();
+		Vector2D v2 = rigidB.getVelocity();
+		
+		//project the respective velocity vectors onto the mutualNormal and mutualTangent unit vectors.
+		double v1n = v1.dot2(mutualNormUnitVect);
+		double v1t = v1.dot2(mutualTanVect);
+		double v2n = v2.dot2(mutualNormUnitVect);
+		double v2t = v2.dot2(mutualTanVect);
+		//Solve for the scalars of the normal velocities after the collision
+		double vnPrimes[] = elasticCollision1D(m1, v1n, m2, v2n);
+		//Find the new normal velocities by multiplying the scalars of vnPrimes by the mutual Normal unit vector
+		Vector2D v1NormFinal = mutualNormUnitVect.mult(vnPrimes[0]);
+		Vector2D v2NormFinal = mutualNormUnitVect.mult(vnPrimes[1]);
+		
+		//the tangential velocities do not change after collision so just use the previous calculated dot product.
+		Vector2D v1TanFinal = mutualTanVect.mult(v1t);
+		Vector2D v2TanFinal = mutualTanVect.mult(v2t);
+		
+		//find the vinal velocity by adding the vectors of the new normals, and the new tangents (which aren't really new).
+		
+		Vector2D velFinals[] = {v1NormFinal.add(v1TanFinal), v2NormFinal.add(v2TanFinal)};
+		System.out.println(velFinals[0].toString() + "\n" + velFinals[1].toString());
+		return velFinals;
+		
+		
+	}
+	public static Vector2D[] elasticCollision2D(double m1, Vector2D v1, double m2, Vector2D v2)
+	{
+
+		double secondVelX[] = elasticCollision1D(m1, v1.getX(), m2, v2.getX());
+		double secondVelY[] = elasticCollision1D(m1, v1.getY(), m2, v2.getY());
+		Vector2D secondVelA = new Vector2D(secondVelX[0], secondVelY[0]);
+		Vector2D secondVelB = new Vector2D(secondVelX[1], secondVelY[1]);
+		Vector2D sumVectorA = v1.sub(v1);
+		Vector2D sumVectorB = v2.sub(v2);
+		
+		Vector2D retVectors[] = {sumVectorA, sumVectorB};
+		return retVectors;
 	}
 	public void findGaps()
 	{

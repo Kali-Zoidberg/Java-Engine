@@ -204,11 +204,8 @@ public class Vector2D extends Cartesian2D{
 	 */
 	public Vector2D add(Vector2D vectorR)
 	{
-		Vector2D retVector = new Vector2D(this);
-		retVector.x = retVector.getX() + vectorR.getX();
-		retVector.y = retVector.getY() + vectorR.getY();
-		retVector.magn = Math.hypot(retVector.getX(),retVector.getY());
-		retVector.dir = Math.atan2(retVector.getY(), retVector.getX());
+		Vector2D retVector = new Vector2D(this.getX() + vectorR.getX(), this.getY() + vectorR.getY());
+		
 		return retVector;
 	}
 	/**
@@ -230,10 +227,8 @@ public class Vector2D extends Cartesian2D{
 	 */
 	public Vector2D mult(double scalar)
 	{
-		Vector2D retVector = new Vector2D(this);
-		retVector.x *= scalar;
-		retVector.y *= scalar;
-		retVector.magn = Math.hypot(retVector.x, retVector.y);
+		Vector2D retVector = new Vector2D(this.getX() * scalar, this.getY() * scalar);
+
 		return retVector;
 	}
 	/**
@@ -243,10 +238,10 @@ public class Vector2D extends Cartesian2D{
 	 */
 	public Vector2D div(double scalar)
 	{
-		Vector2D retVector = new Vector2D(this);
-		retVector.x /= scalar;
-		retVector.y /= scalar;
-		retVector.magn = Math.hypot(retVector.x, retVector.y);
+		if (scalar == 0)
+			return null;
+		Vector2D retVector = new Vector2D(this.getX() / scalar, this.getY() / scalar);
+	
 		return retVector;
 	}
 	

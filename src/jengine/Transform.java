@@ -8,7 +8,7 @@ public class Transform extends Cartesian2D {
 
 	protected double dir = 0;
 	private static String default_name = "Transform";
-	public Vector2D velocity;
+	public Vector2D velocity = new Vector2D(0,0);
 	
 	/**
 	 * Default constructor for transform. Creates a Cartesian coordinate with the parameters (0,0)

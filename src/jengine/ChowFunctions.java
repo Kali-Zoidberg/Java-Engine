@@ -61,6 +61,12 @@ public class ChowFunctions {
 		}
 	}
 	
+	public static boolean isInRange(double val, double a, double b)
+	{
+		return (val <= a && val >= b);
+		
+	}
+	
 	public static void testNormals()
 	{
 		Rectangle test_shape = new Rectangle(0,0,5,6);

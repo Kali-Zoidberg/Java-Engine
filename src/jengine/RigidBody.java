@@ -10,7 +10,6 @@ import java.awt.Color;
 public class RigidBody extends Transform {
 	
 	protected double mass = 1;
-	Vector2D rig_veloc = new Vector2D(0,0);
 	Actor Mentor = (Actor) super.Mentor;
 	Shape collisionShape = null;
 	private boolean has_collision = true;
@@ -167,118 +166,8 @@ public class RigidBody extends Transform {
 			}
 		}
 	}
-	
-	/**
-	 * 
-	 * @param x The x-coordinate to set the RigidBody to.
-	 */
-	public void setX(double x) {
-		UserInterface test_ui = (UserInterface) GameWorld.game_obj_table.get("ui_test");
-		int y_pos = (int) (super.getY() + 0.5); //Calculated here to optimize stack calls.
-		int x_pos = (int) (x);
-		
-		if(has_collision) {
-		//	this.setX2(x);
-			int actor_width = Mentor.getWidth(); // Binding issue
-			int actor_height = Mentor.getHeight();
-			
-			if (x_pos <= GameWorld.getWorldWidth() && x_pos  >= 0) {//Checks the bounds of the object. If the object exits the gameWorld, it no longer has collision. This is to prevent an out-of-bounds exception.
-				super.setX(x);
-				
-				//super.setY(y_pos);
-				for (int i = 0; i <= actor_width; ++i) {
-					for (int j =0; j <= actor_height; ++j) {
-						GameWorld.setWorldCoordinate(i + (int)(Mentor.transform.getX() + 0.5), j + y_pos, "-1");
-						GameWorld.setWorldCoordinate(i + (x_pos), j + y_pos, 
-								Mentor.getName());
-					}
-				}
-				
-			}
-			
-		}
-		else { //Rigid body does not have collision enabled so it may move anywhere on the plane.
-			super.setX(x);
-			//super.setY(y_pos);
-		}
-	}
-	/**
-	 * Overrides the transform setY and if collision is enabled, the GameWorld coordinate spaces will react accordingly.
-	 * @param y The y coordinate to set the RigidBody to.
-	 */
-	
-	public void moveY(double y) {
-		
-		//UserInterface ui_test = (UserInterface) GameWorld.game_obj_table.get("ui_test");
-		int actor_width = Mentor.getWidth();
-		int actor_height = Mentor.getHeight();
-		
-		int y_pos_cur = (int) (super.getY());
-		double y_pos_cur_doub = super.getY();
-		int x_pos_cur = (int) (super.getX());
-		double x_pos_cur_doub = super.getX();
-		
-		int y_pos = y_pos_cur + (int)(y);
-		int x_pos = (int) (super.getX());
 
-		double y_pos_doub = y_pos_cur_doub + y;
-		
-		int delta_y = (int) (y);
-		
-		//ui_test.setText("x pos: " + x_pos + "y pos: " + y_pos); //This is for debug
 
-		/**
-		 * If the newly desired position is less than the previous position, the object is moving negatively along the axis.
-		 * As such, we will need to subtract the Actor's height from its current position. Therefore we multiply by negative 1. 
-		 */
-		//if (y < 0)
-			//actor_height *= -1;
-		
-		
-		int y_pos_next = y_pos_cur + actor_height + delta_y;
-		
-		
-		if(has_collision) {
-
-			if (y_pos > GameWorld.getWorldHeight() || y_pos < 0) {
-				return;
-			} else {
-				//need to check for negative velocity and positive velocity. So two cases.
-				if (delta_y >= 0) {
-					if (this.checkPath(x_pos_cur, y_pos_cur + actor_height + 1, 
-							x_pos + actor_width, y_pos_next)) {
-	
-					setPath(x_pos_cur, y_pos_cur, x_pos_cur + actor_width,
-							y_pos_cur + actor_height, "-1"); //Clear previous allocated space.
-					setPath(x_pos, y_pos, x_pos + actor_width, 
-							y_pos + delta_y, Mentor.getName());
-					
-					super.setY(y_pos_doub);
-
-					}
-				} else {
- 
-					if (this.checkPath(x_pos_cur, y_pos_cur + delta_y - 1, 
-							x_pos + actor_width, y_pos_next - actor_height)) {
-						
-						setPath(x_pos_cur, y_pos_cur, x_pos_cur + actor_width, 
-								y_pos_cur + actor_height, "-1"); //Clear previous allocated space.
-						
-						System.out.println("old y: " + (y_pos_cur - actor_height));
-						
-						setPath(x_pos, y_pos, x_pos + actor_width, 
-								y_pos + delta_y, Mentor.getName());
-						super.setY(y_pos_doub);
-					}
-				}
-			} 
-		} 
-		else  //Rigid body does not have collision so it may be set to anywhere in the plane.
-			super.setY(y_pos_doub);
-		
-	}
-	
-	
 	
 	/**
 	 * Sets the projected path for the actor with the specified maximums. So it checks from the
@@ -361,6 +250,7 @@ public class RigidBody extends Transform {
 						return true;
 				}
 				
+				double minOverlap = 0;
 				if (!isSeparated)
 				{
 					
@@ -369,6 +259,9 @@ public class RigidBody extends Transform {
 					double[] minMaxShapeA = Physics.minMaxProj(actorAShapeVects, normActorB[i]);
 					double[] minMaxShapeB = Physics.minMaxProj(actorBShapeVects, normActorB[i]);
 					isSeparated = Physics.projOverLap(minMaxShapeA, minMaxShapeB);
+					
+					//FIXME
+					//Need to make sure the ogbjects no longer overlap by pushing them outward. http://www.dyn4j.org/2010/01/sat/#sat-mtv
 					if(isSeparated)
 						return true;
 					}
@@ -383,8 +276,11 @@ public class RigidBody extends Transform {
 	{
 		RigidBody rigidA = actorA.rigidbody;
 		RigidBody rigidB = actorB.rigidbody;
-		double actorAVeloc  = Physics.elasticCollisionV1(rigidA.getMass(), rigidA.getVelocity().getX(), rigidB.getMass(), rigidB.getVelocity().getX());
-		
+		Vector2D actorVels[] = Physics.elasticCollision2D(rigidA.getMass(), rigidA, rigidB.getMass(), rigidB);
+		rigidA.setVelocity(actorVels[0]);
+		//if(ChowFunctions.isInRange(actorVels[1].getMagnitude(), -0.1, 0.1))	
+			rigidB.setVelocity(actorVels[1]);
+	
 	}
 	public boolean hasCollision(){ return has_collision; }
 	public void checkAllCollisions()
@@ -394,15 +290,15 @@ public class RigidBody extends Transform {
 		{
 			Actor curActor = GameWorld.actor_list.get(i);
 			if (curActor != this.Mentor && curActor.rigidbody != null && this.Mentor.rigidbody != null && 
-					curActor.rigidbody.hasCollision() && !this.Mentor.getName().equals("box1") && !this.Mentor.getName().contentEquals("box2"))
+					curActor.rigidbody.hasCollision() && (!this.Mentor.getName().equals("box1") || !this.Mentor.getName().contentEquals("box2")))
 			{
-				System.out.printf("Checking : %s and %s \n", this.Mentor.getName(), curActor.getName());
+				//System.out.printf("Checking : %s and %s \n", this.Mentor.getName(), curActor.getName());
 				if(hasCollided(this.Mentor, curActor))
 				{
-					calcCollision(this.Mentor, curActor);
 				}
 				else
-				{
+				{		
+					calcCollision(this.Mentor, curActor);
 				}
 				
 				
@@ -411,11 +307,13 @@ public class RigidBody extends Transform {
 			}
 		}
 	}
+	
 	public void updateBoundingBox()
 	{
-		
-		this.collisionShape.setX(this.getX());
-		this.collisionShape.setY(this.getY());
+		//Include velocity to calculate future projection such that the object doesnt penetrate. Need to over estimate as well 
+		//so maybe a range owuld be useful at some point.
+		this.collisionShape.setX(this.getX() + this.getVelocity().getX());
+		this.collisionShape.setY(this.getY() + this.getVelocity().getY());
 		this.collisionShape.setHeight(this.Mentor.getHeight());
 		this.collisionShape.setWidth(this.Mentor.getWidth());
 		
@@ -426,9 +324,11 @@ public class RigidBody extends Transform {
 	 */
 	public void update() 
 	{
-		super.update();
+
 		updateBoundingBox();
 		checkAllCollisions();
+		super.update();
+
 		//call collision ethods
 		
 	}
