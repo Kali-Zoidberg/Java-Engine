@@ -23,7 +23,7 @@ public class Component {
 	 * Default constructor for Components. No mentor is set to the object.
 	 */
 	
-	Component() {
+	public Component() {
 		Mentor = null;
 		
 	}
@@ -31,7 +31,7 @@ public class Component {
 	 * Constructs a component with a specified name and no Mentor
 	 * @param name The desired name of the component.
 	 */
-	Component(String name) {
+	public Component(String name) {
 		this.name = name;
 	
 	}
@@ -41,7 +41,7 @@ public class Component {
 	 * @param mentor The Parent or mentor of the component.
 	 */
 	
-	Component(GameObject mentor) {
+	public Component(GameObject mentor) {
 		Mentor = mentor;
 		name = Mentor.generateNewName(name, Mentor.component_table);
 		Mentor.addComponent(this);
@@ -53,7 +53,7 @@ public class Component {
 	 * @param name The name of the component
 	 */
 	
-	Component(GameObject mentor, String name) {
+	public Component(GameObject mentor, String name) {
 		Mentor = mentor;
 		this.name = Mentor.generateNewName(name, Mentor.component_table);
 		Mentor.addComponent(this);

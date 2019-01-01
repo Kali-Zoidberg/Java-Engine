@@ -1,5 +1,5 @@
 package jengine;
-
+//TODO: Add option for rescaling. preferably disable it for now.
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -36,7 +36,7 @@ public class GameWindow extends JPanel {
 	 * @param frame_title The title of the frame.
 	 */
 	
-	GameWindow() {
+	public GameWindow() {
 
 	
 	}

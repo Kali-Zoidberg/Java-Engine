@@ -1,5 +1,6 @@
 package jengine;
 
+import chowshapes.Rectangle;
 
 /**
  * A generic class for commonly used functions across classes.
@@ -83,8 +84,6 @@ public class ChowFunctions {
 	 */
 	public static double getCoterminalAngle(double angle)
 	{
-		if(angle < 0)
-			System.out.println("Math: " + Math.ceil(angle/360.0f));
 		return (angle > 0 ? angle - (Math.ceil((angle/360.0)) * 360.0): angle + ((Math.abs(Math.ceil(angle/360.0)) + 1) * 360.0));
 	}
 	

@@ -24,7 +24,7 @@ public class GameWorld {
 	 * @param world_height The height on the world in integers. This is suppose to represent a coordinate space.
 	 */
 	
-	GameWorld(int world_width, int world_height) {
+	public GameWorld(int world_width, int world_height) {
 		GameWorld.world_width = world_width + 1; //Add one just in case the position exists. Might be able to be removed.
 		GameWorld.world_height = world_height + 1;
 		world_coordinate = new String[world_width][world_height];
@@ -52,11 +52,8 @@ public class GameWorld {
 	 * @return Returns true if the object is not out of bounds. Otherwise, it returns false.
 	 */
 	public static boolean isInWorldCoordinateBounds(int x, int y) {
-		if ((x > world_width - 1) || (y > world_height - 1) || x < 0 || y < 0) {
-			System.out.println("width: " + world_width + "height: " + world_height);
-			System.out.println( "EoB: " +"x: " + x + "y : " + y);
+		if ((x > world_width - 1) || (y > world_height - 1) || x < 0 || y < 0)
 			return false;
-		}
 		else
 			return true;
 		}	
@@ -202,7 +199,7 @@ public class GameWorld {
 	 * @return Returns a scaled double.
 	 */
 	
-	public static double getViewPortScaleY()
+	public static double getViewportScaleY()
 	{
 		double world_height = getWorldHeight();
 		return (Render.getScreenHeight()/ world_height);

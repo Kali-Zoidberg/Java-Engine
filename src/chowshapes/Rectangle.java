@@ -1,62 +1,13 @@
-package jengine;
+package chowshapes;
 
+import jengine.Cartesian2D;
+import jengine.Vector2D;
 
-abstract class Shape {
-	protected double x,y,width,height;
-	Shape(double x, double y, double width, double height)
-	{
-		this.x = x;
-		this.y = y;
-		this.width  = width;
-		this.height = height;
-		//genPoints();
-	}
-	public double getX() {
-		return x;
-	}
-	public void setX(double x) {
-		this.x = x;
-		genPoints();
-	}
-	public double getY() {
-		return y;
-	}
-	public void setY(double y) {
-		this.y = y;
-		genPoints();
-	}
-	public double getWidth()
-	{
-		return this.width;
-	}
-	public void setWidth(double width)
-	{
-		this.width = width;
-		genPoints();
-	}
-	public double getHeight()
-	{
-		return this.height;
-	}
-	public void setHeight(double height)
-	{
-		this.height = height;
-		genPoints();
-	}
-	protected abstract void genPoints();
-	public abstract Cartesian2D[] getPoints();
-	public abstract Cartesian2D getCenter();
-	public abstract Vector2D[] getVectors();
-	public abstract Vector2D[] getNormals();
-	public abstract void printPoints();
-}
-
-
-class Rectangle extends Shape {
+public class Rectangle extends Shape {
 	
 	private Cartesian2D points[] = new Cartesian2D[5];
 	
-	Rectangle(double x, double y, double width, double height)
+	public Rectangle(double x, double y, double width, double height)
 	{
 		super(x,y,width,height);
 		genPoints();
@@ -131,7 +82,7 @@ class Rectangle extends Shape {
 		{
 			//create vectors based on the points of the vector
 			Vector2D vectorSegment = new Vector2D(points[i+1].getX() - points[i].getX(),
-													points[i].getY() - points[i + 1].getY());
+													points[i + 1].getY() - points[i].getY());
 		
 			normals[i - 1] = vectorSegment.normL();
 		}
@@ -161,5 +112,9 @@ class Rectangle extends Shape {
 		System.out.println("\n*****\n");
 		for (int i = 0; i< points.length; ++i)
 			System.out.printf("Point[%d]. X: %f Y: %f \n", i, points[i].getX(), points[i].getY());
+	}
+	@Override
+	public double getArea() {
+		return width * height;
 	}
 }

@@ -5,7 +5,8 @@ public class Trigger extends GameObject{
 	private boolean hasEntered = false;
 	private Runnable enteredFunction = null;
 	private Runnable exitFunction = null;
-	Trigger(double x, double y, double radius, String name) {
+	
+	public Trigger(double x, double y, double radius, String name) {
 		super(x, y, name);
 		this.setRadius(radius);
 		// TODO Auto-generated constructor stub

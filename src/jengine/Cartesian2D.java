@@ -10,7 +10,7 @@ public class Cartesian2D extends Component {
 	 * Default constructor. Sets x and y axis to 0,0 (debug area)
 	 */
 
-	Cartesian2D() {
+	public Cartesian2D() {
 		super(default_name);
 		x = 0;
 		y = 0;
@@ -23,7 +23,7 @@ public class Cartesian2D extends Component {
 	 * @param y The y position in the Cartesian coordinate.
 	 */
 	
-	Cartesian2D(double x, double y) {
+	public Cartesian2D(double x, double y) {
 		super(default_name);
 		this.x = x;
 		this.y = y;
@@ -34,7 +34,7 @@ public class Cartesian2D extends Component {
 	 * @param y The y position in the 2D plane
 	 * @param name The name of the component.
 	 */
-	Cartesian2D(double x, double y, String name) {
+	public Cartesian2D(double x, double y, String name) {
 		super(name);
 		this.x = x;
 		this.y = y;
@@ -47,7 +47,7 @@ public class Cartesian2D extends Component {
 	 * @param Mentor The Mentor of the component.
 	 * @param name The name of the component.
 	 */
-	Cartesian2D(double x, double y, GameObject Mentor, String name) {
+	public Cartesian2D(double x, double y, GameObject Mentor, String name) {
 		super(Mentor, name);
 		this.x = x;
 		this.y = y;
@@ -60,7 +60,7 @@ public class Cartesian2D extends Component {
 	 * @param mentor The Cartesian2D's Mentor.
 	 */
 	
-	Cartesian2D(double x, double y, GameObject mentor) {
+	public Cartesian2D(double x, double y, GameObject mentor) {
 		super(mentor, default_name);
 		this.x = x;
 		this.y = y;
@@ -71,11 +71,11 @@ public class Cartesian2D extends Component {
 	 * Constructs a  Cartesian2D with a mentor.
 	 * @param mentor The mentor for the Cartesian 2D
 	 */
-	Cartesian2D(GameObject mentor) {
+	public Cartesian2D(GameObject mentor) {
 		super(mentor, default_name);
 	}
 	
-	Cartesian2D(GameObject mentor, String name) {
+	public Cartesian2D(GameObject mentor, String name) {
 		super(mentor,name);
 		
 	}

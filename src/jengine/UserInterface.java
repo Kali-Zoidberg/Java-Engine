@@ -17,7 +17,7 @@ public class UserInterface extends GameObject{
 	 * Default constructor for UserInterface object. This object is positioned at (0.0,0.0) with a direction of 0.0 radians.
 	 * @param name The name of the UserInterface object.
 	 */
-	UserInterface(String name) {
+	public UserInterface(String name) {
 		super(name);
 		GameWorld.ui_list.add(this);
 		
@@ -32,7 +32,7 @@ public class UserInterface extends GameObject{
 	 * @param The name of the UserInterface object.
 	 */
 	
-	UserInterface(double x, double y, String name) {
+	public UserInterface(double x, double y, String name) {
 		super(x,y, name);
 		is_text = true;
 		GameWorld.ui_list.add(this);
@@ -50,7 +50,7 @@ public class UserInterface extends GameObject{
 	 * @param name The name of the UserInterface object.
 	 */
 	
-	UserInterface(double x, double y, double direction, String text, Color color, Font font, String name) {
+	public UserInterface(double x, double y, double direction, String text, Color color, Font font, String name) {
 		super(x,y,name);
 		ui_text = text;
 		ui_color = color;
@@ -68,7 +68,7 @@ public class UserInterface extends GameObject{
 	 * @param name The name of the UserInterface object.
 	 */
 	
-	UserInterface(double x, double y, double direction, Sprite ui_sprite, String name) {
+	public UserInterface(double x, double y, double direction, Sprite ui_sprite, String name) {
 		super(x,y,name);
 		this.ui_sprite = ui_sprite;
 		GameWorld.game_obj_table.put(name, this);
@@ -83,7 +83,7 @@ public class UserInterface extends GameObject{
 	 * @param font The font of the text.
 	 * @param name The name of the UserInterface object.
 	 */
-	UserInterface(Cartesian2D coordinate, double direction, String text, Color color, Font font, String name) {
+	public UserInterface(Cartesian2D coordinate, double direction, String text, Color color, Font font, String name) {
 		super(coordinate.getX(), coordinate.getY(), name);
 		ui_text = text;
 		ui_color = color;
@@ -102,7 +102,7 @@ public class UserInterface extends GameObject{
 	 * @param name The name of the UserInterface object.
 	 */
 	
-	UserInterface(Cartesian2D coordinate, double direction, Sprite ui_sprite, String name) {
+	public UserInterface(Cartesian2D coordinate, double direction, Sprite ui_sprite, String name) {
 		super(coordinate.getX(), coordinate.getY(), name);
 		this.ui_sprite = ui_sprite;
 		GameWorld.game_obj_table.put(name, this);

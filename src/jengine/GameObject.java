@@ -29,7 +29,7 @@ public abstract class GameObject {
 	 * @param name The name to give the string object.
 	 */
 	
-	GameObject(String name) {
+	public GameObject(String name) {
 		this.name = generateNewName(name, GameWorld.game_obj_table);
 		GameWorld.game_obj_table.put(this.name, this);
 	}
@@ -38,7 +38,7 @@ public abstract class GameObject {
 	 * @param name
 	 * @param transform
 	 */
-	GameObject(String name, Transform transform) {
+	public GameObject(String name, Transform transform) {
 		
 		this.name = generateNewName(name, GameWorld.game_obj_table);
 		this.transform = transform;
@@ -54,7 +54,7 @@ public abstract class GameObject {
 	 * @param y The y position of the game object.
 	 * @param name The name of the GameObject.
 	 */
-	GameObject(double x, double y, String name) {
+	public GameObject(double x, double y, String name) {
 		
 		transform.setX(x);
 		transform.setY(y);

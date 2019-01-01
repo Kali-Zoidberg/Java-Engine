@@ -34,7 +34,7 @@ public class Sound {
 	private Clip soundClip;
 	private String sTag;
 	
-	Sound(String name, String fileName, String lineName)
+	public Sound(String name, String fileName, String lineName)
 	{
 		sSoundName = name;
 		sFileName = fileName;

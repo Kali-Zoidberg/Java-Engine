@@ -1,6 +1,8 @@
 package jengine;
 
-import java.awt.Color;
+import chowshapes.Circle;
+import chowshapes.Rectangle;
+import chowshapes.Shape;
 
 /**
  * @author Chow
@@ -12,6 +14,7 @@ public class RigidBody extends Transform {
 	protected double mass = 1;
 	Actor Mentor = (Actor) super.Mentor;
 	Shape collisionShape = null;
+	private boolean isMovable = true;
 	private boolean has_collision = true;
 	
 	enum CollisionEnum
@@ -25,7 +28,7 @@ public class RigidBody extends Transform {
 	 * @param The String name of the RigidBody. Used for searching through the Array list of actors.
 	 */
 	
-	RigidBody(Actor mentor, String name) {
+	public RigidBody(Actor mentor, String name) {
 		super.Mentor = mentor;
 		Mentor.transform = this;
 		
@@ -38,7 +41,7 @@ public class RigidBody extends Transform {
 	 * @param mentor The mentor of the RigidBody
 	 * @param name The name of the RigidBody.
 	 */
-	RigidBody(double x, double y, Actor mentor, String name) {
+	public RigidBody(double x, double y, Actor mentor, String name) {
 		super(x,y, mentor, name);
 		Mentor.transform = this;
 		collisionShape = new Rectangle(x,y, mentor.getWidth(), mentor.getHeight());
@@ -49,7 +52,7 @@ public class RigidBody extends Transform {
 	 * @param mentor The mentor of the RigidBody.
 	 * @param name The name of the RigidBody.
 	 */
-	RigidBody(Transform transform, Actor mentor, String name) {
+	public RigidBody(Transform transform, Actor mentor, String name) {
 		super(transform.getX(), transform.getY(), mentor, name);
 		Mentor.transform = this;
 		collisionShape = new Rectangle(transform.getX(),transform.getY(), mentor.getWidth(), mentor.getHeight());
@@ -64,7 +67,7 @@ public class RigidBody extends Transform {
 	 * @param shape the collision shape
 	 * @param name The name of the RigidBody.
 	 */
-	RigidBody(Transform transform, Shape collisionShape, Actor mentor, String name) {
+	public RigidBody(Transform transform, Shape collisionShape, Actor mentor, String name) {
 		super(transform.getX(), transform.getY(), mentor, name);
 		Mentor.transform = this;
 		this.collisionShape = collisionShape;
@@ -81,7 +84,7 @@ public class RigidBody extends Transform {
 	 * @param width The width of the RigidBody and box.
 	 * @param height The height of the RigidBody and box.
 	 */
-	/*RigidBody(Transform transform, Color color, String name, int width, int height) {
+	/*public RigidBody(Transform transform, Color color, String name, int width, int height) {
 		super(transform, color, name, width, height);
 	} */
 
@@ -108,11 +111,6 @@ public class RigidBody extends Transform {
 	
 	
 	
-	private boolean isInRange(double a0, double b1, double b2)
-	{
-		return (a0 > b1 && a0 < b2);
-		
-	}
 	
 	/**
 	 * Checks to see if two rigidbodies have collided.
@@ -152,7 +150,6 @@ public class RigidBody extends Transform {
 				{
 
 					//Check to make sure the current actor we are checking is not OUR actor.
-					//if(actor.getID() != this.Mentor.getID()) 
 					if(actor.getName() != this.Mentor.getName())
 					{
 						//CHECK MATH
@@ -203,20 +200,6 @@ public class RigidBody extends Transform {
 	 */
 	public boolean checkPath(int x_min, int y_min, int x_max, int y_max) {
 		this.setX2(x_min);
-		//System.out.printf(" Checking from [%d, %d] to [%d,%d]",x_min,y_min,x_max,y_max);
-	//	for (int i = x_min; i <= x_max; ++i) { 
-		//	for (int j = y_min; j <= y_max; ++j) {
-			//	if (!GameWorld.GetWorldCoordinate(i, j).equals("-1")) {
-				//	System.out.println("\n x:" + this.getX() + " y: " + this.getY());
-				//	System.out.println("i: " + i + " j: " + j + " " + GameWorld.GetWorldCoordinate(i, j));
-				//	return false;
-					
-			//	}
-
-
-	//	}
-			
-//		}
 		
 		return true;
 	}
@@ -225,6 +208,73 @@ public class RigidBody extends Transform {
 		return 0.0;
 	}
 	
+	public boolean hasCollidedCircle(Actor actorA, Actor actorB)
+	{
+		if (!(actorA.rigidbody.collisionShape instanceof Circle) || !(actorB.rigidbody.collisionShape instanceof Circle))
+			return false;
+		
+		//get references to collision shapes
+		Circle circleA = (Circle) actorA.rigidbody.collisionShape;
+		Circle circleB = (Circle) actorB.rigidbody.collisionShape;
+		
+		//get radii
+		
+		double radiusA = circleA.getRadius();
+		double radiusB = circleB.getRadius();
+		
+		//get centers
+		Cartesian2D centerA = circleA.getCenter();
+		Cartesian2D centerB = circleB.getCenter();
+		
+		//calc distances
+		double distance = Math.hypot(Math.abs(centerA.getX() - centerB.getX()), Math.abs(centerA.getY() - centerB.getY()));
+		return !(distance < radiusA + radiusB);
+		
+	}
+	
+	public boolean hasCollidedPolygonAndCircle(Actor actorA, Actor actorB)
+	{
+		Actor circleActor = null;
+		Actor polygonActor = null;
+		if(actorA.rigidbody.collisionShape instanceof Circle)
+		{
+			circleActor = actorA;
+			polygonActor = actorB;
+		}
+		else if (actorB.rigidbody.collisionShape instanceof Circle)
+		{
+			circleActor = actorB;
+			polygonActor = actorA;
+		} 
+		
+		if (polygonActor.rigidbody.collisionShape instanceof Circle)
+			return true;
+		
+		//should probably throw exception
+		
+		Cartesian2D circleCenter = circleActor.rigidbody.collisionShape.getCenter();
+		double circleRadius = ((Circle) circleActor.rigidbody.collisionShape).getRadius();
+		Cartesian2D polygonVectors[] = polygonActor.rigidbody.collisionShape.getPoints();
+		Cartesian2D polygonCenter = polygonActor.rigidbody.collisionShape.getCenter();
+		Vector2D circleVector = new Vector2D(circleCenter.getX() - polygonCenter.getX(), circleCenter.getY() - polygonCenter.getY());
+
+		Vector2D circleNormal = circleVector.unitVector();
+		
+		Vector2D tempVec = new Vector2D(polygonVectors[1].getX() - polygonCenter.getX(), polygonVectors[1].getY() - polygonCenter.getY());
+		double curMax = tempVec.dot(circleNormal);
+		for (int i = 2; i <  polygonVectors.length; ++i)
+		{
+			tempVec = new Vector2D(polygonVectors[i].getX() - polygonCenter.getX(),
+								polygonVectors[i].getY() - polygonCenter.getY());
+			double curProd = tempVec.dot(circleNormal);
+			if (curProd > curMax)
+				curMax = curProd;
+				
+		}
+		
+		return ((circleVector.getMagnitude() - curMax) > circleRadius && circleVector.getMagnitude() > 0);
+		
+	}
 	/**
 	 * Calculates the distance between two actors.
 	 * @param actorA The first actor
@@ -233,40 +283,41 @@ public class RigidBody extends Transform {
 	 */
 	public boolean hasCollided(Actor actorA, Actor actorB)
 	{
-
+				if (actorA.rigidbody.collisionShape instanceof Circle && actorB.rigidbody.collisionShape instanceof Circle)
+					return hasCollidedCircle(actorA, actorB);
+				//if either one of the collision shapes belonging to the actors is a circle, then return the collision for circle and polygon method
+				else if(actorA.rigidbody.collisionShape instanceof Circle || actorB.rigidbody.collisionShape instanceof Circle)
+					return hasCollidedPolygonAndCircle(actorA, actorB);
 				boolean isSeparated = false;
 				Vector2D[] normActorA = actorA.rigidbody.collisionShape.getNormals();
 				Vector2D[] normActorB = actorA.rigidbody.collisionShape.getNormals();
 				
 				Vector2D[] actorAShapeVects = actorA.rigidbody.collisionShape.getVectors();
 				Vector2D[] actorBShapeVects = actorB.rigidbody.collisionShape.getVectors();
-				
-				for (int i = 0; i < normActorA.length; ++i)
+				for (int i = 0; i < normActorB.length; ++i)
 				{
-					double[] minMaxShapeA = Physics.minMaxProj(actorAShapeVects, normActorA[i]);
-					double[] minMaxShapeB = Physics.minMaxProj(actorBShapeVects, normActorA[i]);
-					isSeparated = (minMaxShapeA[0] > minMaxShapeB[1] || minMaxShapeB[0] > minMaxShapeA[1]);
-					if (isSeparated)
-						return true;
+				double[] minMaxShapeA = Physics.minMaxProj(actorAShapeVects, normActorB[i]);
+				double[] minMaxShapeB = Physics.minMaxProj(actorBShapeVects, normActorB[i]);
+				isSeparated = (minMaxShapeA[0] > minMaxShapeB[1] || minMaxShapeB[0] > minMaxShapeA[1]);
+				
+				if(isSeparated)
+					return true;
 				}
 				
-				double minOverlap = 0;
+				//Check the normals of the second object and project the first object onto the second normals.
 				if (!isSeparated)
 				{
 					
-					for (int i = 0; i < normActorB.length; ++i)
+					for (int i = 0; i < normActorA.length; ++i)
 					{
-					double[] minMaxShapeA = Physics.minMaxProj(actorAShapeVects, normActorB[i]);
-					double[] minMaxShapeB = Physics.minMaxProj(actorBShapeVects, normActorB[i]);
-					isSeparated = Physics.projOverLap(minMaxShapeA, minMaxShapeB);
-					
-					//FIXME
-					//Need to make sure the ogbjects no longer overlap by pushing them outward. http://www.dyn4j.org/2010/01/sat/#sat-mtv
-					if(isSeparated)
-						return true;
+						double[] minMaxShapeA = Physics.minMaxProj(actorAShapeVects, normActorA[i]);
+						double[] minMaxShapeB = Physics.minMaxProj(actorBShapeVects, normActorA[i]);
+						isSeparated = (minMaxShapeA[0] > minMaxShapeB[1] || minMaxShapeB[0] > minMaxShapeA[1]);
+						if (isSeparated)
+							return true;
 					}
-					
 				}
+				//If we reach this point, then there was at least ONE axis that had an overlapping projection
 				return false;
 				
 			
@@ -274,39 +325,53 @@ public class RigidBody extends Transform {
 	
 	public void calcCollision(Actor actorA, Actor actorB)
 	{
+
 		RigidBody rigidA = actorA.rigidbody;
 		RigidBody rigidB = actorB.rigidbody;
-		Vector2D actorVels[] = Physics.elasticCollision2D(rigidA.getMass(), rigidA, rigidB.getMass(), rigidB);
-		rigidA.setVelocity(actorVels[0]);
-		//if(ChowFunctions.isInRange(actorVels[1].getMagnitude(), -0.1, 0.1))	
+		Vector2D actorVels[] = new Vector2D[2];
+		
+		//check if they are movable first
+		//if movable
+			//do some different physics, negate the direction? 
+		
+		if(rigidA.collisionShape instanceof Circle || rigidB.collisionShape instanceof Circle)
+			actorVels = Physics.elasticCollision2D(rigidA.getMass(), rigidA, rigidB.getMass(), rigidB);
+		else
+		{
+			actorVels = Physics.elasticCollision2D(rigidA.getMass(), rigidA.getVelocity(), rigidB.getMass(), rigidB.getVelocity());
+			if(!rigidB.isMovable() && rigidA.isMovable())
+			{
+				actorVels[0] = new Vector2D(rigidA.getVelocity().getX() * - 1, rigidB.getVelocity().getY() * -1);
+			}
+			if(!rigidA.isMovable() && rigidB.isMovable())
+			{
+				actorVels[1] = new Vector2D(rigidB.getVelocity().getX() * -1, rigidB.getVelocity().getY() * -1);
+			}
+		}
+		if(rigidA.isMovable())
+			rigidA.setVelocity(actorVels[0]);
+		if(!ChowFunctions.isInRange(actorVels[1].getMagnitude(), -0.1, 0.1) )	
 			rigidB.setVelocity(actorVels[1]);
-	
+		
 	}
 	public boolean hasCollision(){ return has_collision; }
-	public void checkAllCollisions()
+	public void checkCollision(Actor actorB)
 	{
 		//Have to call each time in case it changes over iteration
-		for (int i = 0; i < GameWorld.actor_list.size(); ++i)
-		{
-			Actor curActor = GameWorld.actor_list.get(i);
-			if (curActor != this.Mentor && curActor.rigidbody != null && this.Mentor.rigidbody != null && 
-					curActor.rigidbody.hasCollision() && (!this.Mentor.getName().equals("box1") || !this.Mentor.getName().contentEquals("box2")))
+		
+			if (actorB != this.Mentor && actorB.rigidbody != null && this.Mentor.rigidbody != null && 
+					actorB.rigidbody.hasCollision() && (!this.Mentor.getName().equals("box1") || !this.Mentor.getName().contentEquals("box2")))
 			{
-				//System.out.printf("Checking : %s and %s \n", this.Mentor.getName(), curActor.getName());
-				if(hasCollided(this.Mentor, curActor))
+				if(hasCollided(this.Mentor, actorB))
 				{
 				}
 				else
 				{		
-					calcCollision(this.Mentor, curActor);
+					calcCollision(this.Mentor, actorB);
 				}
-				
-				
-				//else if (collisionStatus == CollisionEnum.PENETRATED)
-				//	System.out.printf("Actors penetrated: %s, %s \n", this.Mentor.getName(), curActor.getName());
 			}
-		}
 	}
+	
 	
 	public void updateBoundingBox()
 	{
@@ -324,9 +389,6 @@ public class RigidBody extends Transform {
 	 */
 	public void update() 
 	{
-
-		updateBoundingBox();
-		checkAllCollisions();
 		super.update();
 
 		//call collision ethods
@@ -349,6 +411,17 @@ public class RigidBody extends Transform {
 	public double getMass()
 	{
 		return this.mass;
+	}
+
+	public boolean isMovable() {
+		return isMovable;
+	}
+	/**
+	 * Set to movable if you want the object to have a velocity upon collision
+	 * @param isMovable
+	 */
+	public void setMovable(boolean isMovable) {
+		this.isMovable = isMovable;
 	}
 	
 }

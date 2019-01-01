@@ -59,7 +59,7 @@ public class Render implements Runnable{
 	 * @param initial_window_height Height of the game window.
 	 */
 
-	Render(String frame_title, double max_framerate, int initial_window_width, int initial_window_height) {
+	public Render(String frame_title, double max_framerate, int initial_window_width, int initial_window_height) {
 		
 		window_title = frame_title;
 		
@@ -89,7 +89,7 @@ public class Render implements Runnable{
 		long diff_time = 0;
 		int init_frame = 0;
 		int diff_frame = 0;
-		
+		game_frame.setTitle(game_window.getWindowTitle());
 		game_frame.add(game_window);
 		game_frame.setSize(window_width, window_height);
 		game_frame.setVisible(true);
@@ -124,6 +124,8 @@ public class Render implements Runnable{
 				game_window.pause(false);
 			
 			if (!game_window.isPaused()) {
+				
+				Physics.update();
 				game_window.Render(); //renders the actors and ui objects.
 			}
 
@@ -153,15 +155,15 @@ public class Render implements Runnable{
 			update_rate *= -1;
 		
 		int init_frame = frames;
-		System.out.println("init frame count: " + frames);
+		//System.out.println("init frame count: " + frames);
 		int cur_frame = 0;
 		int frame_diff = 0;
 		//Thread.sleep(update_rate);
-		System.out.println("final frame count: " + frames);
+		//System.out.println("final frame count: " + frames);
 		cur_frame = frames;
 		
 		frame_diff = cur_frame - init_frame;
-		System.out.println("Frame rate: " + frame_diff);
+		//System.out.println("Frame rate: " + frame_diff);
 	}
 	
 	/**
@@ -234,8 +236,8 @@ public class Render implements Runnable{
 				
 			frame_rate_milli = (long) framerate;
 			frame_rate_nano = (int) ((decimal) * 1000);
-			System.out.println("framerate milli" + frame_rate_milli);
-			System.out.println("framerate nano" + frame_rate_nano);
+			//System.out.println("framerate milli" + frame_rate_milli);
+		//	System.out.println("framerate nano" + frame_rate_nano);
 			return true;
 		} else
 			return false;

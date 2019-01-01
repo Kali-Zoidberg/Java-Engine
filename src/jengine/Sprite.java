@@ -14,7 +14,7 @@ public class Sprite extends Component{
 	 * Defaults to 10x10 pixels in size with the color pink.
 	 */
 
-	Sprite(GameObject Mentor, String name) {
+	public Sprite(GameObject Mentor, String name) {
 		super(Mentor, name);
 		sprite_image = null;
 		
@@ -27,7 +27,7 @@ public class Sprite extends Component{
 	 * @param height Height of the sprite box.
 	 */
 	
-	Sprite(Image img, int width, int height) {
+	public Sprite(Image img, int width, int height) {
 
 		sprite_width = width;
 		sprite_height = height;
@@ -42,7 +42,7 @@ public class Sprite extends Component{
 	 * @param height Height of the sprite box.
 	 */
 	
-	Sprite(Color color, int width, int height) {
+	public Sprite(Color color, int width, int height) {
 
 		sprite_image = null;
 		sprite_color = color;

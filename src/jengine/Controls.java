@@ -12,7 +12,7 @@ import javax.swing.KeyStroke;
 public class Controls {
 
 	public int countt = 0;
-	public int test_speed = 5;
+	public int test_speed = 1;
 	public boolean movingup = false;
 	private Actor player = (Actor) GameWorld.game_obj_table.get("Actor1");
 	public void initializeControls() {

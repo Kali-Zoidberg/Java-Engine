@@ -9,7 +9,7 @@ public class SoundEmittor extends Component {
 	public String sFileName;
 	public Sound sound;
 	
-	SoundEmittor(GameObject mentor, String name, String filename, String lineName) 
+	public SoundEmittor(GameObject mentor, String name, String filename, String lineName) 
 	{
 		super(mentor, name);
 		sound = new Sound(name, filename, lineName);

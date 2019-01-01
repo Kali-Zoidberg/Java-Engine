@@ -11,6 +11,9 @@ import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 
 import TestPackages.TestVectors;
+import chowshapes.Circle;
+import chowshapes.Hexagon;
+import chowshapes.Triangle;
 
 public class Main {
 	
@@ -54,14 +57,16 @@ public class Main {
 			Actor box2 = new Actor(450, 450,50,100, "box2");
 			box.rigidbody.setMass(10);
 			box2.rigidbody.setMass(1000000);
+			box.rigidbody.setMovable(false);
+			box2.rigidbody.setMovable(false);
 			player.rigidbody.setMass(1);
-			box.setRect(50, 50, Color.blue);
 			System.out.println("box center: " + (box.rigidbody.collisionShape.getCenter().getX() - player.rigidbody.collisionShape.getCenter().getX()));
 			box.setVisible(true);
-
+			box2.rigidbody.collisionShape = new Circle(box2.rigidbody.getX(), box2.rigidbody.getY(), 25);
+			player.rigidbody.collisionShape = new Circle(player.rigidbody.getX(), player.rigidbody.getY(), 25);
 			box.rigidbody.setCollision(true);
-			
-			box2.setRect(100, 100, Color.pink);
+			box.rigidbody.collisionShape = new Circle(box.rigidbody.getX(), box.rigidbody.getY(),25);
+			box2.setRect(50, 50, Color.pink);
 			box2.setVisible(true);
 			box2.rigidbody.setCollision(true);
 			
@@ -69,8 +74,8 @@ public class Main {
 		//	player.rigidbody.setY(player.rigidbody.getY());
 			player.setVisible(true);
 			
-			Sprite sprite_test = new Sprite(car_bg,10,10);
-			player.setSprite(sprite_test, "sprite_test");
+			//Sprite sprite_test = new Sprite(car_bg,50,50);
+			//player.setSprite(sprite_test, "sprite_test");
 			player.rigidbody.setCollision(true);
 			
 			System.out.println("box1: " + box.rigidbody.getX() + " y:" + box.rigidbody.getY());

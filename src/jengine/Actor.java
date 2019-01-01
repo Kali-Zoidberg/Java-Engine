@@ -2,6 +2,11 @@ package jengine;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import chowshapes.Circle;
+import chowshapes.Hexagon;
+import chowshapes.Rectangle;
+import chowshapes.Triangle;
+
 /**
  * 
  * Inheritance changes: Actor is a Game Object
@@ -34,7 +39,7 @@ public class Actor extends GameObject{
 	 * @param The String name of the actor. Used for searching through the Array list of actors.
 	 */
 	
-	Actor(String name) {
+	public Actor(String name) {
 		super(name);
 		actor_sprite = null;
 		GameWorld.actor_list.add(this);
@@ -49,7 +54,7 @@ public class Actor extends GameObject{
 	 * @param name the name of the Actor.
 	 */
 	
-	Actor(double x, double y, int width, int height, String name) {
+	public Actor(double x, double y, int width, int height, String name) {
 		super(x,y,name);
 		this.actor_width = width;
 		this.actor_height = height;
@@ -67,7 +72,7 @@ public class Actor extends GameObject{
 	 * is manipulated and retrieved.
 	 */
 	
-	Actor(Transform transform, String name){
+	public Actor(Transform transform, String name){
 		super(name, transform);
 		transform.setMentor(this);
 		transform.setX(transform.getX() - actor_width);
@@ -91,7 +96,7 @@ public class Actor extends GameObject{
 	 * @param height The height of the Actor, and consequently, the sprite.
 	 */
 	
-	Actor(Transform transform, Sprite sprite, int width, int height, String name) {
+	public Actor(Transform transform, Sprite sprite, int width, int height, String name) {
 		
 		
 		super(name, transform);
@@ -122,7 +127,7 @@ public class Actor extends GameObject{
 	 * @param height The height of the Actor and box.
 	 */
 	
-	Actor(Transform transform, Color color, int width, int height, String name) {
+	public Actor(Transform transform, Color color, int width, int height, String name) {
 	
 		super(name, transform);
 		
@@ -140,7 +145,7 @@ public class Actor extends GameObject{
 	}
 	
 	
-	Actor (RigidBody rigidbody, Color color, int width, int height, String name) {
+	public Actor (RigidBody rigidbody, Color color, int width, int height, String name) {
 		
 		super(name, rigidbody);
 		
@@ -287,9 +292,9 @@ public class Actor extends GameObject{
 	public void renderActor() {
 
 		this.converted_pos_x = (int) (rigidbody.getX() * GameWorld.getViewportScaleX() + 0.5f);
-		this.converted_pos_y = (int) (rigidbody.getY() * GameWorld.getViewPortScaleY() + 0.5f);
+		this.converted_pos_y = (int) (rigidbody.getY() * GameWorld.getViewportScaleY() + 0.5f);
 		int conv_act_width = (int) (this.actor_width * GameWorld.getViewportScaleX());
-		int conv_act_height = (int) (this.actor_height * GameWorld.getViewPortScaleY());
+		int conv_act_height = (int) (this.actor_height * GameWorld.getViewportScaleY());
 		double actor_dir = rigidbody.getDirection();
 		
 		if (is_visible) {
@@ -300,26 +305,34 @@ public class Actor extends GameObject{
 			
 				actor_graphics.rotate(this.rigidbody.getDirection(), center.getX(), center.getY() );
 				
-				actor_graphics.drawImage(actor_sprite.getImage(), converted_pos_x, converted_pos_y, 
+				actor_graphics.drawImage(actor_sprite.getImage(), (int) (rigidbody.getX()), (int) (rigidbody.getY()), 
 						actor_sprite.getWidth(), actor_sprite.getHeight(), null);
 
 			} else {
 				actor_graphics.rotate(this.rigidbody.getDirection(),center.getX(), center.getY());
 
 				actor_graphics.setColor(sprite_color);
-				
-				actor_graphics.fillRect(converted_pos_x, converted_pos_y, 
-						conv_act_width, conv_act_height);
-				
-			}
-		} else {
-			//if (actor_sprite != null) {
-				
-			//} else {
-			//	actor_graphics.dispose();
-			//	actor_graphics.clearRect(x_position, y_position, actor_width, actor_height);
-		//	}
-			//unrender the actor.
+				if(!(rigidbody.collisionShape instanceof Rectangle) && !(rigidbody.collisionShape instanceof Circle))
+				{
+					
+					Cartesian2D trigPoints[] = rigidbody.collisionShape.getPoints();
+					int[] xpoints = new int[rigidbody.collisionShape.getPoints().length - 1];
+					int[] ypoints = new int[rigidbody.collisionShape.getPoints().length - 1];
+					for(int i = 0; i < xpoints.length; ++i)
+					{
+						xpoints[i] = (int) (trigPoints[i + 1].getX());
+						ypoints[i] = (int) (trigPoints[i+1].getY());
+						
+					}
+					java.awt.Polygon shape = new java.awt.Polygon(xpoints, ypoints, trigPoints.length - 1);
+					actor_graphics.fill(shape);
+				} else if (!(rigidbody.collisionShape instanceof Circle))
+				actor_graphics.fillRect((int) (this.rigidbody.getX() + 0.5), (int) (this.rigidbody.getY() + 0.5), 
+						this.getWidth(), this.getHeight());
+				else if ((rigidbody.collisionShape instanceof Circle))
+					actor_graphics.fillOval((int) this.rigidbody.getX(), (int) this.rigidbody.getY(), (int)((Circle) this.rigidbody.collisionShape).getRadius() * 2, 
+							(int)((Circle) this.rigidbody.collisionShape).getRadius() * 2);
+			} 
 		}
 	}
 	

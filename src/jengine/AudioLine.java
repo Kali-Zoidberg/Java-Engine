@@ -14,7 +14,7 @@ public class AudioLine {
 	
 	private String sLineName;
 	
-	AudioLine(String lineName)
+	public AudioLine(String lineName)
 	{
 		sLineName = lineName;
 		AudioMaster.putLine(this);

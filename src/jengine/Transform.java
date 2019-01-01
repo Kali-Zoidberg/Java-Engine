@@ -14,7 +14,7 @@ public class Transform extends Cartesian2D {
 	 * Default constructor for transform. Creates a Cartesian coordinate with the parameters (0,0)
 	 */
 	
-	Transform() {
+	public Transform() {
 		super(0,0, default_name);
 	}
 	
@@ -25,7 +25,7 @@ public class Transform extends Cartesian2D {
 	 * @param direction The direction of the Actor.
 	 */
 	
-	Transform(Cartesian2D coordinate, double direction, GameObject Mentor) {
+	public Transform(Cartesian2D coordinate, double direction, GameObject Mentor) {
 		super(coordinate.getX(),coordinate.getY(), Mentor, default_name);
 		dir = direction;
 	}
@@ -38,7 +38,7 @@ public class Transform extends Cartesian2D {
 	 * @param direction The direction of the Transformation.
 	 */
 	
-	Transform(double x, double y, double direction, GameObject Mentor) {
+	public Transform(double x, double y, double direction, GameObject Mentor) {
 		super(x,y, Mentor, default_name);
 		direction = dir;
 	}
@@ -51,7 +51,7 @@ public class Transform extends Cartesian2D {
 	 * @param Mentor The mentor of the transform.
 	 * @param name The name of the transform component.
 	 */
-	Transform(double x, double y, GameObject Mentor, String name) {
+	public Transform(double x, double y, GameObject Mentor, String name) {
 		super(x, y, Mentor, name);
 		
 	}

@@ -1,4 +1,9 @@
 package jengine;
+
+import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.Set;
+
 /**
  * 
  * @author Nicholas Chow
@@ -8,7 +13,7 @@ package jengine;
 public class Physics {
 
 	
-	
+	public static Hashtable <String, Boolean> checkedActorPairsHash = new Hashtable<String, Boolean>();
 	
 	/**
 	 * Calculates the min and max points of a shape by projecting them onto an axis
@@ -28,24 +33,24 @@ public class Physics {
 		double minDotProd = minPointVect.dot(axisUnit);
 		
 		//start at index 1 because the min/max index is first 0.
-		for (int i = 1; i < normLen - 1; ++i)
+		for (int i = 1; i < normLen; ++i)
 		{
 			double curDotProd = normals[i].dot(axisUnit);
 			
 			
 			//find minimum point
-			if(minDotProd > curDotProd)
+			if(curDotProd < minDotProd )
 			{
 				minPointVect = normals[i];
 				minDotProd = curDotProd;
 			} //find max dot prod
-			if(curDotProd > maxDotProd)
+			else if(curDotProd > maxDotProd)
 			{
 				maxPointVect = normals[i];
 				maxDotProd = curDotProd;
 			}
 		}
-		double minAndMax[] = { minDotProd, maxDotProd};
+		double minAndMax[] = {minDotProd, maxDotProd};
 		return minAndMax;
 	}
 	
@@ -130,21 +135,40 @@ public class Physics {
 		double secondVelY[] = elasticCollision1D(m1, v1.getY(), m2, v2.getY());
 		Vector2D secondVelA = new Vector2D(secondVelX[0], secondVelY[0]);
 		Vector2D secondVelB = new Vector2D(secondVelX[1], secondVelY[1]);
-		Vector2D sumVectorA = v1.sub(v1);
-		Vector2D sumVectorB = v2.sub(v2);
+
 		
-		Vector2D retVectors[] = {sumVectorA, sumVectorB};
+		Vector2D retVectors[] = {secondVelA, secondVelB};
 		return retVectors;
 	}
-	public void findGaps()
+
+	public static void update()
 	{
-		
+		//clear checkd actor pair hash
+		checkedActorPairsHash.clear();
+		//first convert all the keys to a set 
+		Hashtable<String, GameObject> gameObjTable = GameWorld.game_obj_table; 
+		Set<String> gameObjKeys = gameObjTable.keySet();
+		gameObjKeys.removeIf(k -> !(gameObjTable.get(k) instanceof Actor));
+		String actorKeys[] = new String[gameObjKeys.size()];
+		int index = 0;
+		//convert set to array in order to use checking algoirthm and also udpate their bounding box while we're at it.
+		for (String s: gameObjKeys)
+		{
+			//update all bounding boxes here before calculating the collisions
+			((Actor) gameObjTable.get(s)).rigidbody.updateBoundingBox();
+			//Convert to Array
+			actorKeys[index++] = s;
+		}
+		//Do Actor collision calculations
+		//O(N * (N-i)) Still resembles O(N^2) but it get better
+		for (int i = 0; i < index - 1; ++i)
+			for (int j = i + 1; j < index; ++j)
+			{
+				//Basically get the current actor, calc collision with a reference to the current actor and the next actor
+				((Actor)gameObjTable.get(actorKeys[i])).rigidbody.checkCollision((Actor) gameObjTable.get(actorKeys[j]));
+				
+			}
 	}
 	
-	public void update()
-	{
-		/**
-		 * calc all projetions?
-		 */
-	}
+	
 }
