@@ -19,7 +19,6 @@ public class UserInterface extends GameObject{
 	 */
 	public UserInterface(String name) {
 		super(name);
-		GameWorld.ui_list.add(this);
 		
 	}
 	
@@ -35,7 +34,6 @@ public class UserInterface extends GameObject{
 	public UserInterface(double x, double y, String name) {
 		super(x,y, name);
 		is_text = true;
-		GameWorld.ui_list.add(this);
 	}
 	
 	
@@ -57,7 +55,6 @@ public class UserInterface extends GameObject{
 		ui_font = font;
 		
 		is_text = true;
-		GameWorld.game_obj_table.put(name, this);
 	}
 	/**
 	 * Constructs a UserInterface object with a specified position and sprite/image.
@@ -71,7 +68,6 @@ public class UserInterface extends GameObject{
 	public UserInterface(double x, double y, double direction, Sprite ui_sprite, String name) {
 		super(x,y,name);
 		this.ui_sprite = ui_sprite;
-		GameWorld.game_obj_table.put(name, this);
 		
 	}
 	/**
@@ -90,7 +86,6 @@ public class UserInterface extends GameObject{
 		ui_font = font;
 		
 		is_text = true;
-		GameWorld.game_obj_table.put(name, this);
 	}
 	
 	
@@ -105,7 +100,6 @@ public class UserInterface extends GameObject{
 	public UserInterface(Cartesian2D coordinate, double direction, Sprite ui_sprite, String name) {
 		super(coordinate.getX(), coordinate.getY(), name);
 		this.ui_sprite = ui_sprite;
-		GameWorld.game_obj_table.put(name, this);
 	}
 	
 	

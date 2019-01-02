@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -20,11 +22,10 @@ public class Render implements Runnable{
 	public static ArrayList<Actor> actor_list = new ArrayList<Actor>();
 	public static ArrayList<UserInterface> ui_list = new ArrayList<UserInterface>();
 
-
+	private static Runnable updateMethod = null;
 
 	private static int current_frame_rate = 0;
 	
-	public static Controls controller = new Controls();
 
 	private static Thread rend_thread;
 	private static JFrame game_frame = new JFrame("Game Window");
@@ -89,10 +90,11 @@ public class Render implements Runnable{
 		long diff_time = 0;
 		int init_frame = 0;
 		int diff_frame = 0;
-		game_frame.setTitle(game_window.getWindowTitle());
+		game_frame.setTitle(window_title);
 		game_frame.add(game_window);
 		game_frame.setSize(window_width, window_height);
 		game_frame.setVisible(true);
+		game_frame.setResizable(false);
 		game_frame.setBackground(bg_color);
 		game_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -124,8 +126,11 @@ public class Render implements Runnable{
 				game_window.pause(false);
 			
 			if (!game_window.isPaused()) {
-				
+				if(updateMethod != null)
+					updateMethod.run();
 				Physics.update();
+			
+				
 				game_window.Render(); //renders the actors and ui objects.
 			}
 
@@ -161,7 +166,7 @@ public class Render implements Runnable{
 		//Thread.sleep(update_rate);
 		//System.out.println("final frame count: " + frames);
 		cur_frame = frames;
-		
+			
 		frame_diff = cur_frame - init_frame;
 		//System.out.println("Frame rate: " + frame_diff);
 	}
@@ -287,6 +292,23 @@ public class Render implements Runnable{
 		return game_frame.getHeight();
 	}
 	
+	/**
+	 * Sets the update method for the game logic to the specfiied method reference.
+	 * @param myUpdateMethod A MyUpdate class contains a fucntion called update. This is used to initizliaze game states each tick.
+	 */
+	public void setUpdateMethod(Runnable myUpdateMethod)
+	{
+		updateMethod = myUpdateMethod;
+	}
+	
+	/**
+	 * The getter for updateMethod
+	 * @return REturns the update method that is called each tick. If it is set to null, no method has been set yet.
+	 */
+	public Runnable getUpdateMethod()
+	{
+		return updateMethod;
+	}
 	
 	/**
 	 * Retrieves the computer's current frame rate.
@@ -314,5 +336,4 @@ public class Render implements Runnable{
 	}
 	
 }
-
 

@@ -59,7 +59,7 @@ public abstract class GameObject {
 		transform.setX(x);
 		transform.setY(y);
 		
-		this.name = name;
+		this.name = generateNewName(name, GameWorld.game_obj_table);
 		transform.Mentor = this;
 		GameWorld.game_obj_table.put(this.name, this);
 

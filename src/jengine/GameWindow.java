@@ -44,7 +44,10 @@ public class GameWindow extends JPanel {
 	public void Render() {
 		
 		//Change parameters once GameWorld class is made.
+		this.removeAll();
+
 		this.repaint();
+		
 	}
 	
 	

@@ -33,6 +33,7 @@ public class Vector2D extends Cartesian2D{
 	 * @param magn Magnitude of the vector.
 	 * @param dir Direction of the vector passed in radians.
 	 */
+	/*
 	public Vector2D(double magnitude, float direction) {
 		magn = magnitude;
 		dir = (double) direction;
@@ -47,7 +48,7 @@ public class Vector2D extends Cartesian2D{
 		super.setX(x);
 	}
 	
-	
+	*/
 	/**
 	 * Sets the x coordinate of the Vector.
 	 * @param The new x coordinate of the vector.

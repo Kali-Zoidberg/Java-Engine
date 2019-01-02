@@ -13,13 +13,13 @@ public class RigidBody extends Transform {
 	
 	protected double mass = 1;
 	Actor Mentor = (Actor) super.Mentor;
-	Shape collisionShape = null;
+	public Shape collisionShape = null;
 	private boolean isMovable = true;
 	private boolean has_collision = true;
-	
+	private boolean hasInteresected = false; 
 	enum CollisionEnum
 	{
-		ISOLATED, PENETRATED, TOUCHED;
+		ISOLATED, PENETRAaTED, TOUCHED;
 	}
 	
 	/**
@@ -56,7 +56,6 @@ public class RigidBody extends Transform {
 		super(transform.getX(), transform.getY(), mentor, name);
 		Mentor.transform = this;
 		collisionShape = new Rectangle(transform.getX(),transform.getY(), mentor.getWidth(), mentor.getHeight());
-		System.out.printf("CollisionShape width: %f collisionshape height: %f\n", ((Rectangle) collisionShape).getWidth(), ((Rectangle) collisionShape).getHeight());
 
 	}
 	
@@ -140,30 +139,6 @@ public class RigidBody extends Transform {
 		
 	}
 	
-	public void setX2(double x) 
-	{
-		if (has_collision)
-		{
-			for (Actor actor: GameWorld.actor_list)
-			{
-				if(actor.rigidbody.hasCollision())
-				{
-
-					//Check to make sure the current actor we are checking is not OUR actor.
-					if(actor.getName() != this.Mentor.getName())
-					{
-						//CHECK MATH
-						if(this.checkCollision(this, actor.rigidbody))
-							System.out.printf("Collision occured between %s and %s \n", this.getName(), actor.getName());
-						
-						
-					}
-
-				}
-			}
-		}
-	}
-
 
 	
 	/**
@@ -199,7 +174,7 @@ public class RigidBody extends Transform {
 	 * @return Returns true if the future position of the object does not interfere with other objects.
 	 */
 	public boolean checkPath(int x_min, int y_min, int x_max, int y_max) {
-		this.setX2(x_min);
+		this.setX(x_min);
 		
 		return true;
 	}
@@ -339,6 +314,7 @@ public class RigidBody extends Transform {
 		else
 		{
 			actorVels = Physics.elasticCollision2D(rigidA.getMass(), rigidA.getVelocity(), rigidB.getMass(), rigidB.getVelocity());
+			//This is a vice versa if statement. If one is not movable and the other is, then recalculate their velocities.
 			if(!rigidB.isMovable() && rigidA.isMovable())
 			{
 				actorVels[0] = new Vector2D(rigidA.getVelocity().getX() * - 1, rigidB.getVelocity().getY() * -1);
@@ -358,16 +334,17 @@ public class RigidBody extends Transform {
 	public void checkCollision(Actor actorB)
 	{
 		//Have to call each time in case it changes over iteration
-		
-			if (actorB != this.Mentor && actorB.rigidbody != null && this.Mentor.rigidbody != null && 
-					actorB.rigidbody.hasCollision() && (!this.Mentor.getName().equals("box1") || !this.Mentor.getName().contentEquals("box2")))
+			if (actorB != this.Mentor && actorB.rigidbody != null && this.Mentor.rigidbody != null)
 			{
 				if(hasCollided(this.Mentor, actorB))
 				{
 				}
 				else
-				{		
-					calcCollision(this.Mentor, actorB);
+				{	
+					this.hasInteresected = true;
+					actorB.rigidbody.hasInteresected = true;
+					if(this.hasCollision())
+						calcCollision(this.Mentor, actorB);
 				}
 			}
 	}
@@ -382,6 +359,8 @@ public class RigidBody extends Transform {
 		this.collisionShape.setHeight(this.Mentor.getHeight());
 		this.collisionShape.setWidth(this.Mentor.getWidth());
 		
+		this.hasInteresected = false;
+
 	}
 	
 	/**
@@ -390,7 +369,6 @@ public class RigidBody extends Transform {
 	public void update() 
 	{
 		super.update();
-
 		//call collision ethods
 		
 	}
@@ -422,6 +400,14 @@ public class RigidBody extends Transform {
 	 */
 	public void setMovable(boolean isMovable) {
 		this.isMovable = isMovable;
+	}
+
+	public boolean hasInteresected() {
+		return hasInteresected;
+	}
+
+	public void setHasInteresected(boolean hasInteresected) {
+		this.hasInteresected = hasInteresected;
 	}
 	
 }

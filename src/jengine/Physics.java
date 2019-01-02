@@ -76,20 +76,15 @@ public class Physics {
 		//add initial vector with second vector to get final
 		return retVeloc;
 	}
-	/*
-	public static Vector2D[] elasticCollision(double mass1, Vector2D velocity1, double mass2, Vector2D velocity2)
-	{
-		//vf1 = [(m1 - m2)·vi1 + 2 m2·vi2]/(m1 + m2)
-		//vf2 = [2 m1·vi1 - (m1 - m2)·vi2]/(m1 + m2)
-		double v1p = velocity1.getMagnitude() * Math.cos(velocity1.getDirection());
-		double v2p = velocity2.getMagnitude() * Math.cos(velocity2.getDirection());
-		double v1s = ((mass1 - mass2)* v1p)+ (2*mass2*v2p) / (mass1+mass2);
-		double v2s = ((2 * mass1 * v1p) - (mass1 - mass2) * v2p)/(mass1+mass2);
-		double retVeloc[] = {v1s, v2s};
-		//add initial vector with second vector to get final
-		return retVeloc;
-	}
-	*/
+	
+	/**
+	 * 
+	 * @param m1 Mass of the first object
+	 * @param rigidA The Rigid body of the first object.
+	 * @param m2 Mass of the second object
+	 * @param rigidB Rigid body of the second object
+	 * @return Returns a Vector2D[] of length 2 representing the respective velocities of the rigid bodies after collision
+	 */
 	public static Vector2D[] elasticCollision2D(double m1, RigidBody rigidA, double m2, RigidBody rigidB)
 	{
 		//find a normal vector. find the centers between the coordinates and create a vector
@@ -120,14 +115,13 @@ public class Physics {
 		Vector2D v1TanFinal = mutualTanVect.mult(v1t);
 		Vector2D v2TanFinal = mutualTanVect.mult(v2t);
 		
-		//find the vinal velocity by adding the vectors of the new normals, and the new tangents (which aren't really new).
+		//find the final velocity by adding the vectors of the new normals, and the new tangents (which aren't really new).
 		
 		Vector2D velFinals[] = {v1NormFinal.add(v1TanFinal), v2NormFinal.add(v2TanFinal)};
-		System.out.println(velFinals[0].toString() + "\n" + velFinals[1].toString());
-		return velFinals;
 		
-		
+		return velFinals;	
 	}
+	
 	public static Vector2D[] elasticCollision2D(double m1, Vector2D v1, double m2, Vector2D v2)
 	{
 
@@ -140,6 +134,7 @@ public class Physics {
 		Vector2D retVectors[] = {secondVelA, secondVelB};
 		return retVectors;
 	}
+	
 
 	public static void update()
 	{

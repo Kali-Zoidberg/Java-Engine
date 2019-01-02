@@ -22,14 +22,12 @@ public class Actor extends GameObject{
 	private Color sprite_color = Color.PINK;
 	public Graphics2D actor_graphics;
 	
-	//private Actor instanceOfActorInTable;
 	private int actor_width = 10;
 	private int actor_height = 10;
 	
 	private int converted_pos_x = 0;
 	private int converted_pos_y = 0;
 	
-	private boolean has_collision = false;
 	public boolean is_visible = false;
 	public RigidBody rigidbody;
 	
@@ -272,6 +270,10 @@ public class Actor extends GameObject{
 		}
 	}
 	
+	public void setColor(Color color)
+	{
+		sprite_color = color;
+	}
 	
 	/**
 	 * Sets the actor to render a rectangle instead of a sprite.

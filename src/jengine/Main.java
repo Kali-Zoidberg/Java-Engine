@@ -1,107 +1,85 @@
 package jengine;
 
-
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.util.Random;
 
-import javax.imageio.ImageIO;
-import javax.swing.JLabel;
-
-import TestPackages.TestVectors;
-import chowshapes.Circle;
-import chowshapes.Hexagon;
-import chowshapes.Triangle;
-
+import chowshapes.*;
 public class Main {
-	
-	public static JLabel focusWindow = new JLabel(""); 
-	public static Render render_obj = new Render("Testing title",60,1000,1000);
-	public static Controls controller = new Controls();
+	private static int screenWidth = 500;
+	private static int screenHeight = 500;
+	public static Render renderObj = new Render("Circle Collisions", 60,screenHeight,screenWidth);
 
-	public static void main (String[] args) throws InterruptedException, IOException {
-		testMethods();
-		File car_file = new File("car_background.jpg");
-		//GameWorld.initializeWorldCoordinates();
-		
-		
-		Start(); //rename
-
-		render_obj.start();
-		
-		BufferedImage car_bg = ImageIO.read(car_file);
-		render_obj.setBackground(car_bg);
-		render_obj.setBackground(Color.black);
-		controller.initializeControls();
-		
-		
+	public static void main(String[] args) {
+		initializeScene();
 	}
-	public static void testMethods()
+	
+	public static void initializeScene()
 	{
-		ChowFunctions.testNormals();
-		TestVectors.testNormalize();
-		TestVectors.testUnitVector();
-		TestVectors.testAddSubVector();
-	}
-	public static void Start() throws IOException {
-//		Transform transform_test = new Transform("Transform", 750,500,0f);
-			File sprite_img = new File("sprite_test.jpg");
-			BufferedImage car_bg = ImageIO.read(sprite_img);
-
-			//UserInterface ui_test = new UserInterface(60.0,60.0,0.0,"Hello world!",Color.WHITE,	new Font("Courier New", Font.PLAIN, 12), "ui_test");
+		int numOfBalls = 300;
+		int x_pos = 50;
+		int x_pos2 = 20;
+		int y_pos = 100;
+		int y_pos2 = screenHeight - 20;
+		Random rand = new Random();
+		rand.setSeed(System.currentTimeMillis());
+		renderObj.setBackground(Color.WHITE);
+		for (int i = 0; i < numOfBalls; ++i)
+		{
+			Actor some_circle = null;
+			if (i < numOfBalls/2)
+			{
+				some_circle = new Actor(x_pos,y_pos,10,10, "top_circle");
+				some_circle.rigidbody.collisionShape = new Circle(x_pos,y_pos, 5);
+				some_circle.setColor(Color.RED);
+				x_pos += 10;
+			} else
+			{
+				some_circle = new Actor(x_pos2, y_pos2, 20, 20, "bot_circle");
+				some_circle.rigidbody.collisionShape = new Circle(x_pos,y_pos, 10);
+				some_circle.setColor(Color.BLUE);
+				x_pos2 += 20;
 			
-			Actor player = new Actor(50, 700, 50,50, "Actor1");
-			Actor box = new Actor(300, 300,50,50, "box1");
-			Actor box2 = new Actor(450, 450,50,100, "box2");
-			box.rigidbody.setMass(10);
-			box2.rigidbody.setMass(1000000);
-			box.rigidbody.setMovable(false);
-			box2.rigidbody.setMovable(false);
-			player.rigidbody.setMass(1);
-			System.out.println("box center: " + (box.rigidbody.collisionShape.getCenter().getX() - player.rigidbody.collisionShape.getCenter().getX()));
-			box.setVisible(true);
-			box2.rigidbody.collisionShape = new Circle(box2.rigidbody.getX(), box2.rigidbody.getY(), 25);
-			player.rigidbody.collisionShape = new Circle(player.rigidbody.getX(), player.rigidbody.getY(), 25);
-			box.rigidbody.setCollision(true);
-			box.rigidbody.collisionShape = new Circle(box.rigidbody.getX(), box.rigidbody.getY(),25);
-			box2.setRect(50, 50, Color.pink);
-			box2.setVisible(true);
-			box2.rigidbody.setCollision(true);
-			
-		//	player.rigidbody.setX(player.rigidbody.getX());
-		//	player.rigidbody.setY(player.rigidbody.getY());
-			player.setVisible(true);
-			
-			//Sprite sprite_test = new Sprite(car_bg,50,50);
-			//player.setSprite(sprite_test, "sprite_test");
-			player.rigidbody.setCollision(true);
-			
-			System.out.println("box1: " + box.rigidbody.getX() + " y:" + box.rigidbody.getY());
+			}
+			some_circle.rigidbody.setCollision(true);
+			some_circle.setVisible(true);
+			some_circle.rigidbody.setVelocity(new Vector2D((double) rand.nextInt(2) + -2, (double) rand.nextInt(2) + -2));
 
-			//player.transform.setDirection(0.86f);
-
-			//	ui_list.add(ui_test);
-			//GameWorld.actor_list.add(player);
-			AudioLine ambientAudioLine = new AudioLine("Ambience");
-			AudioLine backgroundLine = new AudioLine("Background");
-			//SoundEmittor rain_emittor = new SoundEmittor(box, "Rain", "rain.wav", "Ambience");
-			backgroundLine.scaleLineVol(0.5f);
-			SoundEmittor coffee_shop = new SoundEmittor(box2, "Coffee", "coffee_shop.wav", "Background");
-
-			//rain_emittor.play();
-			//rain_emittor.sound.setVolLinear(0.5f);
-			coffee_shop.play();
-			AudioMaster.scaleVolume(0.1f);
-			//rain_emittor.sound.printClipInfo();
-			ambientAudioLine.scaleLineVol(0.5f);
-			//ChowFunctions.test_functions();
-
-			
+		}
+		renderObj.start();
+		MyUpdate updateMethod = new MyUpdate();
+		renderObj.setUpdateMethod(updateMethod);
+		//Actor boxes[] = {some_box, some_box2, some_box3, some_box4};
+		
+		
 	}
 	
-	public static void Update() {
+	
+	static class MyUpdate implements Runnable 	
+	{
+		
+		public void run()
+		{ 
+			
+			for (GameObject goj: GameWorld.game_obj_table.values())
+			{
+				Actor my_act = (Actor) goj;
+				checkBounds(my_act);
+			}
+		
+		}
+		public void checkBounds(Actor actorA)
+		{
+			double posX = actorA.rigidbody.getX() + actorA.rigidbody.getVelocity().getX();
+			double posY = actorA.rigidbody.getY() + actorA.rigidbody.getVelocity().getY();
+			double fullX = posX + actorA.getWidth();
+			double fullY = posY+ actorA.getHeight();
+			//Handle case for the wall on the left hand side
+			if ((posX >= screenWidth || posX <= 0) && (posY >= 0) && (fullY <= screenHeight))
+				//set velocity
+				actorA.rigidbody.setVelocity(new Vector2D (actorA.rigidbody.getVelocity().getX() * -1, actorA.rigidbody.getVelocity().getY()));
+			if ((posY >= screenHeight || posY <=0) && (posX >= 0) && (fullX <= screenWidth))
+					actorA.rigidbody.setVelocity(new Vector2D (actorA.rigidbody.getVelocity().getX(), actorA.rigidbody.getVelocity().getY() * -1));
+		}
 		
 	}
 }
