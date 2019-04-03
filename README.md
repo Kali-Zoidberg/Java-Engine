@@ -5,11 +5,11 @@ This game was created in 2015. Over time I will optimize and improve the re-usab
 
 The following write up will be updated over the course of the next two months.
 
-Component Based Architecture:
-The base class for all parent objects is a game object. Parents are parameterized as mentors.
-The base class for child objects is component. Children are parameterized as component.
-Below is a code snippet in regards to the actual implementation of the component based architecture.
-![alt text](https://imgur.com/0u7bTDk)
+**Component Based Architecture:**</br>
+The base class for all parent objects is a game object. Parents are parameterized as mentors. </br>
+The base class for child objects is component. Children are parameterized as component.</br>
+Below is a code snippet for the actual implementation of the component based architecture.</br>
+![](https://i.imgur.com/0u7bTDk.png)
 
 
 
