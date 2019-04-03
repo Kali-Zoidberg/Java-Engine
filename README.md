@@ -10,6 +10,7 @@ The base class for all parent objects is a game object. Parents are parameterize
 The base class for child objects is component. Children are parameterized as component.</br>
 Below is a code snippet for the actual implementation of the component based architecture.</br>
 ![](https://i.imgur.com/0u7bTDk.png)
+</br>
 This architecture allows for both the parent (mentor) and child (component) to have direct access to one another and invoke their appropiate functions.</br>
 
 
