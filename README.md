@@ -2,6 +2,17 @@
 This game was created in 2015. Over time I will optimize and improve the re-usability of this code as well as properly comment the source code.
 
 
+
+The following write up will be updated over the course of the next two months.
+
+Component Based Architecture:
+The base class for all parent objects is a game object. Parents are parameterized as mentors.
+The base class for child objects is component. Children are parameterized as component.
+Below is a code snippet in regards to the actual implementation of the component based architecture.
+![alt text](https://imgur.com/0u7bTDk)
+
+
+
 Re-Write: Over the course of this program, I will rewrite the code with re-usability in mind. I am hoping to achieve a
 basic game engine in Java using JFrames. However, parallel computing using multi-threads may be implemented to improve the optimization.
 The focus of the multi-threading/parallel computing will be to handle the updated game states such as Vectors, Transforms and Game Logic.
