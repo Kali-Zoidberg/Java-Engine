@@ -9,11 +9,16 @@ The following write up will be updated over the course of the next two months.
 
 1] Create a static Render Object <br>
 
+    public static int frameRate = 60;
+    public static int screenWidth = 500;
+    public static int screenHeight = 500;
     public static Render renderObj = new Render("Window Title", frameRate, screenWidth, screenHeight);
+    
     public static void main(String[] args)
     {
 	    initializeScene();
     }
+    
     public static initializeScene()
     {
 	    //renderObj.setBackground(Image img); // Set the background using an image
@@ -29,9 +34,10 @@ The following write up will be updated over the course of the next two months.
 
     Actor squareActor = new Actor(x_pos, y_pos, width, height, "Actor Name");
 
-<br>3] Assign a collision shape to the actor's rigid body and set the actor to visible.<br>
+<br>3] Assign a collision shape to the actor's rigid body and set the actor's visibility and collision to true.<br>
 
-    squareActor.rigidbody.collisionShape = new Square(x_pos, y_pos, width, height);
+    squareActor.rigidbody.collisionShape = new Rectangle(x_pos, y_pos, width, height);
+    squareActor.setCollision(true);
     squareActor.setVisible(true);
 <br>4] Set the sprite for the Actor
 
@@ -40,17 +46,23 @@ The following write up will be updated over the course of the next two months.
 Set the color for the Actor.
 
     squareActor.setColor(Color.RED);
-<br>5]Create and set the update object.<br>
+<br>5]Create the update object, set the update method and start the scene.<br>
 
-    MyUpdate updatemethod = new MyUpdate();
+    MyUpdate updateMethod = new MyUpdate();
     renderObj.setUpdateMethod(updateMethod);
+    renderObj.start();
 <br>**The Initialization code all together**<br>
 
+    public static int frameRate = 60;
+    public static int screenWidth = 500;
+    public static int screenHeight = 500;
     public static Render renderObj = new Render("Window Title", frameRate, screenWidth, screenHeight);
+    
     public static void main(String[] args)
     {
 	    initializeScene();
     }
+    
     public static void initializeScene()
     {
 	    //renderObj.setBackground(Image img); // Set the background using an image
@@ -58,13 +70,18 @@ Set the color for the Actor.
 	    
 	    int x_pos = 50;
 	    int y_pos = 100;
-	    int width, height = 30;
+	    int width = 50, height = 50;
 	    
 	    Actor squareActor = new Actor(x_pos, y_pos, width, height, "Actor Name"); //Create the actor
-	    squareActor.rigidbody.collisionShape = new Square(x_pos, y_pos, width, height); // Set the collision of the actor.
+	    squareActor.rigidbody.collisionShape = new Rectangle(x_pos, y_pos, width, height); // Set the collision of the actor.
 	    //squareActor.setSprite(new Sprite(new Image("Filepath"), width, height); //Give the actor a sprite and set the image of the sprite.
 	    squareActor.setColor(Color.RED); //Set the color of the actor
+	    squareActor.setCollision(true);
 	    squareActor.setVisible(true);
+	    
+	    MyUpdate updateMethod = new MyUpdate();
+    renderObj.setUpdateMethod(updateMethod);
+	    renderObj.start();
     }
 
 <br>
@@ -98,7 +115,8 @@ The update method will be called each game tick. This method, in particular chan
 		}
 		
 	}
-
+<br><br>
+![Your game should look like this after completion.](https://i.imgur.com/Z0sbegz.png)
 <br>
 <br>
 
