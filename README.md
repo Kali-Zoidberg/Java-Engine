@@ -1,18 +1,20 @@
 
 # JEngine
-JEngine spawned as a rewrite of a video game I wrote in high school. A few days into optimizing and reorganizing the code, I decided to create a full fledged 2D game engine. There are still a few bugs to iron out and areas I need to address but regardless, it is possible for anyone to make a video game utilizing this engine.
-
+JEngine spawned after wanting to rewrite a version of Snakey I created in high school. A few days after optimization and reorganization, I decided to create a full fledged 2D game engine. There are still a few bugs to iron out, and areas I need to address but regardless, it is possible for anyone to make a video game utilizing this engine.
+<br>
 The following write up will be updated over the course of the next two months.
 <br>
-**Component Based Architecture:**</br>
-The base class for all parent objects is a game object. Parents are parameterized as mentors. 
-The base class for child objects is component. Children are parameterized as component.
-Below is a code snippet for the actual implementation of the component based architecture.
+<br>
+**Component Based Architecture:**<br>
+The base class for all parent objects is a game object. Parents are parameterized as mentors. <br>
+The base class for child objects is component. Children are parameterized as component.<br>
+Below is a code snippet for the actual implementation of the component based architecture.<br>
 ![](https://i.imgur.com/0u7bTDk.png)
 
-This architecture allows for both the parent (mentor) and child (component) to have direct access to one another and invoke their appropriate functions. 
+<br>This architecture allows for both the parent (mentor) and child (component) to have direct access to one another and invoke their appropriate functions. 
 <br>
-**Dynamic Audio Scaling**
+<br>
+**Dynamic Audio Scaling**<br>
 Dynamic Audio Scaling is a feature in this engine to allow creators to tag/categorize game sounds, music, etc. as lines or categories. Through these categories, creators may create a new line or category on the AudioMaster by calling the static function:
 
        AudioLine audioLine = new AudioLine("Your line name");
