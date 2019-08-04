@@ -66,7 +66,7 @@ public class AudioLine {
 	 * 
 	 * Todo: Make it so that it's relative. 
 	 */
-	public void setLineVolDB(float volDB)
+	public void setVolDB(float volDB)
 	{
 		fLineVolume = ChowFunctions.dbToLinearFrac(volDB);
 		fLineVolDB = volDB;
@@ -82,7 +82,7 @@ public class AudioLine {
 	 * @param volFrac The linear value from 0 to 1.0 that you wish to set the line volume to.
 	 * TODO: Make it relative.
 	 */
-	public void setLineVolLinear(float volFrac)
+	public void setVolLinear(float volFrac)
 	{
 		fLineVolume = volFrac;
 		fLineVolDB = ChowFunctions.LinearFracToDB(volFrac);
@@ -93,7 +93,7 @@ public class AudioLine {
 		}
 	}
 	
-	public void scaleLineVol(float volFrac)
+	public void scaleVol(float volFrac)
 	{
 		fLineVolume = volFrac;
 		fLineVolDB = ChowFunctions.LinearFracToDB(volFrac);
@@ -137,11 +137,11 @@ public class AudioLine {
 	 * Getter for the linear representation of the volume.
 	 * @return Returns the linear volume representation
 	 */
-	public float getLineVolLinear() { return fLineVolume;}
+	public float getVolLinear() { return fLineVolume;}
 	/**
 	 * Getter for the decibel representation of the volume.
 	 * @return Returns the decibel representation of the volume.
 	 */
-	public float getLineVolDB() { return fLineVolDB; }
+	public float getVolDB() { return fLineVolDB; }
 	
 }

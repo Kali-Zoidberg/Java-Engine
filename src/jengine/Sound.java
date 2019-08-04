@@ -107,8 +107,8 @@ public class Sound {
 		//Plays the sound.
 		if (soundClip.isOpen())
 		{
-			if (audioLine != null && audioLine.getLineVolLinear() != 1.0f)
-				this.scaleVolume(audioLine.getLineVolLinear());
+			if (audioLine != null && audioLine.getVolLinear() != 1.0f)
+				this.scaleVolume(audioLine.getVolLinear());
 			
 			soundClip.start();
 			

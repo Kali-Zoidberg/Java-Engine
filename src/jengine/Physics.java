@@ -167,3 +167,11 @@ public class Physics {
 	
 	
 }
+
+ class PhysicsThread extends Thread
+{
+	public void run()
+	{
+		Physics.update();
+	}
+}

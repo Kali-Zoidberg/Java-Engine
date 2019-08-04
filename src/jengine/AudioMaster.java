@@ -42,7 +42,7 @@ public class AudioMaster {
 		Iterable<AudioLine> audioLines = lineTable.values();
 		for (AudioLine audioLine: audioLines)
 		{
-			audioLine.scaleLineVol(volFrac);
+			audioLine.scaleVol(volFrac);
 		}
 	}
 	
